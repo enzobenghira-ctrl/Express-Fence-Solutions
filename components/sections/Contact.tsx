@@ -8,6 +8,8 @@ const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "", phone: "", email: "", service: "", location: "", message: "",
   });
@@ -16,9 +18,23 @@ export default function Contact() {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Failed to send");
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please call us directly at (305) 967-9202.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -211,8 +227,14 @@ export default function Contact() {
                   </select>
                 </div>
                 <textarea name="message" placeholder="Tell us about your project..." value={form.message} onChange={handleChange} rows={4} style={{ resize: "vertical" }} />
+                {error && (
+                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "#c0392b", textAlign: "center" }}>
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
+                  disabled={loading}
                   style={{
                     background: "var(--dark)",
                     color: "var(--white)",
@@ -222,20 +244,23 @@ export default function Contact() {
                     borderRadius: 8,
                     padding: "16px",
                     border: "none",
-                    cursor: "pointer",
+                    cursor: loading ? "not-allowed" : "pointer",
                     width: "100%",
+                    opacity: loading ? 0.7 : 1,
                     transition: "background 0.2s, transform 0.15s",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--accent)";
-                    e.currentTarget.style.transform = "translateY(-1px)";
+                    if (!loading) {
+                      e.currentTarget.style.background = "var(--accent)";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                    }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "var(--dark)";
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
                 >
-                  Send Message
+                  {loading ? "Sending…" : "Send Message"}
                 </button>
               </form>
             )}
