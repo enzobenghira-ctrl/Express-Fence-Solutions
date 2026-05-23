@@ -127,7 +127,8 @@ export default function Hero() {
           >
             {/* Primary — call */}
             <motion.a
-              href="tel:+13059679202"
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
               whileHover={{ y: -2, boxShadow: "0 8px 28px rgba(184,150,90,0.28)" }}
               whileTap={{ scale: 0.97 }}
               style={{
@@ -147,8 +148,7 @@ export default function Hero() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--dark)")}
             >
-              <Phone size={16} strokeWidth={2.5} />
-              Call for a Free Quote
+              Get a Free Quote
             </motion.a>
 
             {/* Secondary */}

@@ -248,7 +248,7 @@ export default function OtherProductsPage() {
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <a
-              href="tel:+13059679202"
+              href="/#contact"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -264,7 +264,6 @@ export default function OtherProductsPage() {
                 transition: "opacity 0.2s",
               }}
             >
-              <Phone size={16} strokeWidth={2.5} />
               Get a Free Quote
             </a>
             <a
@@ -323,7 +322,7 @@ export default function OtherProductsPage() {
             <FeatureList features={poolFeatures} />
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <a
-                href="tel:+13059679202"
+                href="/#contact"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -398,7 +397,7 @@ export default function OtherProductsPage() {
             <FeatureList features={pergolaFeatures} />
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <a
-                href="tel:+13059679202"
+                href="/#contact"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -504,7 +503,7 @@ export default function OtherProductsPage() {
               <FeatureList features={fenceFeatures} />
               <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <a
-                  href="tel:+13059679202"
+                  href="/#contact"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
