@@ -26,6 +26,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section
+      className="section-mobile"
       style={{ background: "var(--background)", padding: "100px 32px" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>

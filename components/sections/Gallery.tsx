@@ -31,6 +31,7 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
+      className="section-mobile"
       style={{ background: "var(--surface)", padding: "100px 32px" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -157,6 +158,7 @@ export default function Gallery() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="gallery-cta"
           style={{
             marginTop: 64,
             padding: "48px",

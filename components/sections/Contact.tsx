@@ -40,6 +40,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
+      className="section-mobile"
       style={{ background: "var(--background)", padding: "100px 32px" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -207,12 +208,12 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <input type="text" name="name" placeholder="Full name" value={form.name} onChange={handleChange} required />
                   <input type="tel" name="phone" placeholder="Phone number" value={form.phone} onChange={handleChange} required />
                 </div>
                 <input type="email" name="email" placeholder="Email address" value={form.email} onChange={handleChange} />
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div className="form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <select name="service" value={form.service} onChange={handleChange} required>
                     <option value="" disabled>Service...</option>
                     {["WPC Fences","WPC Pergolas","WPC Cladding","WPC Decking","WPC Gates","WPC Benches","Multiple Products","Not Sure Yet"].map(s => (

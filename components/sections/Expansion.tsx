@@ -7,6 +7,7 @@ export default function Expansion() {
   return (
     <section
       id="expanding-to-okeechobee"
+      className="section-mobile-sm"
       style={{
         background: "var(--surface)",
         padding: "80px 32px",

@@ -68,7 +68,7 @@ export default function Navbar() {
             onClick={(e) => { e.preventDefault(); go("#"); }}
             style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
           >
-            <div style={{ position: "relative", height: 68, width: 68, flexShrink: 0 }}>
+            <div className="nav-logo-img" style={{ position: "relative", height: 68, width: 68, flexShrink: 0 }}>
               <Image
                 src="/images/logo-transparent.png"
                 alt="Express Fence Solutions"
@@ -78,7 +78,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+            <div className="nav-brand-text" style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
               <span style={{
                 fontFamily: "var(--font-cormorant)",
                 fontStyle: "italic",

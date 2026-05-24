@@ -44,6 +44,7 @@ export default function Hero() {
       </div>
 
       <div
+        className="hero-content"
         style={{
           position: "relative",
           zIndex: 10,
@@ -222,6 +223,13 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      <style jsx>{`
+        .hero-content { padding: 120px 32px 80px; }
+        @media (max-width: 768px) {
+          .hero-content { padding: 100px 20px 60px; }
+        }
+      `}</style>
 
       {/* Scroll indicator */}
       <motion.div

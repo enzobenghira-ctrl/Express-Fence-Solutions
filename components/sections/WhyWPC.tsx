@@ -16,6 +16,7 @@ export default function WhyWPC() {
   return (
     <section
       id="why-wpc"
+      className="section-mobile"
       style={{ background: "var(--background)", padding: "100px 32px" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -34,6 +35,7 @@ export default function WhyWPC() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.65, ease: "easeOut" }}
+            className="whywpc-left"
             style={{ position: "sticky", top: 100 }}
           >
             <span

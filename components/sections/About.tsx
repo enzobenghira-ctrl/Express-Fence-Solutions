@@ -22,6 +22,7 @@ export default function About() {
   return (
     <section
       id="about"
+      className="section-mobile"
       style={{ background: "var(--surface)", padding: "100px 32px", overflow: "hidden" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -40,6 +41,7 @@ export default function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, ease: "easeOut" }}
+            className="about-img-wrap"
             style={{ position: "relative", height: 520 }}
           >
             {/* Main image */}
@@ -93,6 +95,7 @@ export default function About() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
+              className="about-stat-badge"
               style={{
                 position: "absolute",
                 top: "40%",
@@ -271,9 +274,7 @@ export default function About() {
 
       <style jsx>{`
         @media (max-width: 768px) {
-          .about-grid {
-            grid-template-columns: 1fr !important;
-          }
+          .about-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

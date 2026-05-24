@@ -77,3 +77,26 @@ select option {
   background: var(--white);
   color: var(--text);
 }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-brand-text { display: none !important; }
+  .nav-logo-img { height: 52px !important; width: 52px !important; }
+  .hero-content { padding: 100px 20px 60px !important; }
+
+  .section-mobile { padding: 60px 20px !important; }
+  .section-mobile-sm { padding: 48px 20px !important; }
+
+  .products-grid { grid-template-columns: 1fr !important; }
+
+  .form-2col { grid-template-columns: 1fr !important; }
+
+  .about-img-wrap { height: 320px !important; }
+  .about-stat-badge { display: none !important; }
+
+  .whywpc-left { position: static !important; }
+
+  .contact-grid { grid-template-columns: 1fr !important; }
+
+  .gallery-cta { padding: 32px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
+}

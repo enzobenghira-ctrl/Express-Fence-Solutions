@@ -22,6 +22,7 @@ export default function Products() {
   return (
     <section
       id="products"
+      className="section-mobile"
       style={{ background: "var(--background)", padding: "100px 32px" }}
     >
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -107,6 +108,7 @@ export default function Products() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
+          className="products-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
