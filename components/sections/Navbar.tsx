@@ -96,7 +96,6 @@ export default function Navbar() {
           {/* Nav links — desktop */}
           <ul
             style={{
-              display: "flex",
               listStyle: "none",
               gap: 24,
               alignItems: "center",
