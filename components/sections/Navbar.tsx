@@ -196,151 +196,150 @@ export default function Navbar() {
           {/* Mobile burger */}
           <button
             className="lg:hidden"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpen(!open)}
             aria-label="Open menu"
             style={{
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "var(--dark)",
+              color: open ? "var(--accent)" : scrolled ? "var(--dark)" : "#ffffff",
               padding: 4,
+              transition: "color 0.2s",
             }}
           >
-            <Menu size={24} />
+            {open ? <X size={26} strokeWidth={2} /> : <Menu size={26} strokeWidth={2} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile overlay */}
+      {/* Mobile dropdown menu */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: "tween", duration: 0.22, ease: "easeOut" }}
             style={{
               position: "fixed",
-              inset: 0,
-              zIndex: 100,
+              top: 72,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 99,
               background: "var(--background)",
               display: "flex",
               flexDirection: "column",
+              overflowY: "auto",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "0 24px",
-                height: 72,
-                borderBottom: "1px solid var(--border)",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ position: "relative", height: 44, width: 44, flexShrink: 0 }}>
-                  <Image
-                    src="/images/logo-transparent.png"
-                    alt="Express Fence Solutions"
-                    fill
-                    sizes="44px"
-                    style={{ objectFit: "contain" }}
-                  />
-                </div>
-                <span style={{
-                  fontFamily: "var(--font-cormorant)",
-                  fontStyle: "italic",
-                  fontSize: 18,
-                  fontWeight: 600,
-                  color: "var(--accent)",
-                  whiteSpace: "nowrap",
-                }}>
-                  Express Fence Solutions
-                </span>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--dark)" }}
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                padding: "0 32px",
-                gap: 0,
-              }}
-            >
+            {/* Nav links */}
+            <div style={{ padding: "8px 0" }}>
               {links.map((l, i) => (
-                <motion.div key={l.href} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
+                <motion.div
+                  key={l.href}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
                   {l.anchor ? (
                     <a
                       href={l.href}
                       onClick={(e) => { e.preventDefault(); go(l.href); }}
                       style={{
-                        display: "block",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                         fontFamily: "var(--font-cormorant)",
                         fontStyle: "italic",
-                        fontSize: 42,
+                        fontSize: 32,
                         fontWeight: 400,
                         color: "var(--dark)",
                         textDecoration: "none",
-                        padding: "10px 0",
+                        padding: "18px 24px",
                         borderBottom: "1px solid var(--border)",
+                        transition: "color 0.2s",
                       }}
+                      onTouchStart={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                      onTouchEnd={(e) => (e.currentTarget.style.color = "var(--dark)")}
                     >
                       {l.label}
+                      <span style={{ fontSize: 20, color: "var(--accent)" }}>›</span>
                     </a>
                   ) : (
                     <Link
                       href={l.href}
                       onClick={() => setOpen(false)}
                       style={{
-                        display: "block",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                         fontFamily: "var(--font-cormorant)",
                         fontStyle: "italic",
-                        fontSize: 42,
+                        fontSize: 32,
                         fontWeight: 400,
                         color: "var(--dark)",
                         textDecoration: "none",
-                        padding: "10px 0",
+                        padding: "18px 24px",
                         borderBottom: "1px solid var(--border)",
+                        transition: "color 0.2s",
                       }}
                     >
                       {l.label}
+                      <span style={{ fontSize: 20, color: "var(--accent)" }}>›</span>
                     </Link>
                   )}
                 </motion.div>
               ))}
+            </div>
 
-              <motion.a
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+            {/* Bottom CTA */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35 }}
+              style={{ padding: "24px", marginTop: "auto" }}
+            >
+              <a
                 href="tel:+13059679202"
                 style={{
-                  marginTop: 32,
-                  display: "block",
-                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
                   background: "var(--accent)",
                   color: "var(--white)",
                   fontFamily: "var(--font-dm-sans)",
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: 700,
-                  borderRadius: 8,
+                  borderRadius: 10,
                   padding: "18px",
                   textDecoration: "none",
+                  marginBottom: 12,
                 }}
               >
                 📞 (305) 967-9202
-              </motion.a>
-            </div>
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); go("#contact"); }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "var(--dark)",
+                  color: "var(--white)",
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  borderRadius: 10,
+                  padding: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                Get a Free Quote
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
