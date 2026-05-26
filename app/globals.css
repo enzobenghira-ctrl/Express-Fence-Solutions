@@ -80,7 +80,6 @@ select option {
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .nav-brand-text { display: none !important; }
   .nav-logo-img { height: 52px !important; width: 52px !important; }
   .hero-content { padding: 100px 20px 60px !important; }
 
