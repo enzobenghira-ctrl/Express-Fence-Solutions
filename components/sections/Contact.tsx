@@ -460,11 +460,71 @@ export default function Contact() {
             </div>
           </motion.div>
         </div>
+
+        {/* Partner / trade callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="partner-callout"
+          style={{
+            marginTop: 56,
+            padding: "40px 48px",
+            background: "var(--dark)",
+            borderRadius: 12,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 24,
+          }}
+        >
+          <div style={{ maxWidth: 520 }}>
+            <p
+              style={{
+                fontFamily: "var(--font-cormorant)",
+                fontStyle: "italic",
+                fontSize: "clamp(20px, 2.6vw, 26px)",
+                color: "var(--background)",
+                marginBottom: 8,
+              }}
+            >
+              Are you a contractor, developer, or builder?
+            </p>
+            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "rgba(250,250,247,0.55)", lineHeight: 1.6 }}>
+              We supply and install premium WPC products across South Florida projects — let&apos;s talk volume pricing and partnerships.
+            </p>
+          </div>
+          <Link
+            href="/partner"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: "var(--accent)",
+              color: "var(--white)",
+              fontFamily: "var(--font-dm-sans)",
+              fontSize: 14,
+              fontWeight: 700,
+              borderRadius: 8,
+              padding: "14px 26px",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            Explore Partnerships →
+          </Link>
+        </motion.div>
       </div>
 
       <style jsx>{`
         @media (max-width: 768px) {
           .contact-grid { grid-template-columns: 1fr !important; }
+          .partner-callout { padding: 32px 24px !important; flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
     </section>

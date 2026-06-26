@@ -12,6 +12,7 @@ const links = [
   { label: "WPC Products", href: "/#products" },
   { label: "Why WPC", href: "/#why-wpc" },
   { label: "More Products", href: "/other-products" },
+  { label: "Partner With Us", href: "/partner" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -85,8 +86,8 @@ export default function NavbarPage() {
 
           {/* Nav links — desktop */}
           <ul
-            style={{ listStyle: "none", gap: 24, alignItems: "center" }}
-            className="hidden lg:flex"
+            style={{ listStyle: "none", gap: 26, alignItems: "center" }}
+            className="hidden xl:flex"
           >
             {links.map((l) => (
               <li key={l.href}>
@@ -94,7 +95,7 @@ export default function NavbarPage() {
                   href={l.href}
                   style={{
                     fontFamily: "var(--font-dm-sans)",
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: 600,
                     color: "var(--dark)",
                     textDecoration: "none",
@@ -112,7 +113,7 @@ export default function NavbarPage() {
           </ul>
 
           {/* Right */}
-          <div className="hidden lg:flex" style={{ alignItems: "center", gap: 20 }}>
+          <div className="hidden xl:flex" style={{ alignItems: "center", gap: 16 }}>
             <a
               href="tel:+13059679202"
               style={{
@@ -157,7 +158,7 @@ export default function NavbarPage() {
 
           {/* Mobile burger */}
           <button
-            className="lg:hidden"
+            className="xl:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Open menu"
             style={{

@@ -12,6 +12,7 @@ const links = [
   { label: "Products", href: "#products", anchor: true },
   { label: "Why WPC", href: "#why-wpc", anchor: true },
   { label: "More Products", href: "/other-products", anchor: false },
+  { label: "Partner With Us", href: "/partner", anchor: false },
   { label: "Contact", href: "#contact", anchor: true },
 ];
 
@@ -97,10 +98,10 @@ export default function Navbar() {
           <ul
             style={{
               listStyle: "none",
-              gap: 24,
+              gap: 26,
               alignItems: "center",
             }}
-            className="hidden lg:flex"
+            className="hidden xl:flex"
           >
             {links.map((l) => (
               <li key={l.href}>
@@ -110,7 +111,7 @@ export default function Navbar() {
                     onClick={(e) => { e.preventDefault(); go(l.href); }}
                     style={{
                       fontFamily: "var(--font-dm-sans)",
-                      fontSize: 15,
+                      fontSize: 13,
                       fontWeight: 600,
                       color: scrolled ? "var(--dark)" : "var(--white)",
                       textDecoration: "none",
@@ -129,7 +130,7 @@ export default function Navbar() {
                     href={l.href}
                     style={{
                       fontFamily: "var(--font-dm-sans)",
-                      fontSize: 15,
+                      fontSize: 13,
                       fontWeight: 600,
                       color: scrolled ? "var(--dark)" : "var(--white)",
                       textDecoration: "none",
@@ -148,7 +149,7 @@ export default function Navbar() {
           </ul>
 
           {/* Right */}
-          <div className="hidden lg:flex" style={{ alignItems: "center", gap: 20 }}>
+          <div className="hidden xl:flex" style={{ alignItems: "center", gap: 16 }}>
             <a
               href="tel:+13059679202"
               style={{
@@ -194,7 +195,7 @@ export default function Navbar() {
 
           {/* Mobile burger */}
           <button
-            className="lg:hidden"
+            className="xl:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Open menu"
             style={{
