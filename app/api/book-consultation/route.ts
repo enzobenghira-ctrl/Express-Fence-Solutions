@@ -119,16 +119,17 @@ export async function POST(req: Request) {
       .filter(Boolean)
       .join("\n");
 
+    // Note: attendees are intentionally omitted — a plain service account (no Google
+    // Workspace Domain-Wide Delegation) cannot invite attendees on events it creates.
+    // The customer's contact info is captured in the description instead.
     await calendar.events.insert({
       calendarId: CALENDAR_ID,
-      sendUpdates: "all",
       requestBody: {
         summary: `In-Home Consultation — ${name}`,
         description,
         location: `${address}, ${zip}`,
         start: { dateTime: startIso, timeZone: TIMEZONE },
         end: { dateTime: endIso, timeZone: TIMEZONE },
-        attendees: [{ email }],
       },
     });
 
