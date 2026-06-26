@@ -1,3 +1,4 @@
+import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { CALENDAR_ID, describeGoogleError, getCalendarClient } from "@/lib/google-calendar";
 import {
@@ -8,6 +9,33 @@ import {
   TIMEZONE,
   MIN_LEAD_HOURS,
 } from "@/lib/booking-config";
+
+function formatSlotDisplay(iso: string): string {
+  const d = new Date(iso);
+  const dateStr = d.toLocaleDateString("en-US", { timeZone: TIMEZONE, weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  const timeStr = d.toLocaleTimeString("en-US", { timeZone: TIMEZONE, hour: "numeric", minute: "2-digit" });
+  return `${dateStr} at ${timeStr}`;
+}
+
+async function sendCustomerConfirmation(opts: { email: string; name: string; address: string; zip: string; startIso: string }) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const { error } = await resend.emails.send({
+    from: "Express Fence Solutions <onboarding@resend.dev>",
+    to: opts.email,
+    replyTo: "Info@expressfencesolutions.com",
+    subject: "Your Free In-Home Consultation is Booked — Express Fence Solutions",
+    html: `
+      <h2 style="font-family:sans-serif;color:#1a1a1a;">Your consultation is booked!</h2>
+      <p style="font-family:sans-serif;font-size:15px;color:#1a1a1a;">Hi ${opts.name}, we'll see you at the time below. We'll bring real WPC samples and measure your property for an accurate, no-obligation quote.</p>
+      <table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%;max-width:520px;margin-top:16px;">
+        <tr><td style="padding:8px 0;color:#666;width:100px;">When</td><td style="padding:8px 0;font-weight:600;color:#1a1a1a;">${formatSlotDisplay(opts.startIso)}</td></tr>
+        <tr><td style="padding:8px 0;color:#666;">Where</td><td style="padding:8px 0;color:#1a1a1a;">${opts.address}, ${opts.zip}</td></tr>
+      </table>
+      <p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:24px;">Need to reschedule? Call us at (305) 967-9202.</p>
+    `,
+  });
+  if (error) throw new Error(error.message);
+}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d()+\-.\s]{7,20}$/;
@@ -132,6 +160,14 @@ export async function POST(req: Request) {
         end: { dateTime: endIso, timeZone: TIMEZONE },
       },
     });
+
+    try {
+      await sendCustomerConfirmation({ email, name, address, zip, startIso });
+    } catch (emailErr) {
+      // Don't fail the booking over a non-critical confirmation email — the
+      // calendar event (the source of truth) was already created successfully.
+      console.error("[book-consultation] Confirmation email failed:", emailErr);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
