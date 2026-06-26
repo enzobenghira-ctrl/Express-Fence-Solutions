@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check, Phone, MessageCircle, MapPin, Mail } from "lucide-react";
+import { Check, Phone, MessageCircle, MapPin, Mail, Home } from "lucide-react";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -265,6 +266,55 @@ export default function Contact() {
                 </button>
               </form>
             )}
+
+            {/* Book a free in-home consultation — third option */}
+            <Link
+              href="/book-consultation"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 16,
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 10,
+                padding: "20px 24px",
+                marginTop: 24,
+                textDecoration: "none",
+                transition: "border-color 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 8,
+                  background: "var(--accent-light)",
+                  border: "1px solid var(--accent-border)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Home size={20} style={{ color: "var(--accent)" }} />
+              </div>
+              <div>
+                <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 700, color: "var(--dark)", marginBottom: 2 }}>
+                  Book a Free In-Home Consultation
+                </p>
+                <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "var(--text-secondary)" }}>
+                  Prefer we come to you? We&apos;ll bring samples and measure your property.
+                </p>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Right — info */}

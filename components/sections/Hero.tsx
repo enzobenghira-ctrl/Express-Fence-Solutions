@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 
@@ -153,35 +154,31 @@ export default function Hero() {
             </motion.a>
 
             {/* Secondary */}
-            <motion.a
-              href="#products"
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(255,255,255,0.12)",
-                color: "#ffffff",
-                fontFamily: "var(--font-dm-sans)",
-                fontSize: 15,
-                fontWeight: 600,
-                borderRadius: 8,
-                padding: "16px 32px",
-                textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.40)",
-                transition: "border-color 0.2s, background 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
-            >
-              View Products
-              <ArrowRight size={16} strokeWidth={2} />
-            </motion.a>
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+              <Link
+                href="/book-consultation"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "rgba(255,255,255,0.12)",
+                  color: "#ffffff",
+                  fontFamily: "var(--font-dm-sans)",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  borderRadius: 8,
+                  padding: "16px 32px",
+                  textDecoration: "none",
+                  border: "1px solid rgba(255,255,255,0.40)",
+                  transition: "border-color 0.2s, background 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
+              >
+                Book a Free Consultation
+                <ArrowRight size={16} strokeWidth={2} />
+              </Link>
+            </motion.div>
           </motion.div>
 
           {/* Trust indicators */}
