@@ -57,7 +57,7 @@ export default function ConsultationHero() {
             margin: "0 auto 36px",
           }}
         >
-          Free, no-obligation · ~60 minutes · We come to you. We&apos;ll bring real WPC samples, measure your property precisely, and hand you a transparent quote on the spot — not a guess.
+          Free, no-obligation · ~60 minutes · We come to you. We&apos;ll bring real WPC samples, measure your property precisely, and prepare you a proper quote for your personalized project.
         </p>
         <motion.a
           href="#book-form"

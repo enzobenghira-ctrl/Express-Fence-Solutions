@@ -6,7 +6,7 @@ const steps = [
   { num: "01", title: "We bring physical samples", text: "Real WPC fence, decking, and cladding samples — see and touch the actual material, not a photo." },
   { num: "02", title: "We measure your property", text: "Precise on-site measurements of your space so the quote reflects exactly what you need." },
   { num: "03", title: "We design the right solution", text: "We walk your property with you and recommend the products that fit your space and style." },
-  { num: "04", title: "You get a transparent quote", text: "A custom, itemized quote on the spot — no surprises, no obligation." },
+  { num: "04", title: "You get a transparent quote", text: "A custom, itemized quote prepared for your personalized project." },
 ];
 
 export default function ConsultationProcess() {
