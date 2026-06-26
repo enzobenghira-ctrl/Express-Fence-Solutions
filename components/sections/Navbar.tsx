@@ -113,7 +113,7 @@ export default function Navbar() {
                       fontFamily: "var(--font-dm-sans)",
                       fontSize: 13,
                       fontWeight: 600,
-                      color: scrolled ? "var(--dark)" : "var(--white)",
+                      color: "var(--dark)",
                       textDecoration: "none",
                       letterSpacing: "0.02em",
                       transition: "color 0.2s",
@@ -121,7 +121,7 @@ export default function Navbar() {
                       whiteSpace: "nowrap",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = scrolled ? "var(--dark)" : "var(--white)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--dark)")}
                   >
                     {l.label}
                   </a>
@@ -132,14 +132,14 @@ export default function Navbar() {
                       fontFamily: "var(--font-dm-sans)",
                       fontSize: 13,
                       fontWeight: 600,
-                      color: scrolled ? "var(--dark)" : "var(--white)",
+                      color: "var(--dark)",
                       textDecoration: "none",
                       letterSpacing: "0.02em",
                       transition: "color 0.2s",
                       whiteSpace: "nowrap",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = scrolled ? "var(--dark)" : "var(--white)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--dark)")}
                   >
                     {l.label}
                   </Link>
