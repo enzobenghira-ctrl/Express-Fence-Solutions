@@ -214,7 +214,7 @@ export default function NavbarPage() {
                       justifyContent: "space-between",
                       fontFamily: "var(--font-cormorant)",
                       fontStyle: "italic",
-                      fontSize: 32,
+                      fontSize: 24,
                       fontWeight: 400,
                       color: "var(--dark)",
                       textDecoration: "none",
