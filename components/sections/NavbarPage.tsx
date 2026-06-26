@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const links = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/#about" },
-  { label: "WPC Products", href: "/#products" },
+  { label: "Products", href: "/#products" },
   { label: "Why WPC", href: "/#why-wpc" },
   { label: "More Products", href: "/other-products" },
   { label: "Partner With Us", href: "/partner" },
@@ -86,7 +86,7 @@ export default function NavbarPage() {
 
           {/* Nav links — desktop */}
           <ul
-            style={{ listStyle: "none", gap: 26, alignItems: "center" }}
+            style={{ listStyle: "none", gap: 20, alignItems: "center" }}
             className="hidden xl:flex"
           >
             {links.map((l) => (
