@@ -180,7 +180,7 @@ export default function Testimonials() {
             </p>
           </div>
           <a
-            href="https://g.page/r/YOUR-GOOGLE-REVIEW-LINK/review"
+            href="https://g.page/r/CYJgn-z3BeA1EBM/review"
             target="_blank"
             rel="noopener noreferrer"
             style={{
