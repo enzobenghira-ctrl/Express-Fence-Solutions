@@ -15,7 +15,10 @@ export function describeGoogleError(err: unknown): string {
 
 function getAuth() {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  // Normalize both escaped (\n) and stray CRLF (\r\n) line endings — env var UIs
+  // (and Windows clipboards) can introduce either, and a malformed PEM causes an
+  // OpenSSL "DECODER routines::unsupported" error rather than a clear auth failure.
+  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n").replace(/\r\n/g, "\n");
 
   if (!email || !privateKey) {
     console.error(
