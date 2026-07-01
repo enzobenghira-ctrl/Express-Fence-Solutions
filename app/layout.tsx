@@ -37,6 +37,9 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "https://expressfencesolutions.com" },
   robots: { index: true, follow: true },
+  other: {
+    "facebook-domain-verification": "6hwuisx9mjriqbpo8nnx27jazjrtwh",
+  },
 };
 
 const schema = {
