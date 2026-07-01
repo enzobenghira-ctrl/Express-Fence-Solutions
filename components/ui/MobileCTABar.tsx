@@ -1,5 +1,7 @@
 "use client";
 
+import { trackEvent } from "@/lib/metaEvents";
+
 export default function MobileCTABar() {
   return (
     <div
@@ -18,6 +20,7 @@ export default function MobileCTABar() {
     >
       <a
         href="tel:+13059679202"
+        onClick={() => trackEvent("Contact", { method: "phone" })}
         style={{
           flex: 1,
           display: "flex",

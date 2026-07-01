@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { PROJECT_TYPES, PROPERTY_TYPES, TIMEZONE, isInServiceArea } from "@/lib/booking-config";
+import { trackEvent } from "@/lib/metaEvents";
 
 const STEP_LABELS = ["Project", "Address", "Date & Time", "Your Info"];
 
@@ -141,6 +142,13 @@ export default function BookingForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong booking your consultation.");
       setSuccess(true);
+
+      const [firstName, ...rest] = name.trim().split(/\s+/);
+      trackEvent(
+        "Schedule",
+        { content_name: "In-Home Consultation", content_category: "Fencing" },
+        { email, phone, firstName, lastName: rest.join(" ") || undefined, zip }
+      );
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please call us at (305) 967-9202.");
     } finally {

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/metaEvents";
 
 const comparison = [
   { feature: "Rot & Moisture Resistant", wood: false, wpc: true },
@@ -122,6 +123,7 @@ export default function WhyWPC() {
 
             <a
               href="tel:+13059679202"
+              onClick={() => trackEvent("Contact", { method: "phone" })}
               style={{
                 display: "inline-flex",
                 alignItems: "center",

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Phone, MessageCircle } from "lucide-react";
+import { useEffect } from "react";
+import { trackEvent } from "@/lib/metaEvents";
 
 const containerPools = [
   {
@@ -200,6 +202,10 @@ function FeatureList({ features }: { features: string[] }) {
 }
 
 export default function OtherProductsPage() {
+  useEffect(() => {
+    trackEvent("ViewContent", { content_name: "Other Products", content_category: "Fencing" });
+  }, []);
+
   return (
     <>
       {/* Page Hero */}
@@ -582,6 +588,7 @@ export default function OtherProductsPage() {
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
             <a
               href="tel:+13059679202"
+              onClick={() => trackEvent("Contact", { method: "phone" })}
               style={{
                 display: "inline-flex",
                 alignItems: "center",

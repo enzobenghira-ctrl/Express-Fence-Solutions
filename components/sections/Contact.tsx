@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check, Phone, MessageCircle, MapPin, Mail, Home } from "lucide-react";
+import { trackEvent } from "@/lib/metaEvents";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -31,6 +32,18 @@ export default function Contact() {
       });
       if (!res.ok) throw new Error("Failed to send");
       setSubmitted(true);
+
+      const [firstName, ...rest] = form.name.trim().split(/\s+/);
+      trackEvent(
+        "Lead",
+        { content_name: "Quote Request", content_category: "Fencing" },
+        {
+          email: form.email || undefined,
+          phone: form.phone,
+          firstName,
+          lastName: rest.join(" ") || undefined,
+        }
+      );
     } catch {
       setError("Something went wrong. Please call us directly at (305) 967-9202.");
     } finally {
@@ -139,6 +152,7 @@ export default function Contact() {
               </div>
               <a
                 href="tel:+13059679202"
+                onClick={() => trackEvent("Contact", { method: "phone" })}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -438,7 +452,9 @@ export default function Contact() {
                 <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 3 ? 12 : 0 }}>
                   <span style={{ color: "var(--accent)", marginTop: 2, flexShrink: 0 }}>{item.icon}</span>
                   {item.href ? (
-                    <a href={item.href} style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
+                    <a href={item.href}
+                      onClick={item.href.startsWith("tel:") ? () => trackEvent("Contact", { method: "phone" }) : undefined}
+                      style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = "var(--dark)")}
                       onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
                     >{item.text}</a>

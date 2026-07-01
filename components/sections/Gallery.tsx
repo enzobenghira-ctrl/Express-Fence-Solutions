@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { trackEvent } from "@/lib/metaEvents";
 
 const images = [
   { src: "/images/gate-wood-black-miami.jpg",       alt: "WPC wood-look gate with black aluminum frame Miami" },
@@ -195,6 +196,7 @@ export default function Gallery() {
           </div>
           <a
             href="tel:+13059679202"
+            onClick={() => trackEvent("Contact", { method: "phone" })}
             style={{
               display: "inline-flex",
               alignItems: "center",

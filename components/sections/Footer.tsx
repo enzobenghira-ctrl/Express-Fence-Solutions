@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { trackEvent } from "@/lib/metaEvents";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -163,10 +164,10 @@ export default function Footer() {
               Contact
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <a href="tel:+13059679202" style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 600, color: "var(--accent)", textDecoration: "none" }}>
+              <a href="tel:+13059679202" onClick={() => trackEvent("Contact", { method: "phone" })} style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 600, color: "var(--accent)", textDecoration: "none" }}>
                 <Phone size={13} strokeWidth={2.5} /> (305) 967-9202
               </a>
-              <a href="tel:+17864032322" style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "rgba(250,250,247,0.5)", textDecoration: "none" }}>
+              <a href="tel:+17864032322" onClick={() => trackEvent("Contact", { method: "phone" })} style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "rgba(250,250,247,0.5)", textDecoration: "none" }}>
                 <Phone size={13} /> (786) 403-2322
               </a>
               <a href="mailto:Info@expressfencesolutions.com" style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "rgba(250,250,247,0.5)", textDecoration: "none" }}>

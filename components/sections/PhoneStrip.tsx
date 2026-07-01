@@ -2,6 +2,7 @@
 
 import { Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/metaEvents";
 
 export default function PhoneStrip() {
   return (
@@ -36,6 +37,7 @@ export default function PhoneStrip() {
         </p>
         <a
           href="tel:+13059679202"
+          onClick={() => trackEvent("Contact", { method: "phone" })}
           style={{
             display: "flex",
             alignItems: "center",

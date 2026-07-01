@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
+import { trackEvent } from "@/lib/metaEvents";
 
 export default function Expansion() {
   return (
@@ -138,6 +139,7 @@ export default function Expansion() {
                 </div>
                 <a
                   href="tel:+13059679202"
+                  onClick={() => trackEvent("Contact", { method: "phone" })}
                   style={{
                     fontFamily: "var(--font-dm-sans)",
                     fontSize: 13,

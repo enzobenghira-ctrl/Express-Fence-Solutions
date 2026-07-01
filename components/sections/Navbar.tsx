@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { X, Menu, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackEvent } from "@/lib/metaEvents";
 
 const links = [
   { label: "Home", href: "#", anchor: true },
@@ -152,6 +153,7 @@ export default function Navbar() {
           <div className="hidden xl:flex" style={{ alignItems: "center", gap: 16 }}>
             <a
               href="tel:+13059679202"
+              onClick={() => trackEvent("Contact", { method: "phone" })}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -302,6 +304,7 @@ export default function Navbar() {
             >
               <a
                 href="tel:+13059679202"
+                onClick={() => trackEvent("Contact", { method: "phone" })}
                 style={{
                   display: "flex",
                   alignItems: "center",

@@ -3,12 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Phone } from "lucide-react";
 import NavbarPage from "@/components/sections/NavbarPage";
 import Footer from "@/components/sections/Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import MobileCTABar from "@/components/ui/MobileCTABar";
 import type { ProductData } from "@/lib/products-data";
+import { trackEvent } from "@/lib/metaEvents";
 
 const WHATSAPP = "https://wa.me/13059679202";
 
@@ -17,6 +19,11 @@ interface Props {
 }
 
 export default function ProductDetailClient({ product }: Props) {
+  useEffect(() => {
+    trackEvent("ViewContent", { content_name: product.name, content_category: "Fencing" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.slug]);
+
   return (
     <>
       <NavbarPage />
@@ -583,6 +590,7 @@ export default function ProductDetailClient({ product }: Props) {
                 </a>
                 <a
                   href="tel:+13059679202"
+                  onClick={() => trackEvent("Contact", { method: "phone" })}
                   style={{
                     display: "flex",
                     alignItems: "center",
