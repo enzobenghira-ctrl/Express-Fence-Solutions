@@ -92,7 +92,7 @@ export default function WhyWPC() {
             <div
               style={{
                 padding: "28px",
-                background: "var(--surface)",
+                background: "var(--dark)",
                 borderRadius: 10,
                 border: "1px solid var(--border)",
                 marginBottom: 24,
@@ -103,7 +103,7 @@ export default function WhyWPC() {
                   fontFamily: "var(--font-cormorant)",
                   fontStyle: "italic",
                   fontSize: 20,
-                  color: "var(--dark)",
+                  color: "var(--accent)",
                   marginBottom: 8,
                   lineHeight: 1.3,
                 }}
@@ -114,7 +114,7 @@ export default function WhyWPC() {
                 style={{
                   fontFamily: "var(--font-dm-sans)",
                   fontSize: 13,
-                  color: "var(--text-secondary)",
+                  color: "var(--accent)",
                 }}
               >
                 No painting. No sealing. No repairs.
@@ -133,19 +133,21 @@ export default function WhyWPC() {
                 fontWeight: 600,
                 color: "var(--dark)",
                 textDecoration: "none",
-                background: "var(--surface-2)",
-                border: "1px solid var(--border-strong)",
+                background: "var(--accent)",
+                border: "1px solid var(--accent)",
                 borderRadius: 8,
                 padding: "14px 24px",
-                transition: "border-color 0.2s, background 0.2s",
+                transition: "border-color 0.2s, background 0.2s, color 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--accent)";
-                e.currentTarget.style.background = "var(--accent-light)";
+                e.currentTarget.style.background = "var(--dark)";
+                e.currentTarget.style.borderColor = "var(--dark)";
+                e.currentTarget.style.color = "var(--accent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--border-strong)";
-                e.currentTarget.style.background = "var(--surface-2)";
+                e.currentTarget.style.background = "var(--accent)";
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.color = "var(--dark)";
               }}
             >
               📞 Discuss your project: (305) 967-9202
@@ -278,7 +280,7 @@ export default function WhyWPC() {
               style={{
                 marginTop: 20,
                 padding: "20px 24px",
-                background: "var(--accent-light)",
+                background: "var(--dark)",
                 border: "1px solid var(--accent-border)",
                 borderRadius: 10,
                 display: "flex",
@@ -291,7 +293,7 @@ export default function WhyWPC() {
                 style={{
                   fontFamily: "var(--font-dm-sans)",
                   fontSize: 14,
-                  color: "var(--dark)",
+                  color: "var(--white)",
                   fontWeight: 500,
                 }}
               >

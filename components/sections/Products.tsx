@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { productsData } from "@/lib/products-data";
 
-const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
 const containerVariants = {
   hidden: {},
@@ -77,10 +76,8 @@ export default function Products() {
           >
             Six premium product lines. All made from Wood Plastic Composite — the material that looks like real wood but never warps, rots, or needs maintenance.
           </p>
-          <a
-            href={CATALOG}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/other-products"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -97,9 +94,9 @@ export default function Products() {
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--accent-border)")}
           >
-            Download Full Product Catalog
+            See Our Other Products
             <ArrowUpRight size={14} strokeWidth={2.5} />
-          </a>
+          </Link>
         </motion.div>
 
         {/* Product grid */}

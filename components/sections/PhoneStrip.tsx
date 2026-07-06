@@ -50,7 +50,7 @@ export default function PhoneStrip() {
           }}
         >
           <Phone size={14} strokeWidth={2.5} />
-          (305) 967-9202 — Free Quote
+          (305) 967-9202 — Call Us
         </a>
       </div>
     </motion.div>

@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -117,7 +116,7 @@ export default function Hero() {
               marginBottom: 40,
             }}
           >
-            Premium WPC fencing, pergolas, decking and cladding — built for Florida&apos;s climate, zero maintenance required.
+            Premium fences, pergolas, gates, decking, cladding, and container pools — built for the Florida weather.
           </motion.p>
 
           {/* CTAs */}
@@ -127,10 +126,9 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.34, ease: "easeOut" }}
             style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 48 }}
           >
-            {/* Primary — call */}
+            {/* Primary — book consultation */}
             <motion.a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
+              href="/book-consultation"
               whileHover={{ y: -2, boxShadow: "0 8px 28px rgba(184,150,90,0.28)" }}
               whileTap={{ scale: 0.97 }}
               style={{
@@ -150,35 +148,8 @@ export default function Hero() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--dark)")}
             >
-              Get a Free Quote
+              Book a Free Consultation
             </motion.a>
-
-            {/* Secondary */}
-            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="/book-consultation"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  background: "rgba(255,255,255,0.12)",
-                  color: "#ffffff",
-                  fontFamily: "var(--font-dm-sans)",
-                  fontSize: 15,
-                  fontWeight: 600,
-                  borderRadius: 8,
-                  padding: "16px 32px",
-                  textDecoration: "none",
-                  border: "1px solid rgba(255,255,255,0.40)",
-                  transition: "border-color 0.2s, background 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
-              >
-                Book a Free Consultation
-                <ArrowRight size={16} strokeWidth={2} />
-              </Link>
-            </motion.div>
           </motion.div>
 
           {/* Trust indicators */}

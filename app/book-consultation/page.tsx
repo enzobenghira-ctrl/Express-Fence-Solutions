@@ -34,9 +34,9 @@ export default function BookConsultationPage() {
       <NavbarPage />
       <main>
         <ConsultationHero />
+        <ConsultationBookingSection />
         <ConsultationProcess />
         <ConsultationWhyInPerson />
-        <ConsultationBookingSection />
         <Testimonials />
       </main>
       <Footer />

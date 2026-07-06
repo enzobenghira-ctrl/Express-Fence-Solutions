@@ -46,7 +46,7 @@ export default function NavbarPage() {
       >
         <div
           style={{
-            maxWidth: 1280,
+            maxWidth: 1360,
             margin: "0 auto",
             padding: "0 32px",
             width: "100%",
@@ -87,7 +87,7 @@ export default function NavbarPage() {
 
           {/* Nav links — desktop */}
           <ul
-            style={{ listStyle: "none", gap: 20, alignItems: "center" }}
+            style={{ listStyle: "none", gap: 22, alignItems: "center" }}
             className="hidden xl:flex"
           >
             {links.map((l) => (
@@ -114,7 +114,7 @@ export default function NavbarPage() {
           </ul>
 
           {/* Right */}
-          <div className="hidden xl:flex" style={{ alignItems: "center", gap: 16 }}>
+          <div className="hidden xl:flex" style={{ alignItems: "center", gap: 22, flexShrink: 0 }}>
             <a
               href="tel:+13059679202"
               onClick={() => trackEvent("Contact", { method: "phone" })}
@@ -127,14 +127,18 @@ export default function NavbarPage() {
                 fontWeight: 600,
                 color: "var(--dark)",
                 textDecoration: "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
               <Phone size={14} strokeWidth={2.5} style={{ color: "var(--accent)" }} />
               (305) 967-9202
             </a>
             <Link
-              href="/#contact"
+              href="/book-consultation"
               style={{
+                display: "inline-flex",
+                alignItems: "center",
                 fontFamily: "var(--font-dm-sans)",
                 fontSize: 13,
                 fontWeight: 600,
@@ -143,6 +147,8 @@ export default function NavbarPage() {
                 borderRadius: 6,
                 padding: "10px 22px",
                 textDecoration: "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
                 transition: "background 0.2s, transform 0.15s",
               }}
               onMouseEnter={(e) => {
@@ -154,7 +160,7 @@ export default function NavbarPage() {
                 e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              Free Quote
+              Book Appointment
             </Link>
           </div>
 
@@ -261,7 +267,7 @@ export default function NavbarPage() {
                 📞 (305) 967-9202
               </a>
               <Link
-                href="/#contact"
+                href="/book-consultation"
                 onClick={() => setOpen(false)}
                 style={{
                   display: "flex",
@@ -277,7 +283,7 @@ export default function NavbarPage() {
                   textDecoration: "none",
                 }}
               >
-                Get a Free Quote
+                Book Appointment
               </Link>
             </motion.div>
           </motion.div>

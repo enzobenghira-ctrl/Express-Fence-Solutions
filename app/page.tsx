@@ -19,12 +19,12 @@ export default function Home() {
       <main>
         <Hero />
         <PhoneStrip />
-        <WhyWPC />
         <Products />
+        <WhyWPC />
         <About />
-        <Expansion />
         <Gallery />
         <Testimonials />
+        <Expansion />
         <Contact />
       </main>
       <Footer />

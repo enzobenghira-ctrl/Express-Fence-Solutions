@@ -208,27 +208,26 @@ export default function PartnerContactSection() {
           >
             <div
               style={{
-                background: "var(--surface)",
+                background: "var(--dark)",
                 border: "1px solid var(--border)",
                 borderRadius: 10,
                 padding: "24px",
               }}
             >
-              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-secondary)", marginBottom: 16 }}>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--white)", marginBottom: 16 }}>
                 Talk to Us Directly
               </p>
               {[
                 { icon: <Phone size={14} />, text: "(305) 967-9202", href: "tel:+13059679202" },
-                { icon: <Phone size={14} />, text: "(786) 403-2322", href: "tel:+17864032322" },
                 { icon: <Mail size={14} />, text: "Info@expressfencesolutions.com", href: "mailto:Info@expressfencesolutions.com" },
               ].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 2 ? 12 : 0 }}>
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 1 ? 12 : 0 }}>
                   <span style={{ color: "var(--accent)", marginTop: 2, flexShrink: 0 }}>{item.icon}</span>
                   <a
                     href={item.href}
-                    style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--dark)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
+                    style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none", transition: "color 0.2s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--white)")}
                   >
                     {item.text}
                   </a>

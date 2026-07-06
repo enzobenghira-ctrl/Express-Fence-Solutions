@@ -270,7 +270,7 @@ export default function OtherProductsPage() {
                 transition: "opacity 0.2s",
               }}
             >
-              Get a Free Quote
+              Call For a Quote
             </a>
             <a
               href="https://wa.me/13059679202"
@@ -283,9 +283,9 @@ export default function OtherProductsPage() {
                 fontFamily: "var(--font-dm-sans)",
                 fontSize: 14,
                 fontWeight: 700,
-                background: "rgba(250,250,247,0.1)",
+                background: "#25D366",
                 color: "var(--white)",
-                border: "1px solid rgba(250,250,247,0.2)",
+                border: "1px solid #25D366",
                 borderRadius: 8,
                 padding: "14px 28px",
                 textDecoration: "none",
@@ -346,7 +346,7 @@ export default function OtherProductsPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "var(--dark)")}
               >
-                Get a Pool Quote
+                Call For a Quote
                 <ArrowUpRight size={14} strokeWidth={2.5} />
               </a>
               <a
@@ -421,7 +421,7 @@ export default function OtherProductsPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "var(--dark)")}
               >
-                Get a Pergola Quote
+                Call For a Quote
                 <ArrowUpRight size={14} strokeWidth={2.5} />
               </a>
               <a
@@ -527,7 +527,7 @@ export default function OtherProductsPage() {
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "var(--dark)")}
                 >
-                  Get a Fence Quote
+                  Call For a Quote
                   <ArrowUpRight size={14} strokeWidth={2.5} />
                 </a>
                 <a

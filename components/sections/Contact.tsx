@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check, Phone, MessageCircle, MapPin, Mail, Home } from "lucide-react";
+import { Check, Phone, MessageCircle, MapPin, Mail, Home, FileText } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
@@ -144,10 +144,10 @@ export default function Contact() {
                     marginBottom: 4,
                   }}
                 >
-                  Fastest way to get started?
+                  Best way to start?
                 </p>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "rgba(250,250,247,0.5)" }}>
-                  Give us a call — we&apos;ll quote you in the same conversation.
+                  Give us a call and Book an In-Person Appointment.
                 </p>
               </div>
               <a
@@ -348,7 +348,7 @@ export default function Contact() {
                 display: "flex",
                 alignItems: "center",
                 gap: 16,
-                background: "var(--surface)",
+                background: "#25D366",
                 border: "1px solid var(--border)",
                 borderRadius: 10,
                 padding: "20px 24px",
@@ -369,7 +369,7 @@ export default function Contact() {
                   width: 44,
                   height: 44,
                   borderRadius: "50%",
-                  background: "#25D366",
+                  background: "var(--dark)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -380,7 +380,7 @@ export default function Contact() {
               </div>
               <div>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 700, color: "var(--dark)", marginBottom: 2 }}>Chat on WhatsApp</p>
-                <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "var(--text-secondary)" }}>Quick replies · Preferred in Miami</p>
+                <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "var(--white)" }}>Quick replies · Preferred in Miami</p>
               </div>
             </a>
 
@@ -393,7 +393,7 @@ export default function Contact() {
                 display: "flex",
                 alignItems: "center",
                 gap: 16,
-                background: "var(--surface)",
+                background: "var(--accent)",
                 border: "1px solid var(--border)",
                 borderRadius: 10,
                 padding: "20px 24px",
@@ -420,10 +420,9 @@ export default function Contact() {
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
-                  fontSize: 20,
                 }}
               >
-                📄
+                <FileText size={20} style={{ color: "var(--dark)" }} />
               </div>
               <div>
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 700, color: "var(--dark)", marginBottom: 2 }}>Download Product Catalog</p>
@@ -434,32 +433,31 @@ export default function Contact() {
             {/* Contact details */}
             <div
               style={{
-                background: "var(--surface)",
+                background: "var(--dark)",
                 border: "1px solid var(--border)",
                 borderRadius: 10,
                 padding: "24px",
               }}
             >
-              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-secondary)", marginBottom: 16 }}>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--white)", marginBottom: 16 }}>
                 Contact Info
               </p>
               {[
                 { icon: <Phone size={14} />, text: "(305) 967-9202", href: "tel:+13059679202" },
-                { icon: <Phone size={14} />, text: "(786) 403-2322", href: "tel:+17864032322" },
                 { icon: <Mail size={14} />, text: "Info@expressfencesolutions.com", href: "mailto:Info@expressfencesolutions.com" },
-                { icon: <MapPin size={14} />, text: "Miami & Palm Beach County, FL", href: null },
+                { icon: <MapPin size={14} />, text: "Serving all of South Florida", href: null },
               ].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 3 ? 12 : 0 }}>
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 2 ? 12 : 0 }}>
                   <span style={{ color: "var(--accent)", marginTop: 2, flexShrink: 0 }}>{item.icon}</span>
                   {item.href ? (
                     <a href={item.href}
                       onClick={item.href.startsWith("tel:") ? () => trackEvent("Contact", { method: "phone" }) : undefined}
-                      style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--dark)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
+                      style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none", transition: "color 0.2s" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--white)")}
                     >{item.text}</a>
                   ) : (
-                    <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)" }}>{item.text}</p>
+                    <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)" }}>{item.text}</p>
                   )}
                 </div>
               ))}
@@ -467,7 +465,7 @@ export default function Contact() {
 
             {/* Trust */}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {["Response within 24 hours", "Free quotes always", "Serving Miami & Palm Beach County"].map((item) => (
+              {["Response within 24 hours", "Free quotes always", "Serving all of South Florida"].map((item) => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <Check size={14} style={{ color: "var(--accent)", flexShrink: 0 }} />
                   <span style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)" }}>{item}</span>

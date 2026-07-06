@@ -42,7 +42,7 @@ export default function ConsultationBookingSection() {
             Book your free consultation.
           </h2>
           <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)" }}>
-            Takes 60 seconds · No obligation · We confirm within 24 hours
+            Takes 60 seconds · No obligation · You&apos;ll receive text confirmation
           </p>
         </motion.div>
 

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
 
 const images = [
@@ -79,34 +78,6 @@ export default function Gallery() {
               Installed across South Florida.
             </h2>
           </div>
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              fontFamily: "var(--font-dm-sans)",
-              fontSize: 13,
-              fontWeight: 600,
-              color: "var(--dark)",
-              textDecoration: "none",
-              background: "var(--white)",
-              border: "1px solid var(--border-strong)",
-              borderRadius: 8,
-              padding: "12px 20px",
-              transition: "border-color 0.2s",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border-strong)")}
-          >
-            Start your project
-            <ArrowRight size={14} strokeWidth={2} />
-          </a>
         </motion.div>
 
         {/* Masonry grid */}
