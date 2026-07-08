@@ -18,6 +18,7 @@ const company = [
   { label: "About Us", href: "#about" },
   { label: "Why WPC", href: "#why-wpc" },
   { label: "Gallery", href: "#gallery" },
+  { label: "Fence Installation Miami", href: "/fence-installation-miami" },
   { label: "Expanding to Palm Beach County", href: "#expanding-to-palm-beach" },
   { label: "Contact", href: "#contact" },
 ];
