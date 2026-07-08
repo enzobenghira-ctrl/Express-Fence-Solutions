@@ -94,7 +94,7 @@ export default function BookingForm() {
     if (s === 1) {
       if (address.trim().length < 5) e.address = "Enter your full address.";
       if (!/^\d{5}$/.test(zip.trim())) e.zip = "Enter a valid 5-digit ZIP code.";
-      else if (!isInServiceArea(zip)) e.zip = "We currently serve Miami-Dade & Palm Beach County. Call us to check your area.";
+      else if (!isInServiceArea(zip)) e.zip = "We currently serve Miami-Dade & Broward County. Call us to check your area.";
     }
     if (s === 2) {
       if (!date) e.date = "Choose a date.";

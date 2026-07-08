@@ -67,7 +67,7 @@ function validate(body: Partial<BookingPayload>): string | null {
     return "Please enter a valid address.";
   }
   if (!body.zip || !isInServiceArea(body.zip)) {
-    return "We currently serve Miami-Dade & Palm Beach County. Please call us to check availability in your area.";
+    return "We currently serve Miami-Dade & Broward County. Please call us to check availability in your area.";
   }
   if (!body.slotIso || Number.isNaN(new Date(body.slotIso).getTime())) {
     return "Please select a valid consultation time.";

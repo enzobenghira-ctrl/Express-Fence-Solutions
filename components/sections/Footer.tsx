@@ -18,7 +18,7 @@ const company = [
   { label: "About Us", href: "#about" },
   { label: "Why WPC", href: "#why-wpc" },
   { label: "Gallery", href: "#gallery" },
-  { label: "Expanding to Palm Beach County", href: "#expanding-to-okeechobee" },
+  { label: "Expanding to Palm Beach County", href: "#expanding-to-palm-beach" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -173,7 +173,7 @@ export default function Footer() {
               </a>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)" }}>
                 <MapPin size={13} style={{ marginTop: 2, flexShrink: 0, color: "var(--accent)" }} />
-                Miami & Palm Beach County, FL
+                Miami-Dade & Broward County, FL
               </div>
               <a
                 href="https://www.instagram.com/express_fence_solutions/"

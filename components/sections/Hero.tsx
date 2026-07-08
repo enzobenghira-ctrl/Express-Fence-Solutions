@@ -79,7 +79,7 @@ export default function Hero() {
                 marginBottom: 28,
               }}
             >
-              Miami &amp; Palm Beach County, FL
+              Miami-Dade &amp; Broward County, FL
             </span>
           </motion.div>
 
@@ -162,7 +162,7 @@ export default function Hero() {
             {[
               "World&apos;s #1 WPC Manufacturer",
               "Zero Maintenance",
-              "Miami &amp; Palm Beach County",
+              "Miami-Dade &amp; Broward County",
             ].map((item, i) => (
               <span
                 key={i}

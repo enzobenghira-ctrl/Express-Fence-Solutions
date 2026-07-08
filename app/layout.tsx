@@ -20,9 +20,9 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://expressfencesolutions.com"),
-  title: "Express Fence Solutions — Premium WPC Fences, Pergolas & Decking | Miami & Palm Beach County FL",
+  title: "Express Fence Solutions — Premium WPC Fences, Pergolas & Decking | Miami-Dade & Broward County FL",
   description:
-    "Miami's premium WPC fence, pergola, decking and cladding specialists. Eco-friendly, zero-maintenance outdoor products from the world's largest WPC manufacturer. Serving Miami & Palm Beach County. Call for a free quote.",
+    "Family-owned fence company serving Miami-Dade & Broward County. Premium WPC composite fences, aluminum pergolas & gates. Free consultation.",
   keywords:
     "WPC fence Miami, composite fence Florida, WPC pergola, WPC decking Miami, wood plastic composite fence, outdoor living Miami, Express Fence Solutions",
   openGraph: {
@@ -48,13 +48,15 @@ const schema = {
   name: "Express Fence Solutions LLC",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Miami",
+    streetAddress: "15431 W. Dixie Hwy, Unit 12",
+    addressLocality: "North Miami Beach",
     addressRegion: "FL",
+    postalCode: "33162",
   },
   telephone: "+13059679202",
   email: "Info@expressfencesolutions.com",
   url: "https://expressfencesolutions.com",
-  areaServed: ["Miami, FL", "Palm Beach County, FL", "South Florida"],
+  areaServed: ["Miami-Dade County, FL", "Broward County, FL"],
   sameAs: ["https://www.instagram.com/express_fence_solutions/"],
 };
 

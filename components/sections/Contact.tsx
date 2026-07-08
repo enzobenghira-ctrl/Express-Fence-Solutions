@@ -238,7 +238,7 @@ export default function Contact() {
                   <select name="location" value={form.location} onChange={handleChange} required>
                     <option value="" disabled>Location...</option>
                     <option>Miami / South Florida</option>
-                    <option>Palm Beach County / Central Florida</option>
+                    <option>Palm Beach County / South Florida (coming soon)</option>
                     <option>Other</option>
                   </select>
                 </div>

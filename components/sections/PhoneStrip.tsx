@@ -33,7 +33,7 @@ export default function PhoneStrip() {
             color: "rgba(250,250,247,0.55)",
           }}
         >
-          Representing the world&apos;s largest WPC manufacturer · Serving Miami &amp; Palm Beach County, FL
+          Representing the world&apos;s largest WPC manufacturer · Serving Miami-Dade &amp; Broward County, FL
         </p>
         <a
           href="tel:+13059679202"

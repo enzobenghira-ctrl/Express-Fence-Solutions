@@ -583,7 +583,7 @@ export default function OtherProductsPage() {
             lineHeight: 1.65,
             marginBottom: 36,
           }}>
-            Visit our showroom at 15431 W. Dixie Hwy, Unit 12, North Miami Beach — or get in touch and we&apos;ll come to you for a free consultation.
+            Visit our showroom at 15431 W. Dixie Hwy, Unit 12, North Miami Beach, FL 33162 — or get in touch and we&apos;ll come to you for a free consultation.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
             <a

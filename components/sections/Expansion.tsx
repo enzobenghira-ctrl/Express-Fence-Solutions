@@ -7,7 +7,7 @@ import { trackEvent } from "@/lib/metaEvents";
 export default function Expansion() {
   return (
     <section
-      id="expanding-to-okeechobee"
+      id="expanding-to-palm-beach"
       className="section-mobile-sm"
       style={{
         background: "var(--surface)",
@@ -86,7 +86,7 @@ export default function Expansion() {
                 lineHeight: 1.7,
               }}
             >
-              We&apos;re building a brand new showroom in Palm Beach County — bringing Miami-quality WPC products to Central Florida homeowners. Inquiries are open now.
+              We&apos;re building a brand new showroom in Palm Beach County — bringing Miami-quality WPC products to South Florida homeowners. Inquiries are open now.
             </p>
           </motion.div>
 

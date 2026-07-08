@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-const trustItems = ["World's #1 WPC Manufacturer", "25+ Year Lifespan", "Serving Miami & Palm Beach County"];
+const trustItems = ["World's #1 WPC Manufacturer", "25+ Year Lifespan", "Serving Miami-Dade & Broward County"];
 
 export default function PartnerHero() {
   return (
