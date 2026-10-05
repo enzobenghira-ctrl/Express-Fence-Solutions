@@ -18,7 +18,7 @@ const finishes = [
   },
   {
     name: "Antique Driftwood",
-    image: "/images/fence-beige-miami.png",
+    image: "/images/fence-beige-miami.webp",
     alt: "antique driftwood WPC composite fence in a Miami-Dade backyard with tropical landscaping",
     desc: "A weathered, light-sand finish that brightens the yard and holds its color under the hardest South Florida sun.",
   },

@@ -34,7 +34,7 @@ export default function FenceMiamiOtherServices() {
         </p>
         <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
           <a
-            href="/products/pergolas"
+            href="/products/wpc-pergolas"
             style={{
               fontFamily: "var(--font-dm-sans)",
               fontSize: 13,

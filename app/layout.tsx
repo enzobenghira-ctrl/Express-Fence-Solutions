@@ -27,16 +27,16 @@ export const metadata: Metadata = {
   keywords:
     "WPC fence Miami, composite fence Florida, WPC pergola, WPC decking Miami, wood plastic composite fence, outdoor living Miami, Express Fence Solutions",
   openGraph: {
-    title: "Express Fence Solutions — Premium WPC Fences, Pergolas & Decking | Miami FL",
+    title: "Express Fence Solutions — Premium WPC, built for Florida",
     description:
-      "Miami's premium WPC fence, pergola, decking and cladding specialists. Zero-maintenance outdoor products from the world's largest WPC manufacturer.",
+      "Premium WPC fencing, decking, cladding, pergolas and gates — supplied to contractors and installed for homeowners across South Florida.",
     url: "https://expressfencesolutions.com",
     siteName: "Express Fence Solutions",
-    images: [{ url: "/images/hero-home-luxury.jpg", width: 1200, height: 630, alt: "WPC fence luxury home Miami" }],
+    images: [{ url: "/images/fence-waterway-turf.jpg", alt: "Charcoal WPC privacy fence along a South Florida waterway" }],
     locale: "en_US",
     type: "website",
   },
-  alternates: { canonical: "https://expressfencesolutions.com" },
+  // No site-wide canonical: each page sets its own (a layout canonical would point every page at the homepage).
   robots: { index: true, follow: true },
   other: {
     "facebook-domain-verification": "6hwuisx9mjriqbpo8nnx27jazjrtwh",

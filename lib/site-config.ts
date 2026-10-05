@@ -44,14 +44,13 @@ export interface NavLink {
 }
 
 // Benches stay reachable at /products/benches but are intentionally off the main nav.
-// Slugs are renamed to /products/wpc-* in the product-page phase; update hrefs here then.
 export const PRODUCT_NAV: NavLink[] = [
-  { label: "WPC Fencing", href: "/products/fences" },
-  { label: "WPC Decking", href: "/products/decking" },
-  { label: "WPC Cladding", href: "/products/cladding" },
-  { label: "WPC Pergolas", href: "/products/pergolas" },
+  { label: "WPC Fencing", href: "/products/wpc-fencing" },
+  { label: "WPC Decking", href: "/products/wpc-decking" },
+  { label: "WPC Cladding", href: "/products/wpc-cladding" },
+  { label: "WPC Pergolas", href: "/products/wpc-pergolas" },
   { label: "Gates", href: "/products/gates" },
-  { label: "Aluminum", href: "/other-products" },
+  { label: "Aluminum", href: "/products/aluminum" },
 ];
 
 export const MAIN_NAV: NavLink[] = [

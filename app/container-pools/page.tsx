@@ -18,9 +18,9 @@ const CONSULT = { label: "Book a design consultation", href: `${FUNNEL_ENTRY.hom
 
 // Owner-approved: AI images may appear here, labelled "Concept", until real photos arrive.
 const CONCEPTS = [
-  { src: "/images/container-pool-pergola-daytime.png", alt: "Container pool with WPC deck and pergola" },
-  { src: "/images/container-pool-backyard-pergola-day.png", alt: "Backyard container pool beside a pergola" },
-  { src: "/images/container-pool-pergola-sunset-party.png", alt: "Container pool with pergola at sunset" },
+  { src: "/images/container-pool-pergola-daytime.webp", alt: "Container pool with WPC deck and pergola" },
+  { src: "/images/container-pool-backyard-pergola-day.webp", alt: "Backyard container pool beside a pergola" },
+  { src: "/images/container-pool-pergola-sunset-party.webp", alt: "Container pool with pergola at sunset" },
 ];
 
 export default function ContainerPoolsPage() {

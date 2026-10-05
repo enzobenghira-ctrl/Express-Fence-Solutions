@@ -2,14 +2,14 @@
 // FunnelImage stamps them "Concept", and they stay off trade and landing pages.
 // Remove an entry only when it is replaced by a real photo of a real install.
 export const CONCEPT_IMAGES = new Set<string>([
-  "/images/fence-backyard-lawn-garden.png",
-  "/images/fence-modern-home-driveway.png",
-  "/images/container-pool-backyard-pergola-day.png",
-  "/images/container-pool-pergola-daytime.png",
-  "/images/container-pool-pergola-sunset-party.png",
-  "/images/aluminum-pergola-pool-sunset.png",
-  "/images/aluminum-pergola-waterfront-sunset.png",
-  "/images/gate-double-swing-render.png",
+  "/images/fence-backyard-lawn-garden.webp",
+  "/images/fence-modern-home-driveway.webp",
+  "/images/container-pool-backyard-pergola-day.webp",
+  "/images/container-pool-pergola-daytime.webp",
+  "/images/container-pool-pergola-sunset-party.webp",
+  "/images/aluminum-pergola-pool-sunset.webp",
+  "/images/aluminum-pergola-waterfront-sunset.webp",
+  "/images/gate-double-swing-render.webp",
 ]);
 
 // Confirmed photos of real EFS installs (matched to the owner's phone photos). The only

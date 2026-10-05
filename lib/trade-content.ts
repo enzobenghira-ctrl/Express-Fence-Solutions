@@ -66,15 +66,15 @@ export interface TradeProductLine {
 }
 
 export const TRADE_PRODUCT_LINES: TradeProductLine[] = [
-  { name: "WPC fencing", text: "Privacy and decorative fencing.", href: "/products/fences", highlights: todo("fencing spec highlights") },
-  { name: "WPC decking", text: "Decks, pool surrounds and walkways.", href: "/products/decking", highlights: todo("decking spec highlights") },
-  { name: "WPC wall cladding", text: "Exterior and interior wall finishes.", href: "/products/cladding", highlights: todo("cladding spec highlights") },
-  { name: "WPC pergolas", text: "Shade structures for outdoor living.", href: "/products/pergolas", highlights: todo("pergola spec highlights") },
+  { name: "WPC fencing", text: "Privacy and decorative fencing.", href: "/products/wpc-fencing", highlights: todo("fencing spec highlights") },
+  { name: "WPC decking", text: "Decks, pool surrounds and walkways.", href: "/products/wpc-decking", highlights: todo("decking spec highlights") },
+  { name: "WPC wall cladding", text: "Exterior and interior wall finishes.", href: "/products/wpc-cladding", highlights: todo("cladding spec highlights") },
+  { name: "WPC pergolas", text: "Shade structures for outdoor living.", href: "/products/wpc-pergolas", highlights: todo("pergola spec highlights") },
   { name: "Gates", text: "Pedestrian and driveway gates to match.", href: "/products/gates", highlights: todo("gate spec highlights") },
   {
     name: "Aluminum & container pools",
     text: "Aluminum fences, louvered aluminum pergolas and container pools.",
-    href: "/other-products",
+    href: "/products/aluminum",
     highlights: todo("aluminum & pool spec highlights"),
   },
 ];

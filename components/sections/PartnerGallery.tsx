@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 // photo's real pixel dimensions so it displays at its true aspect ratio
 // instead of being cropped to a fixed box.
 const photos: { image: string; alt: string; width: number; height: number }[] = [
-  { image: "/images/fence-modern-home-driveway.png", alt: "WPC fence modern white home driveway Miami", width: 768, height: 1376 },
-  { image: "/images/container-pool-pergola-daytime.png", alt: "Container pool with wood pergola daytime backyard", width: 896, height: 1200 },
-  { image: "/images/fence-backyard-lawn-garden.png", alt: "WPC fence backyard lawn and garden Miami", width: 3072, height: 5504 },
-  { image: "/images/container-pool-pergola-sunset-party.png", alt: "Container pool with aluminum pergola sunset gathering", width: 3712, height: 4608 },
-  { image: "/images/aluminum-pergola-pool-sunset.png", alt: "White aluminum pergola with lounge chairs poolside sunset", width: 1376, height: 768 },
-  { image: "/images/container-pool-backyard-pergola-day.png", alt: "Container pool with wood pergola dining area backyard", width: 3712, height: 4608 },
-  { image: "/images/aluminum-pergola-waterfront-sunset.png", alt: "Aluminum pergola waterfront Miami skyline sunset", width: 3712, height: 4608 },
+  { image: "/images/fence-modern-home-driveway.webp", alt: "WPC fence modern white home driveway Miami", width: 768, height: 1376 },
+  { image: "/images/container-pool-pergola-daytime.webp", alt: "Container pool with wood pergola daytime backyard", width: 896, height: 1200 },
+  { image: "/images/fence-backyard-lawn-garden.webp", alt: "WPC fence backyard lawn and garden Miami", width: 3072, height: 5504 },
+  { image: "/images/container-pool-pergola-sunset-party.webp", alt: "Container pool with aluminum pergola sunset gathering", width: 3712, height: 4608 },
+  { image: "/images/aluminum-pergola-pool-sunset.webp", alt: "White aluminum pergola with lounge chairs poolside sunset", width: 1376, height: 768 },
+  { image: "/images/container-pool-backyard-pergola-day.webp", alt: "Container pool with wood pergola dining area backyard", width: 3712, height: 4608 },
+  { image: "/images/aluminum-pergola-waterfront-sunset.webp", alt: "Aluminum pergola waterfront Miami skyline sunset", width: 3712, height: 4608 },
 ];
 
 export default function PartnerGallery() {

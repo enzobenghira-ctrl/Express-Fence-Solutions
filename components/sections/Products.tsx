@@ -74,10 +74,10 @@ export default function Products() {
               marginBottom: 24,
             }}
           >
-            Six premium product lines. All made from Wood Plastic Composite — the material that looks like real wood but never warps, rots, or needs maintenance.
+            Five WPC product lines — Wood Plastic Composite looks like real wood, without the warping, rot or repainting.
           </p>
           <Link
-            href="/other-products"
+            href="/products/aluminum"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -94,7 +94,7 @@ export default function Products() {
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--accent-border)")}
           >
-            See Our Other Products
+            Aluminum fences & pergolas
             <ArrowUpRight size={14} strokeWidth={2.5} />
           </Link>
         </motion.div>
@@ -116,7 +116,7 @@ export default function Products() {
             overflow: "hidden",
           }}
         >
-          {productsData.map((p) => (
+          {productsData.filter((p) => p.inMainNav).map((p) => (
             <motion.div
               key={p.num}
               variants={cardVariants}
@@ -261,6 +261,24 @@ export default function Products() {
               </Link>
             </motion.div>
           ))}
+          {/* Sixth tile: the secondary lines, so the grid has no empty cell */}
+          <motion.div
+            variants={cardVariants}
+            style={{ background: "var(--surface)", padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 14 }}
+          >
+            <span style={{ fontFamily: "var(--font-dm-sans)", fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent-text)" }}>
+              More products
+            </span>
+            {[
+              { label: "Aluminum fences & pergolas", href: "/products/aluminum" },
+              { label: "Container pools", href: "/container-pools" },
+              { label: "Outdoor living packages", href: "/outdoor-living-packages" },
+            ].map((l) => (
+              <Link key={l.href} href={l.href} className="efs-link" style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: 26, display: "inline-flex", alignItems: "center", gap: 8 }}>
+                {l.label} <ArrowUpRight size={16} strokeWidth={2.5} />
+              </Link>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -1,37 +1,89 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getProductBySlug, productsData } from "@/lib/products-data";
+import { getProductBySlug, productsData, specRows } from "@/lib/products-data";
+import { SITE } from "@/lib/site-config";
 import SiteShell from "@/components/funnel/SiteShell";
-import ProductDetailClient from "./ProductDetailClient";
+import Hero from "@/components/funnel/Hero";
+import FeatureGrid from "@/components/funnel/FeatureGrid";
+import ProjectGallery from "@/components/funnel/ProjectGallery";
+import SpecTable from "@/components/funnel/SpecTable";
+import ProductFunnelCTA from "@/components/funnel/ProductFunnelCTA";
+import ProductViewTracker from "@/components/funnel/ProductViewTracker";
 
 interface Props {
   params: { slug: string };
 }
 
-export async function generateStaticParams() {
+// /get-a-quote project type for each product, so "Get a Home Quote" arrives pre-selected.
+const QUOTE_TYPE: Record<string, string> = {
+  "wpc-fencing": "fence",
+  "wpc-pergolas": "pergola",
+  "wpc-cladding": "cladding",
+  "wpc-decking": "decking",
+  gates: "gate",
+};
+
+export function generateStaticParams() {
   return productsData.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export function generateMetadata({ params }: Props): Metadata {
   const product = getProductBySlug(params.slug);
   if (!product) return {};
   return {
-    title: `${product.name} Miami — Express Fence Solutions`,
-    description: `Premium WPC ${product.name.toLowerCase()} for South Florida homes. ${product.desc} Zero maintenance, built for Florida's climate. Get a free quote today.`,
-    openGraph: {
-      title: `${product.name} — Express Fence Solutions Miami`,
-      description: product.desc,
-      images: [{ url: product.heroImage }],
-    },
+    title: `${product.name} — Supply & Installation in South Florida | Express Fence Solutions`,
+    description: `${product.desc} Installed for homeowners and supplied to contractors across ${SITE.serviceAreaShort}.`,
+    alternates: { canonical: `${SITE.url}/products/${product.slug}` },
+    openGraph: { title: `${product.name} | Express Fence Solutions`, description: product.desc, images: [{ url: product.heroImage }] },
   };
 }
 
-export default function ProductDetailPage({ params }: Props) {
+export default function ProductPage({ params }: Props) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.desc,
+    image: `${SITE.url}${product.heroImage}`,
+    category: "Wood plastic composite (WPC) outdoor products",
+    brand: { "@type": "Brand", name: SITE.name },
+  };
+
   return (
     <SiteShell>
-      <ProductDetailClient product={product} />
+      <ProductViewTracker name={product.name} />
+      <main>
+        <Hero
+          eyebrow={product.tagline}
+          title={product.name}
+          subtitle={product.overview.join(" ")}
+          image={{ src: product.heroImage, alt: product.alt }}
+        />
+        <FeatureGrid eyebrow="Why homeowners choose it" title={`The benefits of ${product.name.toLowerCase()}`} items={product.benefits} background="background" />
+        <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />
+
+        <section className="efs-section" style={{ background: "var(--surface)" }}>
+          <div style={{ maxWidth: 820, margin: "0 auto" }}>
+            <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product.name)} />
+            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
+              Installation guide:{" "}
+              {product.installGuide ? (
+                <a href={product.installGuide} download className="efs-link" style={{ fontWeight: 600, color: "var(--accent-text)" }}>
+                  Download PDF
+                </a>
+              ) : (
+                <span className="efs-todo">{"{{TODO: install guide PDF}}"}</span>
+              )}
+            </p>
+          </div>
+        </section>
+
+        <ProductFunnelCTA productName={product.name} quoteType={QUOTE_TYPE[product.slug]} />
+      </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
     </SiteShell>
   );
 }

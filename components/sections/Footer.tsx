@@ -6,23 +6,22 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
 import { DIRECTIONS_URL, PRODUCT_NAV, SITE } from "@/lib/site-config";
 
-const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
+// Spec sheets live on the site (the old Google Drive catalog included pricing and is no longer linked).
+const SPEC_KIT = "/trade/spec-kit";
 
 // Absolute hrefs so every link works from any page, not just the homepage.
-const products = [
-  ...PRODUCT_NAV.filter((p) => p.href.startsWith("/products/")),
-  { label: "WPC Benches", href: "/products/benches" },
-];
+const products = [...PRODUCT_NAV, { label: "WPC Benches", href: "/products/benches" }];
 const moreProducts = [
-  { label: "Container Pools", href: "/other-products#container-pools" },
-  { label: "Aluminium Pergolas", href: "/other-products#aluminium-pergolas" },
-  { label: "Aluminium Fences", href: "/other-products#aluminium-fences" },
+  { label: "Get a Home Quote", href: "/get-a-quote" },
+  { label: "Outdoor Living Packages", href: "/outdoor-living-packages" },
+  { label: "Container Pools", href: "/container-pools" },
+  { label: "Homeowners", href: "/homeowners" },
 ];
 const company = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/#about" },
-  { label: "Why WPC", href: "/#why-wpc" },
-  { label: "Gallery", href: "/#gallery" },
+  { label: "About Us", href: "/about" },
+  { label: "Projects", href: "/projects" },
+  { label: "Trade Program", href: "/trade" },
   { label: "Fence Installation Miami", href: "/fence-installation-miami" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -74,10 +73,8 @@ export default function Footer() {
             >
               Make your dream home a reality.
             </p>
-            <a
-              href={CATALOG}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={SPEC_KIT}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -95,8 +92,8 @@ export default function Footer() {
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(184,150,90,0.25)")}
             >
-              📄 Download Catalog
-            </a>
+              📄 Spec sheets
+            </Link>
           </div>
 
           {/* Col 2 — Products */}
@@ -121,7 +118,7 @@ export default function Footer() {
           {/* Col 3 — More Products */}
           <div>
             <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 20 }}>
-              More Products
+              For Homeowners
             </p>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
               {moreProducts.map(p => (
@@ -214,7 +211,7 @@ export default function Footer() {
           }}
         >
           <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "var(--white)" }}>
-            © 2025 Express Fence Solutions LLC. All rights reserved.
+            © {new Date().getFullYear()} {SITE.legalName}. All rights reserved.
           </p>
           <a
             href="https://nordecollective.com"
