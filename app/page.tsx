@@ -1,4 +1,4 @@
-import Navbar from "@/components/sections/Navbar";
+import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/sections/Hero";
 import PhoneStrip from "@/components/sections/PhoneStrip";
 import WhyWPC from "@/components/sections/WhyWPC";
@@ -8,14 +8,10 @@ import Expansion from "@/components/sections/Expansion";
 import Gallery from "@/components/sections/Gallery";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
-import Footer from "@/components/sections/Footer";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import MobileCTABar from "@/components/ui/MobileCTABar";
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
+    <SiteShell transparentHeader>
       <main>
         <Hero />
         <PhoneStrip />
@@ -27,9 +23,6 @@ export default function Home() {
         <Expansion />
         <Contact />
       </main>
-      <Footer />
-      <WhatsAppButton />
-      <MobileCTABar />
-    </>
+    </SiteShell>
   );
 }

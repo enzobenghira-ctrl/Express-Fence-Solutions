@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProductBySlug, productsData } from "@/lib/products-data";
+import SiteShell from "@/components/funnel/SiteShell";
 import ProductDetailClient from "./ProductDetailClient";
 
 interface Props {
@@ -28,5 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default function ProductDetailPage({ params }: Props) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
-  return <ProductDetailClient product={product} />;
+  return (
+    <SiteShell>
+      <ProductDetailClient product={product} />
+    </SiteShell>
+  );
 }

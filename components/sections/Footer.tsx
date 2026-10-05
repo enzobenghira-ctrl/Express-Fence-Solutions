@@ -4,31 +4,31 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
+import { PRODUCT_NAV } from "@/lib/site-config";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
-const products = ["WPC Fences", "WPC Pergolas", "WPC Cladding", "WPC Decking", "WPC Gates", "WPC Benches"];
+// Absolute hrefs so every link works from any page, not just the homepage.
+const products = [
+  ...PRODUCT_NAV.filter((p) => p.href.startsWith("/products/")),
+  { label: "WPC Benches", href: "/products/benches" },
+];
 const moreProducts = [
   { label: "Container Pools", href: "/other-products#container-pools" },
   { label: "Aluminium Pergolas", href: "/other-products#aluminium-pergolas" },
   { label: "Aluminium Fences", href: "/other-products#aluminium-fences" },
 ];
 const company = [
-  { label: "Home", href: "#" },
-  { label: "About Us", href: "#about" },
-  { label: "Why WPC", href: "#why-wpc" },
-  { label: "Gallery", href: "#gallery" },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/#about" },
+  { label: "Why WPC", href: "/#why-wpc" },
+  { label: "Gallery", href: "/#gallery" },
   { label: "Fence Installation Miami", href: "/fence-installation-miami" },
-  { label: "Expanding to Palm Beach County", href: "#expanding-to-palm-beach" },
-  { label: "Contact", href: "#contact" },
+  { label: "Expanding to Palm Beach County", href: "/#expanding-to-palm-beach" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Footer() {
-  const go = (href: string) => {
-    if (href === "#") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <footer
       style={{
@@ -107,14 +107,13 @@ export default function Footer() {
             </p>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
               {products.map(p => (
-                <li key={p}>
-                  <a
-                    href="#products"
-                    onClick={(e) => { e.preventDefault(); go("#products"); }}
+                <li key={p.href}>
+                  <Link
+                    href={p.href}
                     style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "var(--white)")}
-                  >{p}</a>
+                  >{p.label}</Link>
                 </li>
               ))}
             </ul>
@@ -147,13 +146,12 @@ export default function Footer() {
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
               {company.map(c => (
                 <li key={c.label}>
-                  <a
+                  <Link
                     href={c.href}
-                    onClick={(e) => { e.preventDefault(); go(c.href); }}
                     style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "var(--white)")}
-                  >{c.label}</a>
+                  >{c.label}</Link>
                 </li>
               ))}
             </ul>

@@ -1,0 +1,6 @@
+{
+  "_comment": "Drives the container schedule on /trade and /trade/container-schedule. Edit and commit to update the site. null values show as TODO placeholders. nextArrival example: \"November 2026\". allocatedPercent: 0-100. updatedAt: YYYY-MM-DD.",
+  "nextArrival": null,
+  "allocatedPercent": null,
+  "updatedAt": null
+}

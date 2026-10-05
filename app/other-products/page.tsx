@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import OtherProductsPage from "@/components/sections/OtherProductsPage";
-import Navbar from "@/components/sections/NavbarPage";
-import Footer from "@/components/sections/Footer";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import MobileCTABar from "@/components/ui/MobileCTABar";
+import SiteShell from "@/components/funnel/SiteShell";
 
 export const metadata: Metadata = {
   title: "Container Pools, Aluminum Pergolas & Fences | Express Fence Solutions Miami",
@@ -26,14 +23,10 @@ export const metadata: Metadata = {
 
 export default function OtherProducts() {
   return (
-    <>
-      <Navbar />
+    <SiteShell>
       <main>
         <OtherProductsPage />
       </main>
-      <Footer />
-      <WhatsAppButton />
-      <MobileCTABar />
-    </>
+    </SiteShell>
   );
 }

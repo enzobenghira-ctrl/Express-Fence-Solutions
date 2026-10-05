@@ -5,12 +5,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Phone } from "lucide-react";
-import NavbarPage from "@/components/sections/NavbarPage";
-import Footer from "@/components/sections/Footer";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import MobileCTABar from "@/components/ui/MobileCTABar";
 import type { ProductData } from "@/lib/products-data";
 import { trackEvent } from "@/lib/metaEvents";
+import { SITE } from "@/lib/site-config";
 
 const WHATSAPP = "https://wa.me/13059679202";
 
@@ -26,9 +23,7 @@ export default function ProductDetailClient({ product }: Props) {
 
   return (
     <>
-      <NavbarPage />
-
-      <main style={{ paddingTop: 72, background: "var(--background)" }}>
+      <main style={{ paddingTop: "var(--header-h)", background: "var(--background)" }}>
         {/* ── Hero ─────────────────────────────────────────────────── */}
         <section
           style={{
@@ -768,7 +763,7 @@ export default function ProductDetailClient({ product }: Props) {
                   margin: 0,
                 }}
               >
-                Visit our North Miami Beach showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.
+                Visit our {SITE.address.city} showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.
               </p>
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -821,10 +816,6 @@ export default function ProductDetailClient({ product }: Props) {
           </motion.div>
         </section>
       </main>
-
-      <Footer />
-      <WhatsAppButton />
-      <MobileCTABar />
 
       {/* Responsive layout styles */}
       <style>{`

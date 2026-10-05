@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
+import { SITE } from "@/lib/site-config";
 
 export default function Expansion() {
   return (
@@ -102,7 +103,7 @@ export default function Expansion() {
               {
                 icon: "🟢",
                 title: "Miami — Open Now",
-                desc: "North Miami Beach showroom serving all of South Florida.",
+                desc: `${SITE.address.city} showroom serving all of South Florida.`,
                 phone: "(305) 967-9202",
               },
               {

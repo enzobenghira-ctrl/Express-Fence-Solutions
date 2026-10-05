@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import NavbarPage from "@/components/sections/NavbarPage";
-import Footer from "@/components/sections/Footer";
+import SiteShell from "@/components/funnel/SiteShell";
 import PartnerHero from "@/components/sections/PartnerHero";
 import PartnerAudiences from "@/components/sections/PartnerAudiences";
 import PartnerWhyUs from "@/components/sections/PartnerWhyUs";
@@ -8,8 +7,6 @@ import PartnerHowItWorks from "@/components/sections/PartnerHowItWorks";
 import PartnerProductShowcase from "@/components/sections/PartnerProductShowcase";
 import PartnerGallery from "@/components/sections/PartnerGallery";
 import PartnerContactSection from "@/components/sections/PartnerContactSection";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import MobileCTABar from "@/components/ui/MobileCTABar";
 
 export const metadata: Metadata = {
   title: "Partner With Us — WPC Contractor & Trade Partnerships | Express Fence Solutions",
@@ -32,8 +29,7 @@ export const metadata: Metadata = {
 
 export default function PartnerPage() {
   return (
-    <>
-      <NavbarPage />
+    <SiteShell mobileBar="trade">
       <main>
         <PartnerHero />
         <PartnerAudiences />
@@ -43,9 +39,6 @@ export default function PartnerPage() {
         <PartnerGallery />
         <PartnerContactSection />
       </main>
-      <Footer />
-      <WhatsAppButton />
-      <MobileCTABar />
-    </>
+    </SiteShell>
   );
 }

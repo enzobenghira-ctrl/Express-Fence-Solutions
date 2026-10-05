@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import NavbarPage from "@/components/sections/NavbarPage";
-import Footer from "@/components/sections/Footer";
+import SiteShell from "@/components/funnel/SiteShell";
 import Testimonials from "@/components/sections/Testimonials";
 import ConsultationHero from "@/components/sections/ConsultationHero";
 import ConsultationProcess from "@/components/sections/ConsultationProcess";
 import ConsultationWhyInPerson from "@/components/sections/ConsultationWhyInPerson";
 import ConsultationBookingSection from "@/components/sections/ConsultationBookingSection";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import StickyBookCTA from "@/components/ui/StickyBookCTA";
 
 export const metadata: Metadata = {
@@ -30,8 +28,7 @@ export const metadata: Metadata = {
 
 export default function BookConsultationPage() {
   return (
-    <>
-      <NavbarPage />
+    <SiteShell mobileBar="none">
       <main>
         <ConsultationHero />
         <ConsultationBookingSection />
@@ -39,9 +36,7 @@ export default function BookConsultationPage() {
         <ConsultationWhyInPerson />
         <Testimonials />
       </main>
-      <Footer />
-      <WhatsAppButton />
       <StickyBookCTA />
-    </>
+    </SiteShell>
   );
 }

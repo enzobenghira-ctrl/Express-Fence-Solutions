@@ -42,7 +42,7 @@ export default function FenceMiamiHero() {
           zIndex: 10,
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "110px 32px 64px",
+          padding: "calc(var(--header-h) + 38px) 32px 64px",
           width: "100%",
         }}
       >

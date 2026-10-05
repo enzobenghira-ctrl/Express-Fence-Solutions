@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import NavbarPage from "@/components/sections/NavbarPage";
-import Footer from "@/components/sections/Footer";
+import SiteShell from "@/components/funnel/SiteShell";
 import Testimonials from "@/components/sections/Testimonials";
 import FenceMiamiHero from "@/components/sections/FenceMiamiHero";
 import FenceMiamiWhyWPC from "@/components/sections/FenceMiamiWhyWPC";
@@ -9,7 +8,6 @@ import FenceMiamiOtherServices from "@/components/sections/FenceMiamiOtherServic
 import FenceMiamiServiceArea from "@/components/sections/FenceMiamiServiceArea";
 import FenceMiamiContactStrip from "@/components/sections/FenceMiamiContactStrip";
 import FenceMiamiBookingSection from "@/components/sections/FenceMiamiBookingSection";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import StickyBookCTA from "@/components/ui/StickyBookCTA";
 
 export const metadata: Metadata = {
@@ -41,8 +39,7 @@ export const metadata: Metadata = {
 
 export default function FenceInstallationMiamiPage() {
   return (
-    <>
-      <NavbarPage />
+    <SiteShell mobileBar="none">
       <main>
         <FenceMiamiHero />
         <FenceMiamiWhyWPC />
@@ -53,9 +50,7 @@ export default function FenceInstallationMiamiPage() {
         <FenceMiamiContactStrip />
         <FenceMiamiBookingSection />
       </main>
-      <Footer />
-      <WhatsAppButton />
       <StickyBookCTA />
-    </>
+    </SiteShell>
   );
 }

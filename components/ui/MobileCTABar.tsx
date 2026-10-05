@@ -1,8 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { trackEvent } from "@/lib/metaEvents";
+import { trackFunnelClick } from "@/lib/analytics";
+import { FUNNEL_ENTRY, type Funnel } from "@/lib/site-config";
 
-export default function MobileCTABar() {
+// Trade pages must never show a homeowner CTA, so the third button follows the page's funnel.
+const FUNNEL_BUTTON: Record<Funnel, { label: string; href: string }> = {
+  home: { label: "Get a Quote", href: FUNNEL_ENTRY.homeQuote },
+  trade: { label: "Apply", href: FUNNEL_ENTRY.tradeApply },
+};
+
+export default function MobileCTABar({ funnel = "home" }: { funnel?: Funnel }) {
+  const cta = FUNNEL_BUTTON[funnel];
   return (
     <div
       style={{
@@ -14,9 +24,9 @@ export default function MobileCTABar() {
         height: 68,
         background: "var(--background)",
         borderTop: "1px solid var(--border)",
-        display: "flex",
       }}
-      className="md:hidden"
+      // display lives in the class, not the style, or the inline style would override md:hidden
+      className="flex md:hidden"
     >
       <a
         href="tel:+13059679202"
@@ -57,6 +67,24 @@ export default function MobileCTABar() {
       >
         💬 WhatsApp
       </a>
+      <Link
+        href={cta.href}
+        onClick={() => trackFunnelClick(funnel, cta.label)}
+        style={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "var(--dark)",
+          color: "var(--white)",
+          fontFamily: "var(--font-dm-sans)",
+          fontSize: 15,
+          fontWeight: 700,
+          textDecoration: "none",
+        }}
+      >
+        {cta.label}
+      </Link>
     </div>
   );
 }

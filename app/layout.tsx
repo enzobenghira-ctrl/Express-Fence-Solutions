@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import MetaPixel from "@/components/MetaPixel";
+import AttributionCapture from "@/components/funnel/AttributionCapture";
+import { SITE } from "@/lib/site-config";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -45,19 +47,19 @@ export const metadata: Metadata = {
 const schema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  name: "Express Fence Solutions LLC",
+  name: SITE.legalName,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "15431 W. Dixie Hwy, Unit 12",
-    addressLocality: "North Miami Beach",
-    addressRegion: "FL",
-    postalCode: "33162",
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
+    addressRegion: SITE.address.region,
+    postalCode: SITE.address.postalCode,
   },
-  telephone: "+13059679202",
-  email: "Info@expressfencesolutions.com",
-  url: "https://expressfencesolutions.com",
+  telephone: SITE.phone.e164,
+  email: SITE.email,
+  url: SITE.url,
   areaServed: ["Miami-Dade County, FL", "Broward County, FL"],
-  sameAs: ["https://www.instagram.com/express_fence_solutions/"],
+  sameAs: [SITE.instagram],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -71,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <MetaPixel />
+        <AttributionCapture />
         {children}
       </body>
     </html>

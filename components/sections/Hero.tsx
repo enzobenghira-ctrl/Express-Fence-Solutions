@@ -50,7 +50,7 @@ export default function Hero() {
           zIndex: 10,
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "120px 32px 80px",
+          padding: "calc(var(--header-h) + 48px) 32px 80px",
           width: "100%",
         }}
       >
@@ -193,9 +193,9 @@ export default function Hero() {
       </div>
 
       <style jsx>{`
-        .hero-content { padding: 120px 32px 80px; }
+        .hero-content { padding: calc(var(--header-h) + 48px) 32px 80px; }
         @media (max-width: 768px) {
-          .hero-content { padding: 100px 20px 60px; }
+          .hero-content { padding: calc(var(--header-h) + 28px) 20px 60px; }
         }
       `}</style>
 
