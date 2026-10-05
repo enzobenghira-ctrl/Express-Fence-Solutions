@@ -3,6 +3,7 @@ import { CALENDAR_ID, describeGoogleError, getCalendarClient } from "@/lib/googl
 import { SLOT_DURATION_MINUTES, TIMEZONE, generateSlotsForDate, isDateBookable } from "@/lib/booking-config";
 import { EMAIL_RE, isValidPhone } from "@/lib/form-validation";
 import { SITE } from "@/lib/site-config";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 // Books a trade qualification call on the shared Google Calendar. This is the in-house
 // fallback used on /thank-you-trade until CALENDAR_TRADE_URL points at an external
@@ -40,6 +41,10 @@ function validate(body: Partial<CallPayload>): string | null {
 }
 
 export async function POST(req: Request) {
+  if (!rateLimit(`book-call:${clientIp(req)}`, 5, 10 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many attempts — please wait a few minutes." }, { status: 429 });
+  }
+
   let body: Partial<CallPayload>;
   try {
     body = await req.json();

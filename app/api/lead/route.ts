@@ -5,6 +5,7 @@ import { UTM_KEYS } from "@/lib/attribution";
 import { LEAD_FORMS, isLeadKind, type LeadFormDefinition, type LeadKind } from "@/lib/forms/registry";
 import { PHOTO_DATA_PREFIX, displayValue, validateValues, type FormValues } from "@/lib/forms/schema";
 import { computeRoute } from "@/lib/lead-routing";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site-config";
 
 // Single endpoint for every lead form. Never lose a lead: it goes to the CRM webhook when
@@ -137,6 +138,10 @@ async function emailLead(lead: Lead, form: LeadFormDefinition, photo: Buffer | n
 }
 
 export async function POST(req: Request) {
+  if (!rateLimit(`lead:${clientIp(req)}`, 8, 10 * 60 * 1000)) {
+    return NextResponse.json({ error: "Too many submissions — please wait a few minutes." }, { status: 429 });
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();

@@ -6,6 +6,7 @@ import { MAX_BOOKING_DAYS_AHEAD, TIMEZONE } from "@/lib/booking-config";
 import { EMAIL_RE, formatPhone, isValidPhone } from "@/lib/form-validation";
 import { readLastLead } from "@/lib/last-lead";
 import { SITE } from "@/lib/site-config";
+import { trackFunnelEvent, userDataFrom } from "@/lib/tracking";
 
 interface Slot {
   iso: string;
@@ -81,6 +82,7 @@ export default function TradeCallBooking() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
+      trackFunnelEvent("Schedule_Trade", { userData: userDataFrom({ contactName: contact.name, email: contact.email, phone: contact.phone }) });
       setBooked(slot);
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : `Something went wrong. Please call us at ${SITE.phone.display}.`);

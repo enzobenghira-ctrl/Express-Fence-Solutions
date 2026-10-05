@@ -28,7 +28,7 @@ export default function ThankYouTradePage() {
             </p>
           </div>
 
-          <CalendarEmbed url={process.env.CALENDAR_TRADE_URL} title="Book your qualification call" fallback={<TradeCallBooking />} />
+          <CalendarEmbed url={process.env.CALENDAR_TRADE_URL} title="Book your qualification call" scheduledEvent="Schedule_Trade" fallback={<TradeCallBooking />} />
 
           <section aria-labelledby="spec-kit-heading" style={{ marginTop: 56 }}>
             <h2 id="spec-kit-heading" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)", marginBottom: 6 }}>

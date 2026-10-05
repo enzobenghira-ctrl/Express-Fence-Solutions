@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { OUT_OF_AREA_MESSAGE, PROJECT_TYPES, PROPERTY_TYPES, TIMEZONE, isInServiceArea } from "@/lib/booking-config";
 import { trackEvent } from "@/lib/metaEvents";
+import { trackFunnelEvent } from "@/lib/tracking";
 
 const STEP_LABELS = ["Project", "Address", "Date & Time", "Your Info"];
 
@@ -158,6 +159,10 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
         { content_name: "In-Home Consultation", content_category: "Fencing" },
         { email, phone, firstName, lastName: rest.join(" ") || undefined, zip }
       );
+      trackFunnelEvent("Schedule_Home", {
+        userData: { email, phone, firstName, lastName: rest.join(" ") || undefined, zip },
+        params: { content_category: "home" },
+      });
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please call us at (305) 967-9202.");
     } finally {

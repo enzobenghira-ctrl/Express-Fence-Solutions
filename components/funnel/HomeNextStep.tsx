@@ -53,5 +53,5 @@ export default function HomeNextStep({ calendarUrl }: { calendarUrl?: string }) 
     phone: c.phone,
   };
 
-  return <CalendarEmbed url={calendarUrl} title="Book your design consultation" fallback={<BookingForm initial={initial} />} />;
+  return <CalendarEmbed url={calendarUrl} title="Book your design consultation" scheduledEvent="Schedule_Home" fallback={<BookingForm initial={initial} />} />;
 }

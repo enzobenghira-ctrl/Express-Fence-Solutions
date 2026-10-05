@@ -9,6 +9,7 @@ import { LEAD_FORMS, type LeadKind } from "@/lib/forms/registry";
 import { isChoiceField, validateField, type FormField, type FormValues } from "@/lib/forms/schema";
 import { compressPhoto } from "@/lib/image-compress";
 import { saveLastLead } from "@/lib/last-lead";
+import { trackLeadSubmitted } from "@/lib/tracking";
 import { SITE } from "@/lib/site-config";
 
 /** Exactly what is POSTed to /api/lead. */
@@ -139,7 +140,9 @@ export default function MultiStepForm({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
-      saveLastLead(kind, values, typeof data.route === "string" ? data.route : null);
+      const route = typeof data.route === "string" ? data.route : null;
+      saveLastLead(kind, values, route);
+      trackLeadSubmitted(kind, submission.eventId, values, route);
       onSubmitted?.(submission);
       // Leave `submitting` on so the button can't double-submit while the next page loads.
       router.push(successHref);

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import MetaPixel from "@/components/MetaPixel";
+import GoogleTag from "@/components/GoogleTag";
 import AttributionCapture from "@/components/funnel/AttributionCapture";
 import { SITE } from "@/lib/site-config";
 import "./globals.css";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <MetaPixel />
+        <GoogleTag />
         <AttributionCapture />
         {children}
       </body>

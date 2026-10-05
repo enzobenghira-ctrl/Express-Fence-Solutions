@@ -45,18 +45,25 @@ export interface MetaUserData {
   zip?: string;
 }
 
+// Meta's standard events go through fbq("track"); anything else (Lead_Trade, Schedule_Home…)
+// must use fbq("trackCustom") or the pixel rejects it as non-standard.
+const STANDARD_EVENTS = new Set(["PageView", "ViewContent", "Lead", "Schedule", "Contact", "CompleteRegistration", "SubmitApplication"]);
+
 export function trackEvent(
   eventName: string,
   params: MetaEventParams = {},
-  userData: MetaUserData = {}
+  userData: MetaUserData = {},
+  /** Pass a known id to tie this event to others (e.g. the lead id sent to the CRM). */
+  eventIdOverride?: string
 ): void {
   const eventId =
-    typeof crypto !== "undefined" && "randomUUID" in crypto
+    eventIdOverride ||
+    (typeof crypto !== "undefined" && "randomUUID" in crypto
       ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
   if (typeof window !== "undefined" && typeof window.fbq === "function") {
-    window.fbq("track", eventName, params, { eventID: eventId });
+    window.fbq(STANDARD_EVENTS.has(eventName) ? "track" : "trackCustom", eventName, params, { eventID: eventId });
   }
 
   const { value, currency, ...customData } = params;
@@ -75,6 +82,7 @@ export function trackEvent(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
+    keepalive: true, // survive the redirect to a thank-you page
   }).catch((error) => {
     console.error("Meta CAPI request failed:", error);
   });
