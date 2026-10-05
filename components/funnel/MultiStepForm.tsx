@@ -4,48 +4,19 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { getAttribution, type Attribution } from "@/lib/attribution";
-import { EMAIL_RE, ZIP_RE, formatPhone, isValidPhone } from "@/lib/form-validation";
-import { SITE, type Funnel } from "@/lib/site-config";
+import { formatPhone } from "@/lib/form-validation";
+import { LEAD_FORMS, type LeadKind } from "@/lib/forms/registry";
+import { isChoiceField, validateField, type FormField, type FormValues } from "@/lib/forms/schema";
+import { saveLastLead } from "@/lib/last-lead";
+import { SITE } from "@/lib/site-config";
 
-export interface FormOption {
-  value: string;
-  label: string;
-}
-
-interface FieldBase {
-  name: string;
-  label: string;
-  required?: boolean;
-  hint?: string;
-}
-
-type ChoiceField = FieldBase & { type: "choice" | "multichoice"; options: FormOption[] };
-type InputField = FieldBase & { type: "text" | "email" | "tel" | "zip"; placeholder?: string; autoComplete?: string };
-type TextareaField = FieldBase & { type: "textarea"; placeholder?: string };
-
-export type FormField = ChoiceField | InputField | TextareaField;
-
-function isChoiceField(field: FormField): field is ChoiceField {
-  return field.type === "choice" || field.type === "multichoice";
-}
-
-export interface FormStep {
-  /** Short label under the progress bar, e.g. "Your business". */
-  label: string;
-  /** The step's question/heading. */
-  title: string;
-  fields: FormField[];
-}
-
-export type FormValues = Record<string, string | string[]>;
-
-/** Exactly what is POSTed to the endpoint. */
+/** Exactly what is POSTed to /api/lead. */
 export interface LeadSubmission {
-  kind: string;
-  funnel: Funnel;
+  kind: LeadKind;
   values: FormValues;
   hidden: Record<string, string>;
   attribution: Attribution;
+  pageUrl: string;
   /** Shared by the browser pixel and the server-side CAPI event so Meta counts the lead once. */
   eventId: string;
   /** Honeypot — must be empty. */
@@ -54,9 +25,8 @@ export interface LeadSubmission {
 }
 
 interface Props {
-  kind: string;
-  funnel: Funnel;
-  steps: FormStep[];
+  /** Which form to render — its steps and fields come from lib/forms/registry.ts. */
+  kind: LeadKind;
   submitLabel: string;
   successHref: string;
   endpoint?: string;
@@ -74,24 +44,8 @@ function newEventId(): string {
     : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function validateField(field: FormField, value: string | string[] | undefined): string | null {
-  if (Array.isArray(value) ? value.length === 0 : !value?.trim()) {
-    if (!field.required) return null;
-    if (field.type === "choice") return "Please choose an option.";
-    if (field.type === "multichoice") return "Please choose at least one.";
-    return "This field is required.";
-  }
-  const str = Array.isArray(value) ? "" : (value ?? "").trim();
-  if (field.type === "email" && !EMAIL_RE.test(str)) return "Please enter a valid email address.";
-  if (field.type === "tel" && !isValidPhone(str)) return "Please enter a valid 10-digit phone number.";
-  if (field.type === "zip" && !ZIP_RE.test(str)) return "Please enter a 5-digit ZIP code.";
-  return null;
-}
-
 export default function MultiStepForm({
   kind,
-  funnel,
-  steps,
   submitLabel,
   successHref,
   endpoint = "/api/lead",
@@ -101,6 +55,7 @@ export default function MultiStepForm({
 }: Props) {
   const router = useRouter();
   const formId = useId();
+  const { steps } = LEAD_FORMS[kind];
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -165,10 +120,10 @@ export default function MultiStepForm({
     setSubmitError("");
     const submission: LeadSubmission = {
       kind,
-      funnel,
       values,
       hidden: hiddenValues,
       attribution: getAttribution(),
+      pageUrl: window.location.href,
       eventId: newEventId(),
       hp,
       elapsedMs: Date.now() - startedAt.current,
@@ -184,6 +139,7 @@ export default function MultiStepForm({
         const data = await res.json().catch(() => ({}));
         throw new Error(typeof data.error === "string" ? data.error : "");
       }
+      saveLastLead(kind, values);
       onSubmitted?.(submission);
       // Leave `submitting` on so the button can't double-submit while the next page loads.
       router.push(successHref);
@@ -307,11 +263,13 @@ export default function MultiStepForm({
         padding: "clamp(24px, 4vw, 32px) clamp(20px, 4vw, 28px)",
       }}
     >
-      {/* Progress */}
-      <p className="sr-only" aria-live="polite">
-        Step {step + 1} of {steps.length}: {current.label}
-      </p>
-      <div aria-hidden style={{ display: "flex", gap: 8, marginBottom: 28 }}>
+      {/* Progress — only meaningful for multi-step forms */}
+      {steps.length > 1 && (
+        <p className="sr-only" aria-live="polite">
+          Step {step + 1} of {steps.length}: {current.label}
+        </p>
+      )}
+      <div aria-hidden style={{ display: steps.length > 1 ? "flex" : "none", gap: 8, marginBottom: 28 }}>
         {steps.map((s, i) => (
           <div key={s.label} style={{ flex: 1 }}>
             <div

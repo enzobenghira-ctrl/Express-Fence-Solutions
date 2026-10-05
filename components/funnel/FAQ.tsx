@@ -4,7 +4,10 @@ import { isTodo, type Fact } from "@/lib/facts";
 
 export interface FAQItem {
   question: string;
-  answer: Fact;
+  /** One fact, or several shown as one paragraph (lets confirmed text sit next to a {{TODO}}). */
+  answer: Fact | Fact[];
+  /** Optional link after the answer, e.g. "Get directions". */
+  link?: { label: string; href: string; external?: boolean };
 }
 
 interface Props {
@@ -14,12 +17,14 @@ interface Props {
   items: FAQItem[];
 }
 
+const parts = (answer: FAQItem["answer"]): Fact[] => (Array.isArray(answer) ? answer : [answer]);
+
 /**
  * Accordion built on <details> (works without JS) plus FAQPage JSON-LD.
- * Unconfirmed {{TODO}} answers are shown on the page but left out of the schema.
+ * Answers with any unconfirmed {{TODO}} part are shown on the page but left out of the schema.
  */
 export default function FAQ({ id, eyebrow, title = "Frequently asked questions", items }: Props) {
-  const answered = items.filter((i) => !isTodo(i.answer));
+  const answered = items.filter((i) => !parts(i.answer).some(isTodo));
   const schema =
     answered.length > 0
       ? {
@@ -28,7 +33,7 @@ export default function FAQ({ id, eyebrow, title = "Frequently asked questions",
           mainEntity: answered.map((i) => ({
             "@type": "Question",
             name: i.question,
-            acceptedAnswer: { "@type": "Answer", text: i.answer as string },
+            acceptedAnswer: { "@type": "Answer", text: (parts(i.answer) as string[]).join(" ") },
           })),
         }
       : null;
@@ -69,7 +74,25 @@ export default function FAQ({ id, eyebrow, title = "Frequently asked questions",
                   color: "var(--text-secondary)",
                 }}
               >
-                <FactText value={item.answer} />
+                {parts(item.answer).map((p, i) => (
+                  <span key={i}>
+                    {i > 0 && " "}
+                    <FactText value={p} />
+                  </span>
+                ))}
+                {item.link && (
+                  <>
+                    {" "}
+                    <a
+                      href={item.link.href}
+                      className="efs-link"
+                      style={{ fontWeight: 600, color: "var(--accent-text)" }}
+                      {...(item.link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      {item.link.label} →
+                    </a>
+                  </>
+                )}
               </div>
             </details>
           ))}

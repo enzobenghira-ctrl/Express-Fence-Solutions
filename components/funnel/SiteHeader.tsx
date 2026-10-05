@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "@/lib/metaEvents";
 import { FUNNEL_ENTRY, MAIN_NAV, PRODUCT_NAV, SITE, TRADE_NAV_CTA } from "@/lib/site-config";
 import FunnelButton from "@/components/funnel/FunnelButton";
@@ -91,10 +90,10 @@ export default function SiteHeader({ transparent = false }: Props) {
           aria-label="Main"
           style={{
             height: "var(--nav-h)",
+            // No backdrop-filter blur: at 97% opacity it's invisible, and blurring the hero
+            // photo underneath delayed first paint by ~1s in Lighthouse's mobile emulation.
             background: solid ? "rgba(250,250,247,0.97)" : "rgba(250,250,247,0)",
             borderBottom: solid ? "1px solid var(--border)" : "1px solid transparent",
-            backdropFilter: solid ? "blur(16px)" : "none",
-            WebkitBackdropFilter: solid ? "blur(16px)" : "none",
             transition: "background 0.35s ease, border-color 0.35s ease",
             display: "flex",
             alignItems: "center",
@@ -232,15 +231,11 @@ export default function SiteHeader({ transparent = false }: Props) {
         </nav>
       </header>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
+      {/* Mobile menu — CSS animation keeps framer-motion off pages that don't otherwise need it */}
+      {open && (
+          <div
             id="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ type: "tween", duration: 0.22, ease: "easeOut" }}
+            className="site-mobile-menu"
             style={{
               position: "fixed",
               top: scrolled ? "var(--nav-h)" : "var(--header-h)",
@@ -323,9 +318,8 @@ export default function SiteHeader({ transparent = false }: Props) {
                 <Phone size={16} aria-hidden /> {SITE.phone.display}
               </a>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }
