@@ -22,9 +22,8 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://expressfencesolutions.com"),
-  title: "Express Fence Solutions — Premium WPC Fences, Pergolas & Decking | Miami-Dade & Broward County FL",
-  description:
-    "Family-owned fence company serving Miami-Dade & Broward County. Premium WPC composite fences, aluminum pergolas & gates. Free consultation.",
+  title: "Express Fence Solutions — Premium WPC Fences, Pergolas & Decking | Miami-Dade to Okeechobee, FL",
+  description: `Family-owned fence company serving ${SITE.serviceArea}. Premium WPC composite fences, pergolas & gates. Free consultation.`,
   keywords:
     "WPC fence Miami, composite fence Florida, WPC pergola, WPC decking Miami, wood plastic composite fence, outdoor living Miami, Express Fence Solutions",
   openGraph: {
@@ -58,7 +57,7 @@ const schema = {
   telephone: SITE.phone.e164,
   email: SITE.email,
   url: SITE.url,
-  areaServed: ["Miami-Dade County, FL", "Broward County, FL"],
+  areaServed: SITE.serviceCounties.map((county) => ({ "@type": "AdministrativeArea", name: `${county} County, FL` })),
   sameAs: [SITE.instagram],
 };
 

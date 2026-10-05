@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Phone } from "lucide-react";
 import type { ProductData } from "@/lib/products-data";
 import { trackEvent } from "@/lib/metaEvents";
-import { SITE } from "@/lib/site-config";
+import { DIRECTIONS_URL, SITE } from "@/lib/site-config";
 
 const WHATSAPP = "https://wa.me/13059679202";
 
@@ -763,7 +763,10 @@ export default function ProductDetailClient({ product }: Props) {
                   margin: 0,
                 }}
               >
-                Visit our {SITE.address.city} showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.
+                Visit our {SITE.address.city} showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.{" "}
+                <a href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, whiteSpace: "nowrap" }}>
+                  Get directions →
+                </a>
               </p>
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>

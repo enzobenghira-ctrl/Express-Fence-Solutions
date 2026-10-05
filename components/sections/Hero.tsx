@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone } from "lucide-react";
+import { SITE } from "@/lib/site-config";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -79,7 +80,7 @@ export default function Hero() {
                 marginBottom: 28,
               }}
             >
-              Miami-Dade &amp; Broward County, FL
+              {SITE.serviceAreaShort}
             </span>
           </motion.div>
 
@@ -162,7 +163,7 @@ export default function Hero() {
             {[
               "World&apos;s #1 WPC Manufacturer",
               "Zero Maintenance",
-              "Miami-Dade &amp; Broward County",
+              "Miami-Dade to Okeechobee",
             ].map((item, i) => (
               <span
                 key={i}

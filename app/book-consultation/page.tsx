@@ -6,11 +6,11 @@ import ConsultationProcess from "@/components/sections/ConsultationProcess";
 import ConsultationWhyInPerson from "@/components/sections/ConsultationWhyInPerson";
 import ConsultationBookingSection from "@/components/sections/ConsultationBookingSection";
 import StickyBookCTA from "@/components/ui/StickyBookCTA";
+import { SITE } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Book a Free In-Home Consultation | Express Fence Solutions Miami",
-  description:
-    "Book a free, no-obligation in-home consultation. We bring real WPC samples, measure your property, and give you an accurate custom quote on the spot. Serving Miami-Dade & Broward County.",
+  description: `Book a free, no-obligation in-home consultation. We bring real WPC samples, measure your property, and give you an accurate custom quote on the spot. Serving ${SITE.serviceAreaShort}.`,
   keywords:
     "free consultation WPC fence Miami, in-home estimate fence Florida, book consultation Express Fence Solutions",
   openGraph: {

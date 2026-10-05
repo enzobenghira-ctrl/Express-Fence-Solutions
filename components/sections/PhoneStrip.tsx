@@ -3,6 +3,7 @@
 import { Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { trackEvent } from "@/lib/metaEvents";
+import { SITE } from "@/lib/site-config";
 
 export default function PhoneStrip() {
   return (
@@ -33,7 +34,7 @@ export default function PhoneStrip() {
             color: "rgba(250,250,247,0.55)",
           }}
         >
-          Representing the world&apos;s largest WPC manufacturer · Serving Miami-Dade &amp; Broward County, FL
+          Representing the world&apos;s largest WPC manufacturer · Serving {SITE.serviceAreaShort}
         </p>
         <a
           href="tel:+13059679202"

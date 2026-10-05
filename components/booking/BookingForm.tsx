@@ -3,7 +3,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { PROJECT_TYPES, PROPERTY_TYPES, TIMEZONE, isInServiceArea } from "@/lib/booking-config";
+import { OUT_OF_AREA_MESSAGE, PROJECT_TYPES, PROPERTY_TYPES, TIMEZONE, isInServiceArea } from "@/lib/booking-config";
 import { trackEvent } from "@/lib/metaEvents";
 
 const STEP_LABELS = ["Project", "Address", "Date & Time", "Your Info"];
@@ -94,7 +94,7 @@ export default function BookingForm() {
     if (s === 1) {
       if (address.trim().length < 5) e.address = "Enter your full address.";
       if (!/^\d{5}$/.test(zip.trim())) e.zip = "Enter a valid 5-digit ZIP code.";
-      else if (!isInServiceArea(zip)) e.zip = "We currently serve Miami-Dade & Broward County. Call us to check your area.";
+      else if (!isInServiceArea(zip)) e.zip = OUT_OF_AREA_MESSAGE;
     }
     if (s === 2) {
       if (!date) e.date = "Choose a date.";
@@ -327,7 +327,7 @@ export default function BookingForm() {
                 </div>
                 <div>
                   <label htmlFor="zip" style={labelStyle}>ZIP code</label>
-                  <input id="zip" type="text" inputMode="numeric" placeholder="33162" maxLength={5} value={zip} onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))} />
+                  <input id="zip" type="text" inputMode="numeric" placeholder="5-digit ZIP" maxLength={5} value={zip} onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))} />
                   {errors.zip && <p style={fieldErrorStyle}>{errors.zip}</p>}
                 </div>
               </div>

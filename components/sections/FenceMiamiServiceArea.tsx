@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
+import { DIRECTIONS_URL, SITE } from "@/lib/site-config";
 
+// Miami-Dade and Broward communities — this page targets the Miami market.
 const cities = [
   "Miami",
   "North Miami Beach",
@@ -65,7 +67,7 @@ export default function FenceMiamiServiceArea() {
               marginBottom: 20,
             }}
           >
-            Fence Installation Across Miami-Dade &amp; Broward County
+            Fence Installation from Miami-Dade to Okeechobee
           </h2>
           <p
             style={{
@@ -77,7 +79,11 @@ export default function FenceMiamiServiceArea() {
               margin: "0 auto",
             }}
           >
-            We&apos;re a family-owned company based in North Miami Beach, and we install throughout both counties. Coming soon: Palm Beach County.
+            We&apos;re a family-owned company installing across {SITE.serviceArea}, with our showroom at{" "}
+            {SITE.address.street}, {SITE.address.city}.{" "}
+            <a href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent-text)", fontWeight: 600 }}>
+              Get directions
+            </a>
           </p>
         </motion.div>
 

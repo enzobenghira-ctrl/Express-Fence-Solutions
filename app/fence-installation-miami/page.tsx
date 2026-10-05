@@ -13,13 +13,13 @@ import StickyBookCTA from "@/components/ui/StickyBookCTA";
 export const metadata: Metadata = {
   title: "Fence Installation Miami | WPC Composite Fence Company — Express Fence Solutions",
   description:
-    "Professional fence installation across Miami-Dade & Broward County. Premium zero-maintenance WPC composite fencing. Family-owned, free in-person consultation. Book today.",
+    "Fence installation across Miami-Dade, Broward and north to Okeechobee. Premium zero-maintenance WPC composite fencing. Family-owned, free in-person consultation.",
   keywords:
     "fence installation Miami, fence company Miami, WPC composite fence Miami-Dade, fence installation Broward County, composite fencing South Florida",
   openGraph: {
     title: "Fence Installation Miami | WPC Composite Fence Company — Express Fence Solutions",
     description:
-      "Professional fence installation across Miami-Dade & Broward County. Premium zero-maintenance WPC composite fencing. Family-owned, free in-person consultation.",
+      "Fence installation across Miami-Dade, Broward and north to Okeechobee. Premium zero-maintenance WPC composite fencing. Family-owned, free in-person consultation.",
     url: "https://expressfencesolutions.com/fence-installation-miami",
     siteName: "Express Fence Solutions",
     images: [

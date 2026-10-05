@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, MapPin } from "lucide-react";
+import { DIRECTIONS_URL, SITE } from "@/lib/site-config";
 
 const stats = [
   { val: "25+", label: "Year lifespan" },
@@ -15,7 +16,7 @@ const checks = [
   "World's largest WPC manufacturer",
   "Eco-friendly, fully recyclable materials",
   "Built for Florida's climate",
-  "Now expanding to Palm Beach County, FL",
+  `Serving ${SITE.serviceArea}`,
 ];
 
 export default function About() {
@@ -230,6 +231,37 @@ export default function About() {
                 </li>
               ))}
             </ul>
+
+            {/* Showroom */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                background: "var(--background)",
+                border: "1px solid var(--border)",
+                borderRadius: 10,
+                padding: "18px 20px",
+                marginBottom: 32,
+              }}
+            >
+              <MapPin size={18} style={{ color: "var(--accent)", flexShrink: 0, marginTop: 2 }} />
+              <div style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}>
+                <p style={{ fontWeight: 700, color: "var(--dark)" }}>Visit our showroom</p>
+                <p>
+                  {SITE.address.street}, {SITE.address.city}, {SITE.address.region} {SITE.address.postalCode}
+                </p>
+                <a
+                  href={DIRECTIONS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="efs-link"
+                  style={{ fontWeight: 600, color: "var(--accent-text)" }}
+                >
+                  Get directions →
+                </a>
+              </div>
+            </div>
 
             {/* Stats row */}
             <div

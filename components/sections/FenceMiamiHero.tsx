@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { SITE } from "@/lib/site-config";
 
 export default function FenceMiamiHero() {
   return (
@@ -70,7 +71,7 @@ export default function FenceMiamiHero() {
                 marginBottom: 24,
               }}
             >
-              Miami-Dade &amp; Broward County, FL
+              {SITE.serviceAreaShort}
             </span>
           </motion.div>
 
@@ -105,7 +106,7 @@ export default function FenceMiamiHero() {
               marginBottom: 32,
             }}
           >
-            Family-owned fence company serving Miami-Dade &amp; Broward County — with a free in-person consultation and exact on-site measurement.
+            Family-owned fence company serving Miami-Dade, Broward and north to Okeechobee — with a free in-person consultation and exact on-site measurement.
           </motion.p>
 
           <motion.div

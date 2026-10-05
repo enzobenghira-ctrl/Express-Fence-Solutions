@@ -11,7 +11,7 @@ import PartnerContactSection from "@/components/sections/PartnerContactSection";
 export const metadata: Metadata = {
   title: "Partner With Us — WPC Contractor & Trade Partnerships | Express Fence Solutions",
   description:
-    "Trade & volume pricing for general contractors, developers, and builders. A standing WPC supply and install partnership backed by the world's largest WPC manufacturer. Serving Miami-Dade & Broward County.",
+    "Trade & volume pricing for general contractors, developers, and builders. A standing WPC supply and install partnership backed by the world's largest WPC manufacturer. Serving Miami-Dade to Okeechobee, FL.",
   keywords:
     "WPC contractor partnership Miami, trade composite fencing Florida, wholesale WPC supplier, WPC trade pricing, general contractor fence supplier Miami",
   openGraph: {

@@ -1,15 +1,15 @@
-// REAL testimonials only — each entry must be traceable to its source (a Google
-// review, a signed customer statement, etc.). TestimonialBlock renders nothing
-// for an audience with no entries, so leaving a list empty is always safe.
+// REAL Google reviews only, copied exactly as they appear on our Google Business Profile.
+// Never edit, trim, translate or "fix" review text. Every section that shows reviews
+// renders nothing while its list is empty, so an empty list is always safe.
 
-export interface Testimonial {
-  quote: string;
+export interface GoogleReview {
+  /** Reviewer name exactly as shown on Google. */
   name: string;
-  detail?: string;
-  /** Where this came from, e.g. "Google review, March 2026". Required on purpose. */
-  source: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  /** Full review text, verbatim. */
+  text: string;
 }
 
-export const HOMEOWNER_TESTIMONIALS: Testimonial[] = [];
+export const HOMEOWNER_REVIEWS: GoogleReview[] = [];
 
-export const CONTRACTOR_TESTIMONIALS: Testimonial[] = [];
+export const CONTRACTOR_REVIEWS: GoogleReview[] = [];

@@ -14,15 +14,22 @@ export const SITE = {
   },
   whatsapp: "https://wa.me/13059679202",
   email: "Info@expressfencesolutions.com",
-  // New showroom address pending from the owner — update these four fields when confirmed.
+  // Showroom & warehouse.
   address: {
-    street: "15431 W. Dixie Hwy, Unit 12",
-    city: "North Miami Beach",
+    street: "8031 US-441",
+    city: "Okeechobee",
     region: "FL",
-    postalCode: "33162",
+    postalCode: "34974",
   },
-  serviceArea: "Miami-Dade & Broward County, FL",
+  // South to north. Drives schema areaServed, service-area copy and the contact form's
+  // location options. Keep in sync with SERVICE_ZIP_RANGES in lib/booking-config.ts.
+  serviceCounties: ["Miami-Dade", "Broward", "Palm Beach", "Martin", "St. Lucie", "Okeechobee"],
+  serviceArea: "Miami-Dade, Broward, Palm Beach, Martin, St. Lucie & Okeechobee counties",
+  /** For badges and tight spaces where the full county list won't fit. */
+  serviceAreaShort: "Miami-Dade to Okeechobee, FL",
   instagram: "https://www.instagram.com/express_fence_solutions/",
+  googleBusinessProfile: "https://g.page/r/CYJgn-z3BeA1EBM",
+  googleReviewUrl: "https://g.page/r/CYJgn-z3BeA1EBM/review",
 } as const;
 
 export const FUNNEL_ENTRY = {
@@ -58,3 +65,6 @@ export function formatAddress(): string {
   const { street, city, region, postalCode } = SITE.address;
   return `${street}, ${city}, ${region} ${postalCode}`;
 }
+
+/** Google Maps turn-by-turn directions to the showroom. */
+export const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(formatAddress())}`;

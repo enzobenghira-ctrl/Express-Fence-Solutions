@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { SITE } from "@/lib/site-config";
 
-const trustItems = ["World's #1 WPC Manufacturer", "25+ Year Lifespan", "Serving Miami-Dade & Broward County"];
+const trustItems = ["World's #1 WPC Manufacturer", "25+ Year Lifespan", `Serving ${SITE.serviceAreaShort}`];
 
 export default function PartnerHero() {
   return (

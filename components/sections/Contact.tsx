@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check, Phone, MessageCircle, MapPin, Mail, Home, FileText } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
+import { DIRECTIONS_URL, SITE, formatAddress } from "@/lib/site-config";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -237,8 +238,9 @@ export default function Contact() {
                   </select>
                   <select name="location" value={form.location} onChange={handleChange} required>
                     <option value="" disabled>Location...</option>
-                    <option>Miami / South Florida</option>
-                    <option>Palm Beach County / South Florida (coming soon)</option>
+                    {SITE.serviceCounties.map((county) => (
+                      <option key={county}>{county} County</option>
+                    ))}
                     <option>Other</option>
                   </select>
                 </div>
@@ -445,9 +447,9 @@ export default function Contact() {
               {[
                 { icon: <Phone size={14} />, text: "(305) 967-9202", href: "tel:+13059679202" },
                 { icon: <Mail size={14} />, text: "Info@expressfencesolutions.com", href: "mailto:Info@expressfencesolutions.com" },
-                { icon: <MapPin size={14} />, text: "Serving all of South Florida", href: null },
+                { icon: <MapPin size={14} />, text: `Showroom: ${formatAddress()}`, href: null },
               ].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: i < 2 ? 12 : 0 }}>
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12 }}>
                   <span style={{ color: "var(--accent)", marginTop: 2, flexShrink: 0 }}>{item.icon}</span>
                   {item.href ? (
                     <a href={item.href}
@@ -461,11 +463,19 @@ export default function Contact() {
                   )}
                 </div>
               ))}
+              <a
+                href={DIRECTIONS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-block", marginLeft: 24, fontFamily: "var(--font-dm-sans)", fontSize: 13, fontWeight: 600, color: "var(--accent)", textDecoration: "none" }}
+              >
+                Get directions →
+              </a>
             </div>
 
             {/* Trust */}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {["Response within 24 hours", "Free quotes always", "Serving all of South Florida"].map((item) => (
+              {["Response within 24 hours", "Free quotes always", `Serving ${SITE.serviceAreaShort}`].map((item) => (
                 <div key={item} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <Check size={14} style={{ color: "var(--accent)", flexShrink: 0 }} />
                   <span style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)" }}>{item}</span>

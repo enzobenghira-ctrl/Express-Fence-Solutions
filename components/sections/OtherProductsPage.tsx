@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Phone, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/metaEvents";
-import { formatAddress } from "@/lib/site-config";
+import { DIRECTIONS_URL, formatAddress } from "@/lib/site-config";
 
 const containerPools = [
   {
@@ -584,7 +584,10 @@ export default function OtherProductsPage() {
             lineHeight: 1.65,
             marginBottom: 36,
           }}>
-            Visit our showroom at {formatAddress()} — or get in touch and we&apos;ll come to you for a free consultation.
+            Visit our showroom at {formatAddress()} — or get in touch and we&apos;ll come to you for a free consultation.{" "}
+            <a href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, whiteSpace: "nowrap" }}>
+              Get directions →
+            </a>
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
             <a
