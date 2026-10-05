@@ -7,6 +7,7 @@ import { getAttribution, type Attribution } from "@/lib/attribution";
 import { formatPhone } from "@/lib/form-validation";
 import { LEAD_FORMS, type LeadKind } from "@/lib/forms/registry";
 import { isChoiceField, validateField, type FormField, type FormValues } from "@/lib/forms/schema";
+import { compressPhoto } from "@/lib/image-compress";
 import { saveLastLead } from "@/lib/last-lead";
 import { SITE } from "@/lib/site-config";
 
@@ -62,6 +63,7 @@ export default function MultiStepForm({
   const [hp, setHp] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [photoBusy, setPhotoBusy] = useState(false);
   const startedAt = useRef(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isFirstRender = useRef(true);
@@ -135,11 +137,9 @@ export default function MultiStepForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submission),
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(typeof data.error === "string" ? data.error : "");
-      }
-      saveLastLead(kind, values);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
+      saveLastLead(kind, values, typeof data.route === "string" ? data.route : null);
       onSubmitted?.(submission);
       // Leave `submitting` on so the button can't double-submit while the next page loads.
       router.push(successHref);
@@ -203,6 +203,53 @@ export default function MultiStepForm({
               );
             })}
           </div>
+          {errorText}
+        </div>
+      );
+    }
+
+    if (field.type === "photo") {
+      const photo = typeof values[field.name] === "string" ? (values[field.name] as string) : "";
+      return (
+        <div key={field.name}>
+          <label htmlFor={id} className="efs-form-label">
+            {field.label} <span style={{ fontWeight: 400 }}>(optional)</span>
+          </label>
+          {hint}
+          {photo ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- local data URL preview */}
+              <img src={photo} alt="Your photo" style={{ width: 88, height: 66, objectFit: "cover", borderRadius: 6, border: "1px solid var(--border)" }} />
+              <button type="button" className="efs-btn efs-btn--secondary efs-btn--sm" onClick={() => setValue(field.name, "")}>
+                Remove
+              </button>
+            </div>
+          ) : (
+            <input
+              id={id}
+              type="file"
+              accept="image/*"
+              aria-describedby={describedBy}
+              disabled={photoBusy}
+              style={{ padding: 10, cursor: "pointer" }}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                if (!file) return;
+                setPhotoBusy(true);
+                try {
+                  setValue(field.name, await compressPhoto(file));
+                } catch {
+                  setErrors((er) => ({ ...er, [field.name]: "We couldn't read that photo. Try a JPG or PNG, or skip it." }));
+                } finally {
+                  setPhotoBusy(false);
+                }
+              }}
+            />
+          )}
+          {photoBusy && (
+            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>Preparing photo…</p>
+          )}
           {errorText}
         </div>
       );
@@ -341,7 +388,7 @@ export default function MultiStepForm({
             <ChevronLeft size={16} aria-hidden /> Back
           </button>
         )}
-        <button type="submit" className="efs-btn efs-btn--primary" style={{ flex: 1 }} disabled={submitting}>
+        <button type="submit" className="efs-btn efs-btn--primary" style={{ flex: 1 }} disabled={submitting || photoBusy}>
           {submitting ? (
             <>
               <Loader2 size={16} className="animate-spin" aria-hidden /> Sending…

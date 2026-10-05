@@ -30,22 +30,31 @@ function formatSlotDisplay(iso: string): string {
 const todayStr = new Date().toISOString().slice(0, 10);
 const maxDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-export default function BookingForm() {
+/** Optional starting values, e.g. carried over from the /get-a-quote form. */
+export interface BookingFormInitial {
+  projectTypes?: string[];
+  zip?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+}
+
+export default function BookingForm({ initial = {} }: { initial?: BookingFormInitial }) {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [projectTypes, setProjectTypes] = useState<string[]>([]);
+  const [projectTypes, setProjectTypes] = useState<string[]>(initial.projectTypes ?? []);
   const [propertyType, setPropertyType] = useState("");
   const [address, setAddress] = useState("");
-  const [zip, setZip] = useState("");
+  const [zip, setZip] = useState(initial.zip ?? "");
   const [date, setDate] = useState("");
   const [slots, setSlots] = useState<Slot[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [availabilityWarning, setAvailabilityWarning] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(initial.name ?? "");
+  const [email, setEmail] = useState(initial.email ?? "");
+  const [phone, setPhone] = useState(initial.phone ?? "");
   const [notes, setNotes] = useState("");
 
   const [submitting, setSubmitting] = useState(false);

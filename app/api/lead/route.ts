@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 import { Resend } from "resend";
 import { UTM_KEYS } from "@/lib/attribution";
 import { LEAD_FORMS, isLeadKind, type LeadFormDefinition, type LeadKind } from "@/lib/forms/registry";
-import { displayValue, validateValues, type FormValues } from "@/lib/forms/schema";
+import { PHOTO_DATA_PREFIX, displayValue, validateValues, type FormValues } from "@/lib/forms/schema";
 import { computeRoute } from "@/lib/lead-routing";
 import { SITE } from "@/lib/site-config";
 
@@ -23,6 +24,7 @@ interface Lead {
   attribution: Record<string, string>;
   pageUrl: string;
   submittedAt: string;
+  photoNote?: string;
 }
 
 function cleanString(v: unknown, max: number): string {
@@ -37,6 +39,39 @@ function pickStrings(raw: unknown, keys: readonly string[], max: number): Record
     if (v) out[k] = v;
   }
   return out;
+}
+
+/**
+ * Moves an attached photo out of the lead values: uploads it to Vercel Blob and puts the
+ * URL in its place. Returns the raw JPEG when it couldn't be stored, so the email can
+ * carry it as an attachment instead.
+ */
+async function storePhoto(lead: Lead): Promise<Buffer | null> {
+  const dataUrl = lead.values.photo;
+  if (typeof dataUrl !== "string" || !dataUrl.startsWith(PHOTO_DATA_PREFIX)) return null;
+  delete lead.values.photo;
+
+  const jpeg = Buffer.from(dataUrl.slice(PHOTO_DATA_PREFIX.length), "base64");
+  if (jpeg[0] !== 0xff || jpeg[1] !== 0xd8 || jpeg[2] !== 0xff) {
+    console.warn(`[lead] Ignored photo that isn't a JPEG on lead ${lead.id}`);
+    return null;
+  }
+
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const blob = await put(`quote-photos/${lead.id}.jpg`, jpeg, {
+        access: "public",
+        contentType: "image/jpeg",
+        addRandomSuffix: true, // unguessable URL — homeowners' property photos aren't listable
+      });
+      lead.values.photo = blob.url;
+      return null;
+    } catch (err) {
+      console.error(`[lead] Photo upload to Blob failed for lead ${lead.id}:`, err);
+    }
+  }
+  lead.photoNote = "Photo could not be stored online — it is attached to the notification email.";
+  return jpeg;
 }
 
 function escapeHtml(s: string): string {
@@ -59,7 +94,7 @@ async function forwardToCrm(url: string, lead: Lead): Promise<boolean> {
   }
 }
 
-async function emailLead(lead: Lead, form: LeadFormDefinition): Promise<boolean> {
+async function emailLead(lead: Lead, form: LeadFormDefinition, photo: Buffer | null): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
     console.error("[lead] RESEND_API_KEY is not set — cannot email lead", lead.id);
     return false;
@@ -71,6 +106,7 @@ async function emailLead(lead: Lead, form: LeadFormDefinition): Promise<boolean>
     ...fields.filter((f) => lead.values[f.name] !== undefined).map((f) => row(f.label, displayValue(f, lead.values[f.name]))),
     ...Object.entries(lead.hidden).map(([k, v]) => row(k, v)),
     lead.route ? row("Route", lead.route) : "",
+    lead.photoNote ? row("Photo", lead.photoNote) : "",
     ...Object.entries(lead.attribution).map(([k, v]) => row(k, v)),
     row("Page", lead.pageUrl || "—"),
     row("Lead ID", lead.id),
@@ -87,6 +123,7 @@ async function emailLead(lead: Lead, form: LeadFormDefinition): Promise<boolean>
       replyTo: typeof lead.values.email === "string" ? lead.values.email : undefined,
       subject,
       html: `<h2 style="font-family:sans-serif;color:#1a1a1a;">${escapeHtml(form.label)}</h2><table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;">${rows}</table>`,
+      attachments: photo ? [{ filename: `project-photo-${lead.id}.jpg`, content: photo }] : undefined,
     });
     if (error) {
       console.error(`[lead] Email failed for lead ${lead.id}:`, error.message);
@@ -127,7 +164,8 @@ export async function POST(req: Request) {
   }
 
   const lead: Lead = {
-    id: cleanString(body.eventId, 100) || crypto.randomUUID(),
+    // The browser's event id (shared with the Meta pixel for dedup); also used in the photo's file path, so keep it path-safe.
+    id: cleanString(body.eventId, 100).replace(/[^A-Za-z0-9-]/g, "") || crypto.randomUUID(),
     kind,
     funnel: form.funnel,
     route: computeRoute(kind, values),
@@ -138,8 +176,14 @@ export async function POST(req: Request) {
     submittedAt: new Date().toISOString(),
   };
 
+  const unstoredPhoto = await storePhoto(lead);
+
   const webhook = process.env.CRM_WEBHOOK_URL;
-  const delivered = (webhook && (await forwardToCrm(webhook, lead))) || (await emailLead(lead, form));
+  let delivered = Boolean(webhook) && (await forwardToCrm(webhook!, lead));
+  // Email when there's no CRM, when the CRM failed, or when a photo needs to travel as an attachment.
+  if (!delivered || unstoredPhoto) {
+    delivered = (await emailLead(lead, form, unstoredPhoto)) || delivered;
+  }
 
   if (!delivered) {
     console.error("[lead] UNDELIVERED LEAD — recover from this log line:", JSON.stringify(lead));

@@ -18,8 +18,14 @@ interface FieldBase {
 export type ChoiceField = FieldBase & { type: "choice" | "multichoice"; options: FormOption[] };
 export type InputField = FieldBase & { type: "text" | "email" | "tel" | "zip"; placeholder?: string; autoComplete?: string };
 export type TextareaField = FieldBase & { type: "textarea"; placeholder?: string };
+/** Optional photo. The browser compresses it to a JPEG data URL; /api/lead uploads it to Vercel Blob. */
+export type PhotoField = FieldBase & { type: "photo" };
 
-export type FormField = ChoiceField | InputField | TextareaField;
+export type FormField = ChoiceField | InputField | TextareaField | PhotoField;
+
+export const PHOTO_DATA_PREFIX = "data:image/jpeg;base64,";
+/** ~2 MB of JPEG once base64-encoded — comfortably under Vercel's 4.5 MB request limit. */
+export const MAX_PHOTO_CHARS = 2_800_000;
 
 export interface FormStep {
   /** Short label under the progress bar, e.g. "Your business". */
@@ -52,6 +58,10 @@ export function validateField(field: FormField, value: string | string[] | undef
     return null;
   }
   if (Array.isArray(value)) return "Invalid value.";
+  if (field.type === "photo") {
+    if (!value!.startsWith(PHOTO_DATA_PREFIX) || value!.length > MAX_PHOTO_CHARS) return "Please choose a smaller photo.";
+    return null;
+  }
   const str = value!.trim();
   if (str.length > (field.type === "textarea" ? MAX_TEXTAREA : MAX_TEXT)) return "That's too long.";
   if (field.type === "email" && !EMAIL_RE.test(str)) return "Please enter a valid email address.";
@@ -85,6 +95,7 @@ export function validateValues(
 
 /** Human-readable label for a stored value (option labels instead of slugs). */
 export function displayValue(field: FormField, value: string | string[]): string {
+  if (field.type === "photo") return typeof value === "string" && value.startsWith("http") ? value : "Photo provided";
   if (!isChoiceField(field)) return Array.isArray(value) ? value.join(", ") : value;
   const label = (v: string) => field.options.find((o) => o.value === v)?.label ?? v;
   return Array.isArray(value) ? value.map(label).join(", ") : label(value);
