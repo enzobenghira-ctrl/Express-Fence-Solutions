@@ -1,29 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { CONTRACTOR_REVIEWS, HOMEOWNER_REVIEWS } from "@/lib/testimonials";
+import { GOOGLE_BUSINESS_PROFILE } from "@/lib/business-info";
 
-const testimonials = [
-  {
-    quote: "We replaced our old wood fence and the difference is incredible. Three years in and it still looks brand new — no painting, no repairs, nothing. Worth every penny.",
-    name: "Carlos M.",
-    detail: "WPC Fencing, Miami",
-    initial: "C",
-  },
-  {
-    quote: "The pergola over our dock completely transformed how we use our backyard. Held up through two hurricane seasons without a scratch. Professional start to finish.",
-    name: "Jennifer R.",
-    detail: "WPC Pergola, South Florida",
-    initial: "J",
-  },
-  {
-    quote: "I was blown away by the quality. Our neighbors keep asking who did it. The charcoal fence matches our home perfectly and requires absolutely nothing from us.",
-    name: "Roberto A.",
-    detail: "WPC Fencing & Gate, Miami Beach",
-    initial: "R",
-  },
-];
-
+/** Real Google reviews only (lib/testimonials.ts). The whole section is hidden until there are some. */
 export default function Testimonials() {
+  const reviews = [...HOMEOWNER_REVIEWS, ...CONTRACTOR_REVIEWS];
+  if (reviews.length === 0) return null;
+
   return (
     <section
       className="section-mobile"
@@ -51,7 +36,7 @@ export default function Testimonials() {
               marginBottom: 16,
             }}
           >
-            Client Reviews
+            Google Reviews
           </span>
           <h2
             style={{
@@ -70,15 +55,14 @@ export default function Testimonials() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 24,
             marginBottom: 48,
           }}
-          className="testimonials-grid"
         >
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
+          {reviews.map((r, i) => (
+            <motion.figure
+              key={`${r.name}-${r.text.slice(0, 24)}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -90,63 +74,55 @@ export default function Testimonials() {
                 padding: "36px",
                 display: "flex",
                 flexDirection: "column",
-                gap: 0,
+                gap: 20,
               }}
             >
               {/* Stars */}
-              <div style={{ display: "flex", gap: 3, marginBottom: 20 }}>
-                {[...Array(5)].map((_, j) => (
-                  <span key={j} style={{ color: "var(--accent)", fontSize: 14 }}>★</span>
+              <div role="img" aria-label={`${r.rating} out of 5 stars`} style={{ display: "flex", gap: 3 }}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <span key={n} aria-hidden style={{ color: n <= r.rating ? "var(--accent)" : "var(--border-strong)", fontSize: 14 }}>
+                    ★
+                  </span>
                 ))}
               </div>
 
-              {/* Quote */}
-              <p
+              {/* Review text — verbatim */}
+              <blockquote
                 style={{
                   fontFamily: "var(--font-cormorant)",
                   fontStyle: "italic",
                   fontSize: 18,
                   color: "var(--dark)",
                   lineHeight: 1.65,
+                  whiteSpace: "pre-line",
                   flex: 1,
-                  marginBottom: 28,
                 }}
               >
-                &ldquo;{t.quote}&rdquo;
-              </p>
+                {r.text}
+              </blockquote>
 
-              {/* Author */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    background: "var(--accent-light)",
-                    border: "1px solid var(--accent-border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "var(--font-cormorant)",
-                    fontStyle: "italic",
-                    fontSize: 18,
-                    fontWeight: 600,
-                    color: "var(--accent)",
-                    flexShrink: 0,
-                  }}
+              {/* Reviewer + source */}
+              <figcaption
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  flexWrap: "wrap",
+                  fontFamily: "var(--font-dm-sans)",
+                }}
+              >
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--dark)" }}>{r.name}</span>
+                <a
+                  href={GOOGLE_BUSINESS_PROFILE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", textDecoration: "none" }}
                 >
-                  {t.initial}
-                </div>
-                <div>
-                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, fontWeight: 600, color: "var(--dark)" }}>
-                    {t.name}
-                  </p>
-                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "var(--text-secondary)" }}>
-                    {t.detail}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                  Google review ↗
+                </a>
+              </figcaption>
+            </motion.figure>
           ))}
         </div>
 
@@ -176,11 +152,11 @@ export default function Testimonials() {
               Happy with your installation?
             </p>
             <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--text-secondary)" }}>
-              Leave us a Google review — it takes 30 seconds and helps Miami homeowners find us.
+              Leave us a Google review — it takes 30 seconds and helps homeowners find us.
             </p>
           </div>
           <a
-            href="https://g.page/r/CYJgn-z3BeA1EBM/review"
+            href={`${GOOGLE_BUSINESS_PROFILE}/review`}
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -203,11 +179,6 @@ export default function Testimonials() {
           </a>
         </motion.div>
       </div>
-
-      <style jsx>{`
-        .testimonials-grid { grid-template-columns: 1fr !important; }
-        @media (min-width: 768px) { .testimonials-grid { grid-template-columns: repeat(3, 1fr) !important; } }
-      `}</style>
     </section>
   );
 }

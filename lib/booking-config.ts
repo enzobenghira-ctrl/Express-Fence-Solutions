@@ -1,5 +1,7 @@
 // Shared config + helpers for the in-home consultation booking flow.
 
+import { SERVICE_AREA } from "@/lib/business-info";
+
 export const TIMEZONE = "America/New_York";
 export const SLOT_DURATION_MINUTES = 60;
 
@@ -32,15 +34,31 @@ export const PROPERTY_TYPES = [
   { value: "commercial", label: "Commercial" },
 ] as const;
 
-// Approximate ZIP ranges for Miami-Dade and Palm Beach County.
+// ZIP ranges covering the six service counties in SERVICE_COUNTIES. ZIP codes don't
+// follow county lines exactly, so this is approximate — out-of-area visitors are told
+// to call, never silently dropped.
 const SERVICE_ZIP_RANGES: [number, number][] = [
-  [33001, 33299], // Miami-Dade County
-  [33401, 33499], // Palm Beach County
+  [33001, 33299], // Miami-Dade + south Broward (Hollywood, Pembroke Pines, Coral Springs…)
+  [33301, 33399], // Broward — Fort Lauderdale area
+  [33401, 33499], // Palm Beach + Deerfield Beach (Broward) + Hobe Sound (Martin)
+  [34945, 34958], // St. Lucie (Fort Pierce, Port St. Lucie) + Martin (Indiantown, Jensen Beach)
+  [34972, 34974], // Okeechobee
+  [34979, 34997], // St. Lucie (Port St. Lucie) + Martin (Stuart, Palm City)
 ];
+
+// Inside the ranges above but outside the six counties.
+const EXCLUDED_ZIPS = new Set<number>([
+  33001, 33036, 33037, 33040, 33041, 33042, 33043, 33044, 33045, 33050, 33051, 33052, 33070, // Monroe — Florida Keys
+  33440, // Clewiston — Hendry
+  33471, // Moore Haven — Glades
+]);
+
+export const OUT_OF_AREA_MESSAGE = `We currently serve ${SERVICE_AREA}. Please call us at (305) 967-9202 to check your area.`;
 
 export function isInServiceArea(zip: string): boolean {
   const z = Number.parseInt(zip, 10);
   if (!Number.isInteger(z) || !/^\d{5}$/.test(zip.trim())) return false;
+  if (EXCLUDED_ZIPS.has(z)) return false;
   return SERVICE_ZIP_RANGES.some(([min, max]) => z >= min && z <= max);
 }
 

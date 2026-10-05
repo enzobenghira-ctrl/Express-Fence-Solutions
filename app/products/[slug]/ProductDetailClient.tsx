@@ -11,6 +11,7 @@ import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import MobileCTABar from "@/components/ui/MobileCTABar";
 import type { ProductData } from "@/lib/products-data";
 import { trackEvent } from "@/lib/metaEvents";
+import { ADDRESS, DIRECTIONS_URL } from "@/lib/business-info";
 
 const WHATSAPP = "https://wa.me/13059679202";
 
@@ -768,7 +769,10 @@ export default function ProductDetailClient({ product }: Props) {
                   margin: 0,
                 }}
               >
-                Visit our North Miami Beach showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.
+                Visit our {ADDRESS.city} showroom to see, touch, and compare WPC products in person — or reach out for a free quote and we'll bring the samples to you.{" "}
+                <a href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 600, whiteSpace: "nowrap" }}>
+                  Get directions →
+                </a>
               </p>
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>

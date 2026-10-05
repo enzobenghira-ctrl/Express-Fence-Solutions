@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { CALENDAR_ID, describeGoogleError, getCalendarClient } from "@/lib/google-calendar";
 import {
   isInServiceArea,
+  OUT_OF_AREA_MESSAGE,
   PROJECT_TYPES,
   PROPERTY_TYPES,
   SLOT_DURATION_MINUTES,
@@ -67,7 +68,7 @@ function validate(body: Partial<BookingPayload>): string | null {
     return "Please enter a valid address.";
   }
   if (!body.zip || !isInServiceArea(body.zip)) {
-    return "We currently serve Miami-Dade & Broward County. Please call us to check availability in your area.";
+    return OUT_OF_AREA_MESSAGE;
   }
   if (!body.slotIso || Number.isNaN(new Date(body.slotIso).getTime())) {
     return "Please select a valid consultation time.";

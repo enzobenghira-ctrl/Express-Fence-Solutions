@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
+import { ADDRESS, DIRECTIONS_URL, SERVICE_AREA } from "@/lib/business-info";
 
 const CATALOG = "https://drive.google.com/file/d/1ppHVFNHBI4mRzAuBZgrRHWTiE0YpF2d6/view?usp=sharing";
 
@@ -18,7 +19,6 @@ const company = [
   { label: "About Us", href: "#about" },
   { label: "Why WPC", href: "#why-wpc" },
   { label: "Gallery", href: "#gallery" },
-  { label: "Expanding to Palm Beach County", href: "#expanding-to-palm-beach" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -171,10 +171,25 @@ export default function Footer() {
                 <Mail size={13} style={{ marginTop: 2, flexShrink: 0, color: "var(--accent)" }} />
                 Info@expressfencesolutions.com
               </a>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)" }}>
-                <MapPin size={13} style={{ marginTop: 2, flexShrink: 0, color: "var(--accent)" }} />
-                Miami-Dade & Broward County, FL
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", lineHeight: 1.5 }}>
+                <MapPin size={13} style={{ marginTop: 3, flexShrink: 0, color: "var(--accent)" }} />
+                <div>
+                  <p style={{ fontWeight: 600 }}>Showroom</p>
+                  <p>{ADDRESS.street}</p>
+                  <p>{ADDRESS.city}, {ADDRESS.region} {ADDRESS.postalCode}</p>
+                  <a
+                    href={DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "none" }}
+                  >
+                    Get directions →
+                  </a>
+                </div>
               </div>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 12, color: "rgba(250,250,247,0.75)", lineHeight: 1.5 }}>
+                Serving {SERVICE_AREA}
+              </p>
               <a
                 href="https://www.instagram.com/express_fence_solutions/"
                 target="_blank"
