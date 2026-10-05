@@ -14,9 +14,9 @@ export default function MobileCTABar() {
         height: 68,
         background: "var(--background)",
         borderTop: "1px solid var(--border)",
-        display: "flex",
       }}
-      className="md:hidden"
+      // display lives in the class, not the style, or the inline style would override md:hidden
+      className="flex md:hidden"
     >
       <a
         href="tel:+13059679202"
