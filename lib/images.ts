@@ -11,6 +11,7 @@ export const CONCEPT_IMAGES = new Set<string>([
   "/images/aluminum-pergola-pool-sunset.webp",
   "/images/aluminum-pergola-waterfront-sunset.webp",
   "/images/gate-double-swing-render.webp",
+  "/images/gate-wpc-sliding-white-frame.webp",
   "/images/aluminum-pergola-white-poolside.webp",
   "/images/aluminum-pergola-white-outdoor-kitchen.webp",
   "/images/container-pool-glass-wall-night.webp",

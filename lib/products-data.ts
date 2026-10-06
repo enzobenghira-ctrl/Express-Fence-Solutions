@@ -175,7 +175,7 @@ export const productsData: ProductData[] = [
     gallery: [
       { src: "/images/gate-wood-black-miami.jpg", alt: "Wood-look WPC gate with black frame" },
       { src: "/images/gate-teak-tropical.jpeg", alt: "Teak-look WPC gate in a tropical garden" },
-      { src: "/images/gate-double-swing-render.webp", alt: "Double swing WPC gate design" },
+      { src: "/images/gate-wpc-sliding-white-frame.webp", alt: "Dark WPC sliding driveway gate and pedestrian gate in a white aluminum frame" },
     ],
     installGuide: null,
     inHomeGrid: true,
