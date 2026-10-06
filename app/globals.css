@@ -191,6 +191,90 @@ select option {
   right: 16px;
 }
 
+/* Material composition chart. Categorical slots in fixed order, validated for color-blind
+   separation; every value is also listed as text, so no color stands alone. */
+.efs-comp {
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: clamp(24px, 4vw, 36px);
+  margin-bottom: 40px;
+}
+.efs-comp-bar {
+  display: flex;
+  gap: 2px;
+  height: 16px;
+}
+.efs-comp-bar--empty {
+  background: var(--surface-2);
+  border-radius: 4px;
+}
+.efs-comp-seg {
+  position: relative;
+  min-width: 4px;
+}
+.efs-comp-seg:first-child { border-radius: 4px 0 0 4px; }
+.efs-comp-seg:last-child { border-radius: 0 4px 4px 0; }
+.efs-comp-seg:only-child { border-radius: 4px; }
+/* Taller invisible hit area than the 16px mark. */
+.efs-comp-seg::before {
+  content: "";
+  position: absolute;
+  inset: -10px 0;
+}
+.efs-comp-bar:hover .efs-comp-seg:not(:hover) { opacity: 0.35; }
+.efs-comp-tip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--dark);
+  border-radius: 6px;
+  padding: 6px 10px;
+  pointer-events: none;
+  display: none;
+  z-index: 2;
+}
+/* Tooltips open toward the middle of the bar so they never run off the card. */
+.efs-comp-tip--start { left: 0; transform: none; }
+.efs-comp-tip--end { left: auto; right: 0; transform: none; }
+.efs-comp-seg:hover .efs-comp-tip { display: block; }
+.efs-comp-legend {
+  list-style: none;
+  margin-top: 20px;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 15px;
+  color: var(--dark);
+}
+.efs-comp-legend li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.efs-comp-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.efs-comp-pct {
+  margin-left: auto;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Header — the whole fixed header slides up by the top bar's height once scrolled. */
 .site-header-link {
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;

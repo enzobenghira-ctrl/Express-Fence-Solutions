@@ -7,6 +7,7 @@ import Hero from "@/components/funnel/Hero";
 import FeatureGrid from "@/components/funnel/FeatureGrid";
 import ProjectGallery from "@/components/funnel/ProjectGallery";
 import SpecTable, { visibleRows } from "@/components/funnel/SpecTable";
+import MaterialComposition from "@/components/funnel/MaterialComposition";
 import { TodoNote } from "@/components/funnel/FactText";
 import { SHOW_TODOS } from "@/lib/facts";
 import ProductFunnelCTA from "@/components/funnel/ProductFunnelCTA";
@@ -67,11 +68,12 @@ export default function ProductPage({ params }: Props) {
         <FeatureGrid eyebrow="Why homeowners choose it" title={`The benefits of ${product.name}`} items={product.benefits} background="background" />
         <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />
 
-        {/* Specs: confirmed rows only in production; the whole section drops out if there are none. */}
-        {(visibleRows(specRows(product.name)).length > 0 || product.installGuide || SHOW_TODOS) && (
+        {/* Composition + specs: confirmed content only in production; the whole section drops out if there's none. */}
+        {(product.composition || visibleRows(specRows(product)).length > 0 || product.installGuide || SHOW_TODOS) && (
           <section className="efs-section" style={{ background: "var(--surface)" }}>
             <div style={{ maxWidth: 820, margin: "0 auto" }}>
-              <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product.name)} />
+              <MaterialComposition productName={product.name} composition={product.composition} />
+              <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product)} />
               {(product.installGuide || SHOW_TODOS) && (
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
                   Installation guide:{" "}

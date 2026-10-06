@@ -5,6 +5,11 @@
 import { todo, type Fact } from "@/lib/facts";
 import type { SpecRow } from "@/components/funnel/SpecTable";
 
+export interface CompositionPart {
+  label: string;
+  pct: number;
+}
+
 export interface ProductData {
   slug: string;
   num: string;
@@ -19,6 +24,13 @@ export interface ProductData {
   overview: string[];
   benefits: { title: string; text: string }[];
   gallery: { src: string; alt: string }[];
+  /**
+   * Material breakdown from the supplier spec sheet, or null until it's confirmed (the
+   * chart is then hidden in production). Up to 5 parts summing to 100, listed in the same
+   * order on every product so each material keeps its color, e.g.
+   * [{ label: "Wood fiber", pct: 60 }, { label: "HDPE", pct: 32 }, { label: "UV stabilizers", pct: 5 }, { label: "Anti-fungal additives", pct: 3 }]
+   */
+  composition: CompositionPart[] | null;
   /** Install guide PDF in public/downloads/, or null until it's uploaded. */
   installGuide: string | null;
   /** Shown in the main nav and homepage grid. Benches stay reachable but off the nav. */
@@ -30,13 +42,16 @@ const NO_ROT = { title: "Won't rot or splinter", text: "Stands up to Florida's h
 const FLORIDA = { title: "Made for Florida", text: "A good fit for sun, humidity and coastal salt air." };
 
 /** Rows every WPC spec table shows (blueprint). Filled in from the supplier spec sheet. */
-export function specRows(product: string): SpecRow[] {
-  const t = (what: string): Fact => todo(`${product} ${what}`);
+export function specRows({ name, composition }: ProductData): SpecRow[] {
+  const t = (what: string): Fact => todo(`${name} ${what}`);
   return [
     { label: "Profile dimensions", value: t("profile dimensions") },
     { label: "Lengths", value: t("lengths") },
     { label: "Colors", value: t("colors") },
-    { label: "Composition", value: todo("composition from the supplier spec sheet") },
+    {
+      label: "Composition",
+      value: composition ? composition.map((c) => `${c.pct}% ${c.label}`).join(", ") : todo("composition from the supplier spec sheet"),
+    },
     { label: "Post / support system", value: t("post or support system") },
     { label: "Pallet quantity", value: t("pallet quantity") },
     { label: "Warranty", value: todo("warranty length and terms") },
@@ -64,6 +79,7 @@ export const productsData: ProductData[] = [
       { src: "/images/fence-grey-decorative-top.webp", alt: "Grey WPC fence with a decorative top panel" },
       { src: "/images/fence-dark-grey-autumn.webp", alt: "Dark grey WPC fence in a garden" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: true,
   },
@@ -86,6 +102,7 @@ export const productsData: ProductData[] = [
       { src: "/images/pergola-wpc-tropical.webp", alt: "WPC pergola in a tropical garden" },
       { src: "/images/decking-pergola-aerial.webp", alt: "Aerial view of a WPC pergola over a deck" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: true,
   },
@@ -108,6 +125,7 @@ export const productsData: ProductData[] = [
       { src: "/images/cladding-teak-restaurant.webp", alt: "Teak-look WPC slat cladding in a restaurant" },
       { src: "/images/cladding-teak-living-room.webp", alt: "Teak-look WPC cladding in a living room" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: true,
   },
@@ -130,6 +148,7 @@ export const productsData: ProductData[] = [
       { src: "/images/decking-grey-closeup.webp", alt: "Grey WPC decking with planters" },
       { src: "/images/decking-dark-grey-pond.webp", alt: "Dark grey WPC decking beside a pond" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: true,
   },
@@ -153,6 +172,7 @@ export const productsData: ProductData[] = [
       { src: "/images/gate-teak-tropical.jpeg", alt: "Teak-look WPC gate in a tropical garden" },
       { src: "/images/gate-double-swing-render.webp", alt: "Double swing WPC gate design" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: true,
   },
@@ -172,6 +192,7 @@ export const productsData: ProductData[] = [
       { src: "/images/bench-wpc-outdoor.webp", alt: "WPC outdoor bench" },
       { src: "/images/bench-teak-closeup.webp", alt: "Teak-look WPC bench" },
     ],
+    composition: null,
     installGuide: null,
     inMainNav: false,
   },
