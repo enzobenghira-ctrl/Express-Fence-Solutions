@@ -290,8 +290,8 @@ export const productsData: ProductData[] = [
     ],
     gallery: [
       { src: "/images/aluminum-pergola-white-poolside.webp", alt: "White louvered aluminum pergola over a poolside dining area" },
-      { src: "/images/aluminum-pergola-pool-sunset.webp", alt: "White louvered aluminum pergola beside a pool at sunset" },
-      { src: "/images/aluminum-pergola-waterfront-sunset.webp", alt: "Louvered aluminum pergola on a waterfront patio" },
+      { src: "/images/aluminum-pergola-white-outdoor-kitchen.webp", alt: "White louvered aluminum pergola over an outdoor kitchen and dining area" },
+      { src: "/images/aluminum-pergola-black-patio.webp", alt: "Dark grey louvered aluminum pergola over a patio lounge" },
     ],
     specs: [
       { label: "Sizes", value: todo("louvered pergola sizes") },
