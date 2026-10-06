@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProductBySlug, productsData, specRows } from "@/lib/products-data";
+import { getComposition } from "@/lib/composition-data";
 import { SITE } from "@/lib/site-config";
 import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
@@ -44,6 +45,7 @@ export function generateMetadata({ params }: Props): Metadata {
 export default function ProductPage({ params }: Props) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
+  const composition = getComposition(product.slug);
 
   const schema = {
     "@context": "https://schema.org",
@@ -69,10 +71,10 @@ export default function ProductPage({ params }: Props) {
         <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />
 
         {/* Composition + specs: confirmed content only in production; the whole section drops out if there's none. */}
-        {(product.composition || visibleRows(specRows(product)).length > 0 || product.installGuide || SHOW_TODOS) && (
+        {(composition || visibleRows(specRows(product)).length > 0 || product.installGuide || SHOW_TODOS) && (
           <section className="efs-section" style={{ background: "var(--surface)" }}>
             <div style={{ maxWidth: 820, margin: "0 auto" }}>
-              <MaterialComposition productName={product.name} composition={product.composition} />
+              <MaterialComposition productName={product.name} composition={composition} />
               <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product)} />
               {(product.installGuide || SHOW_TODOS) && (
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
