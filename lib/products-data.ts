@@ -105,6 +105,7 @@ export const productsData: ProductData[] = [
     gallery: [
       { src: "/images/pergola-wpc-tropical.webp", alt: "WPC pergola in a tropical garden" },
       { src: "/images/decking-pergola-aerial.webp", alt: "Aerial view of a WPC pergola over a deck" },
+      { src: "/images/pergola-wpc-dark-chocolate.jpg", alt: "Dark chocolate WPC pergola over a patio dining area" },
     ],
     installGuide: null,
     inHomeGrid: true,
