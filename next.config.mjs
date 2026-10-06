@@ -21,6 +21,8 @@ const REDIRECTS = [
   // The combined aluminum page and /container-pools became separate product pages
   ["/products/aluminum", "/products/aluminum-fences"],
   ["/container-pools", "/products/container-pools"],
+  // Packages now live on /projects, with the package builder
+  ["/outdoor-living-packages", "/projects#packages"],
 ];
 
 // {{TODO}} placeholders are visible on preview deployments and local builds, and removed

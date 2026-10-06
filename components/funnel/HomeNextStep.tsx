@@ -32,7 +32,10 @@ export default function HomeNextStep({ calendarUrl }: { calendarUrl?: string }) 
 
   if (lead === undefined) return <div style={{ minHeight: 420 }} aria-busy="true" />;
 
-  if (lead?.kind === "home_quote" && lead.route === "partner_referral") {
+  // Quote requests and package requests are both homeowner leads.
+  const homeLead = lead?.kind === "home_quote" || lead?.kind === "package" ? lead : null;
+
+  if (homeLead?.route === "partner_referral") {
     return (
       <Confirmation title="We've got your request">
         We&apos;ll call you shortly to talk through your project and the best way to get it built. Questions in the meantime? Call{" "}
@@ -44,9 +47,10 @@ export default function HomeNextStep({ calendarUrl }: { calendarUrl?: string }) 
     );
   }
 
-  const c = lead?.kind === "home_quote" ? lead.contact : {};
+  const c = homeLead?.contact ?? {};
+  const projectType = homeLead?.kind === "package" ? "outdoor-living-package" : c.projectType;
   const initial: BookingFormInitial = {
-    projectTypes: c.projectType && BOOKING_PROJECT[c.projectType] ? [BOOKING_PROJECT[c.projectType]] : undefined,
+    projectTypes: projectType && BOOKING_PROJECT[projectType] ? [BOOKING_PROJECT[projectType]] : undefined,
     zip: c.zip,
     name: c.contactName,
     email: c.email,

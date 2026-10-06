@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
+import { LEAD_FORMS } from "@/lib/forms/registry";
 import TestimonialBlock from "@/components/funnel/TestimonialBlock";
 import { TRADE_TYPES } from "@/lib/forms/trade";
 import { SITE } from "@/lib/site-config";
@@ -33,7 +34,7 @@ export default function TradeApplyPage({ searchParams }: Props) {
           trustItems={["Trade pricing after approval", `Showroom in ${SITE.address.city}, FL`, `Serving ${SITE.serviceAreaShort}`]}
           aside={
             <MultiStepForm
-              kind="trade_application"
+              kind="trade_application" steps={LEAD_FORMS.trade_application.steps}
               submitLabel="Submit application"
               successHref="/thank-you-trade"
               initialValues={presetTrade ? { tradeType: presetTrade } : undefined}

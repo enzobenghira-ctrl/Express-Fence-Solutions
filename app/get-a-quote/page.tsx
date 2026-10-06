@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
+import { LEAD_FORMS } from "@/lib/forms/registry";
 import TestimonialBlock from "@/components/funnel/TestimonialBlock";
 import ProcessSteps from "@/components/funnel/ProcessSteps";
 import FeatureGrid from "@/components/funnel/FeatureGrid";
@@ -26,7 +27,7 @@ export default function GetAQuotePage({ searchParams }: Props) {
   const presetType = HOME_PROJECT_TYPES.some((t) => t.value === searchParams.type) ? searchParams.type : undefined;
   const form = (
     <MultiStepForm
-      kind="home_quote"
+      kind="home_quote" steps={LEAD_FORMS.home_quote.steps}
       submitLabel="Get my free quote"
       successHref="/thank-you-home"
       initialValues={presetType ? { projectType: presetType } : undefined}

@@ -2,6 +2,7 @@
 // sides accept exactly the same fields, options and formats.
 
 import { EMAIL_RE, ZIP_RE, isValidPhone } from "@/lib/form-validation";
+import { parseSelection, selectionError, selectionToText, type BuilderComponent } from "@/lib/forms/package-selection";
 
 export interface FormOption {
   value: string;
@@ -15,13 +16,22 @@ interface FieldBase {
   hint?: string;
 }
 
-export type ChoiceField = FieldBase & { type: "choice" | "multichoice"; options: FormOption[] };
+export type ChoiceField = FieldBase & {
+  type: "choice" | "multichoice";
+  options: FormOption[];
+  /** Picking an option also fills these other fields, e.g. a starting package pre-loads the builder. */
+  presets?: Record<string, Record<string, string>>;
+};
 export type InputField = FieldBase & { type: "text" | "email" | "tel" | "zip"; placeholder?: string; autoComplete?: string };
 export type TextareaField = FieldBase & { type: "textarea"; placeholder?: string };
 /** Optional photo. The browser compresses it to a JPEG data URL; /api/lead uploads it to Vercel Blob. */
 export type PhotoField = FieldBase & { type: "photo" };
+/** Package builder: parts to toggle, each with options. The value is a JSON PackageSelection. */
+export type PackageField = FieldBase & { type: "package"; components: BuilderComponent[] };
+/** Read-only summary of another field (the package), with a link back to edit each part. Never submitted. */
+export type ReviewField = FieldBase & { type: "review"; of: string };
 
-export type FormField = ChoiceField | InputField | TextareaField | PhotoField;
+export type FormField = ChoiceField | InputField | TextareaField | PhotoField | PackageField | ReviewField;
 
 export const PHOTO_DATA_PREFIX = "data:image/jpeg;base64,";
 /** ~2 MB of JPEG once base64-encoded — comfortably under Vercel's 4.5 MB request limit. */
@@ -45,6 +55,14 @@ export function isChoiceField(field: FormField): field is ChoiceField {
 }
 
 export function validateField(field: FormField, value: string | string[] | undefined): string | null {
+  if (field.type === "review") return null;
+  if (field.type === "package") {
+    if (!value) return field.required ? "Choose at least one part for your package." : null;
+    const selection = parseSelection(value);
+    if (!selection) return "Please choose from the options shown.";
+    if (field.required && Object.keys(selection).length === 0) return "Choose at least one part for your package.";
+    return selectionError(selection, field.components);
+  }
   if (Array.isArray(value) ? value.length === 0 : !value?.trim()) {
     if (!field.required) return null;
     if (field.type === "choice") return "Please choose an option.";
@@ -82,7 +100,8 @@ export function validateValues(
   const values: FormValues = {};
   const errors: Record<string, string> = {};
 
-  for (const field of steps.flatMap((s) => s.fields)) {
+  // Review fields only display other fields — they never carry a value of their own.
+  for (const field of steps.flatMap((s) => s.fields).filter((f) => f.type !== "review")) {
     const v = input[field.name];
     const normalized =
       Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : typeof v === "string" ? v.trim() : undefined;
@@ -96,6 +115,10 @@ export function validateValues(
 /** Human-readable label for a stored value (option labels instead of slugs). */
 export function displayValue(field: FormField, value: string | string[]): string {
   if (field.type === "photo") return typeof value === "string" && value.startsWith("http") ? value : "Photo provided";
+  if (field.type === "package") {
+    const selection = parseSelection(value);
+    return selection ? selectionToText(selection, field.components) : "";
+  }
   if (!isChoiceField(field)) return Array.isArray(value) ? value.join(", ") : value;
   const label = (v: string) => field.options.find((o) => o.value === v)?.label ?? v;
   return Array.isArray(value) ? value.map(label).join(", ") : label(value);

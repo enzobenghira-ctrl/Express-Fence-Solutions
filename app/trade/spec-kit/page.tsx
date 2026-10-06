@@ -3,6 +3,7 @@ import Link from "next/link";
 import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
+import { LEAD_FORMS } from "@/lib/forms/registry";
 import DownloadList, { HAS_DOWNLOADS } from "@/components/funnel/DownloadList";
 import { robotsFor } from "@/lib/content-readiness";
 import { SHOW_TODOS } from "@/lib/facts";
@@ -51,7 +52,7 @@ export default function SpecKitPage({ searchParams }: Props) {
                 </p>
               </div>
             ) : (
-              <MultiStepForm kind="spec_kit" submitLabel="Get the spec kit" successHref="/trade/spec-kit?unlocked=1" />
+              <MultiStepForm kind="spec_kit" steps={LEAD_FORMS.spec_kit.steps} submitLabel="Get the spec kit" successHref="/trade/spec-kit?unlocked=1" />
             )
           }
         />

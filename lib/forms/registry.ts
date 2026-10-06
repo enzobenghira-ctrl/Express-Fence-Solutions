@@ -9,8 +9,9 @@ import {
   TRADE_APPLICATION_STEPS,
 } from "@/lib/forms/trade";
 import { HOME_QUOTE_STEPS } from "@/lib/forms/home";
+import { PACKAGE_STEPS } from "@/lib/forms/package";
 
-export type LeadKind = "trade_application" | "spec_kit" | "sample_request" | "pallet_reservation" | "home_quote";
+export type LeadKind = "trade_application" | "spec_kit" | "sample_request" | "pallet_reservation" | "home_quote" | "package";
 
 export interface LeadFormDefinition {
   funnel: Funnel;
@@ -27,6 +28,7 @@ export const LEAD_FORMS: Record<LeadKind, LeadFormDefinition> = {
   sample_request: { funnel: "trade", label: "Sample request", steps: SAMPLE_REQUEST_STEPS, hiddenKeys: [] },
   pallet_reservation: { funnel: "trade", label: "Pallet reservation", steps: PALLET_RESERVATION_STEPS, hiddenKeys: [] },
   home_quote: { funnel: "home", label: "Home quote request", steps: HOME_QUOTE_STEPS, hiddenKeys: [] },
+  package: { funnel: "home", label: "Package request", steps: PACKAGE_STEPS, hiddenKeys: [] },
 };
 
 export function isLeadKind(value: unknown): value is LeadKind {

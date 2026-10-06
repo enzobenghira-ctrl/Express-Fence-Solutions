@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
+import { LEAD_FORMS } from "@/lib/forms/registry";
 import Confirmation from "@/components/funnel/Confirmation";
 import { SITE } from "@/lib/site-config";
 
@@ -35,7 +36,7 @@ export default function SamplesPage({ searchParams }: Props) {
                 .
               </Confirmation>
             ) : (
-              <MultiStepForm kind="sample_request" submitLabel="Request samples" successHref="/trade/samples?sent=1" />
+              <MultiStepForm kind="sample_request" steps={LEAD_FORMS.sample_request.steps} submitLabel="Request samples" successHref="/trade/samples?sent=1" />
             )
           }
         />

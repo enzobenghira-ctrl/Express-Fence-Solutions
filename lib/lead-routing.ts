@@ -24,7 +24,7 @@ export function computeRoute(kind: LeadKind, values: FormValues): LeadRoute | nu
     }
   }
 
-  if (kind === "home_quote") {
+  if (kind === "home_quote" || kind === "package") {
     // Small jobs and jobs outside the six-county area go to a Certified Installer partner;
     // EFS still sells the material.
     if (typeof values.zip !== "string" || !isInServiceArea(values.zip)) return "partner_referral";

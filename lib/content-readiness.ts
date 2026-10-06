@@ -6,7 +6,6 @@
 import schedule from "@/content/container-schedule.json";
 import { isTodo } from "@/lib/facts";
 import { SPEC_KIT_FILES } from "@/lib/downloads";
-import { PACKAGE_DEFINITIONS } from "@/lib/home-content";
 import { INSTALLER_FAQS } from "@/lib/trade-content";
 
 /** The Certified Installer program is ready once its terms (the installer FAQ answers) are all confirmed. */
@@ -18,7 +17,6 @@ export const SCHEDULE_READY = (schedule as { nextArrival: string | null }).nextA
 const READY: Record<string, boolean> = {
   "/trade/spec-kit": SPEC_KIT_FILES.some((f) => f.href),
   "/trade/container-schedule": SCHEDULE_READY,
-  "/outdoor-living-packages": !isTodo(PACKAGE_DEFINITIONS),
   "/trade/certified-installer": INSTALLER_TERMS_READY,
 };
 

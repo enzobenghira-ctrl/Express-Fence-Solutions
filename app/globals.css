@@ -368,6 +368,114 @@ select option {
 .efs-choice:hover span { border-color: var(--dark); }
 .efs-choice input:checked + span { border-color: var(--accent); background: var(--accent-light); color: var(--accent-text); }
 .efs-choice input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.efs-choice--sm span { font-size: 13px; padding: 8px 14px; min-height: 40px; }
+
+/* Package builder (/projects#design) */
+.efs-pkg-parts { display: flex; flex-direction: column; gap: 10px; outline: none; }
+.efs-pkg-part { background: var(--white); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.15s; }
+.efs-pkg-part[data-on] { border-color: var(--accent); }
+.efs-pkg-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 14px 16px;
+  min-height: 52px;
+  cursor: pointer;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark);
+}
+/* Undo the site-wide input styling (appearance: none, 48px height) so the native checkbox shows. */
+.efs-pkg-toggle input {
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.efs-pkg-toggle input:focus { box-shadow: none; }
+.efs-pkg-toggle input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.efs-pkg-options { display: flex; flex-direction: column; gap: 14px; padding: 0 16px 16px; }
+.efs-pkg-review { list-style: none; background: var(--white); border: 1px solid var(--border); border-radius: 10px; }
+.efs-pkg-review li { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.efs-pkg-review li:last-child { border-bottom: 0; }
+.efs-pkg-review-name { font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 15px; font-weight: 700; color: var(--dark); }
+.efs-pkg-review-detail { font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 14px; line-height: 1.5; color: var(--text-secondary); margin-top: 2px; }
+.efs-pkg-edit {
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  min-height: 32px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* In-page tabs on /projects: sticky under the (scrolled) header */
+.efs-section-tabs {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 40;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.efs-section-tabs ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.efs-section-tabs ul::-webkit-scrollbar { display: none; }
+.efs-section-tabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 14px;
+  white-space: nowrap;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.efs-section-tabs a:hover { color: var(--dark); }
+.efs-section-tabs a[aria-current] { color: var(--accent-text); border-bottom-color: var(--accent); }
+.efs-section-tabs a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (max-width: 640px) {
+  .efs-section-tabs ul { justify-content: flex-start; }
+  .efs-section-tabs a { padding: 0 10px; font-size: 13px; }
+}
+/* Anchored sections land below the header and the tab bar. */
+.efs-tab-target { scroll-margin-top: calc(var(--nav-h) + 52px); }
+
+/* Outdoor living package cards */
+.efs-pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+@media (max-width: 400px) { .efs-pkg-grid { grid-template-columns: 1fr; } }
+.efs-pkg-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.efs-pkg-card ul { list-style: none; display: grid; gap: 6px; }
+.efs-pkg-card li { display: flex; gap: 8px; align-items: flex-start; font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 14px; line-height: 1.5; color: var(--dark); }
 
 .efs-form-label {
   display: block;

@@ -52,15 +52,3 @@ export const HOME_PROJECTS = [
 /** /thank-you-home owner video. Set to a URL (e.g. "/videos/owner-welcome.mp4") when recorded. */
 export const OWNER_VIDEO_URL: string | null = null;
 
-// Outdoor living packages. "Projects from $X" stays hidden until the owner confirms prices:
-// leave PACKAGE_PRICE_FROM null and nothing about price renders.
-export const PACKAGE_PRICE_FROM: string | null = null;
-
-export const PACKAGE_INCLUDES = [
-  { title: "Decking", text: "The base for your outdoor room — around a pool, off the house or in the yard." },
-  { title: "Pergola", text: "Shade and structure overhead." },
-  { title: "Wall cladding", text: "A finished wood look on walls, kitchens and planters." },
-  { title: "Fencing & gates", text: "Privacy and a matching entry." },
-];
-
-export const PACKAGE_DEFINITIONS: Fact = todo("package tiers and what each includes");

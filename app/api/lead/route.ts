@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { Resend } from "resend";
 import { UTM_KEYS } from "@/lib/attribution";
+import { describePackageLead } from "@/lib/forms/package";
 import { LEAD_FORMS, isLeadKind, type LeadFormDefinition, type LeadKind } from "@/lib/forms/registry";
 import { PHOTO_DATA_PREFIX, displayValue, validateValues, type FormValues } from "@/lib/forms/schema";
 import { computeRoute } from "@/lib/lead-routing";
@@ -26,6 +27,8 @@ interface Lead {
   pageUrl: string;
   submittedAt: string;
   photoNote?: string;
+  /** Package leads: the full selection as structured data (values.package holds the raw JSON). */
+  package?: ReturnType<typeof describePackageLead>;
 }
 
 function cleanString(v: unknown, max: number): string {
@@ -102,7 +105,7 @@ async function emailLead(lead: Lead, form: LeadFormDefinition, photo: Buffer | n
   }
   const fields = form.steps.flatMap((s) => s.fields);
   const row = (label: string, value: string) =>
-    `<tr><td style="padding:6px 12px 6px 0;color:#666;vertical-align:top;white-space:nowrap;">${escapeHtml(label)}</td><td style="padding:6px 0;color:#1a1a1a;">${escapeHtml(value)}</td></tr>`;
+    `<tr><td style="padding:6px 12px 6px 0;color:#666;vertical-align:top;white-space:nowrap;">${escapeHtml(label)}</td><td style="padding:6px 0;color:#1a1a1a;">${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`;
   const rows = [
     ...fields.filter((f) => lead.values[f.name] !== undefined).map((f) => row(f.label, displayValue(f, lead.values[f.name]))),
     ...Object.entries(lead.hidden).map(([k, v]) => row(k, v)),
@@ -180,6 +183,7 @@ export async function POST(req: Request) {
     pageUrl: cleanString(body.pageUrl, 500),
     submittedAt: new Date().toISOString(),
   };
+  if (kind === "package") lead.package = describePackageLead(values);
 
   const unstoredPhoto = await storePhoto(lead);
 

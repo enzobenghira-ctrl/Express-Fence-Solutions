@@ -3,6 +3,7 @@ import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
 import ContainerScheduleCard from "@/components/funnel/ContainerScheduleCard";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
+import { LEAD_FORMS } from "@/lib/forms/registry";
 import Confirmation from "@/components/funnel/Confirmation";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
 import { robotsFor } from "@/lib/content-readiness";
@@ -52,7 +53,7 @@ export default function ContainerSchedulePage({ searchParams }: Props) {
                 .
               </Confirmation>
             ) : (
-              <MultiStepForm kind="pallet_reservation" submitLabel="Send reservation" successHref="/trade/container-schedule?sent=1#reserve" />
+              <MultiStepForm kind="pallet_reservation" steps={LEAD_FORMS.pallet_reservation.steps} submitLabel="Send reservation" successHref="/trade/container-schedule?sent=1#reserve" />
             )}
           </div>
         </section>

@@ -18,6 +18,7 @@ export type FunnelEventName =
 const LEAD_EVENT: Record<LeadKind, FunnelEventName> = {
   trade_application: "Lead_Trade",
   home_quote: "Lead_Home",
+  package: "Lead_Home",
   spec_kit: "SpecKit",
   sample_request: "SampleRequest",
   pallet_reservation: "PalletReservation",
@@ -57,13 +58,24 @@ export function userDataFrom(values: Partial<Record<string, string | string[]>>)
   };
 }
 
-/** Called once per accepted lead, with the same id the CRM receives. */
-export function trackLeadSubmitted(kind: LeadKind, eventId: string, values: FormValues, route: string | null): void {
+const LEAD_NAME: Partial<Record<LeadKind, string>> = {
+  trade_application: "Trade application",
+  home_quote: "Home quote",
+  package: "Package request",
+};
+
+/** Called once per accepted lead, with the same id the CRM receives. `params` adds custom parameters, e.g. package_name. */
+export function trackLeadSubmitted(
+  kind: LeadKind,
+  eventId: string,
+  values: FormValues,
+  route: string | null,
+  params: Record<string, unknown> = {}
+): void {
   const userData = userDataFrom(values);
-  const funnel = kind === "home_quote" ? "home" : "trade";
-  trackFunnelEvent(LEAD_EVENT[kind], { eventId, userData, params: { content_category: funnel, route: route ?? undefined } });
+  const funnel = kind === "home_quote" || kind === "package" ? "home" : "trade";
+  trackFunnelEvent(LEAD_EVENT[kind], { eventId, userData, params: { content_category: funnel, route: route ?? undefined, ...params } });
   // Standard "Lead" alongside during the switchover, so existing Meta campaigns keep their signal.
-  if (kind === "trade_application" || kind === "home_quote") {
-    trackEvent("Lead", { content_name: kind === "home_quote" ? "Home quote" : "Trade application", content_category: funnel }, userData, eventId);
-  }
+  const name = LEAD_NAME[kind];
+  if (name) trackEvent("Lead", { content_name: name, content_category: funnel, ...params }, userData, eventId);
 }

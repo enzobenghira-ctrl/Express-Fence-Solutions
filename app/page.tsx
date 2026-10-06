@@ -88,7 +88,7 @@ export default function Home() {
             { label: "Aluminum gates", href: "/products/aluminum-gates" },
             { label: "Aluminum pergolas", href: "/products/aluminum-pergolas" },
             { label: "Container pools", href: "/products/container-pools" },
-            { label: "Outdoor living packages", href: "/outdoor-living-packages" },
+            { label: "Outdoor living packages", href: "/projects#packages" },
           ].filter((l) => isPageReady(l.href))}
           showAluminumLink
         />

@@ -19,7 +19,7 @@ interface Props {
 
 const HOMEOWNER_LINKS: NavLink[] = [
   { label: "Get a Home Quote", href: "/get-a-quote" },
-  { label: "Outdoor Living Packages", href: "/outdoor-living-packages" },
+  { label: "Outdoor Living Packages", href: "/projects#packages" },
   { label: "Homeowners", href: "/homeowners" },
 ];
 

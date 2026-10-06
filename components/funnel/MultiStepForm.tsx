@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { getAttribution, type Attribution } from "@/lib/attribution";
 import { formatPhone } from "@/lib/form-validation";
-import { LEAD_FORMS, type LeadKind } from "@/lib/forms/registry";
-import { isChoiceField, validateField, type FormField, type FormValues } from "@/lib/forms/schema";
+import PackageBuilderField, { PackageReview } from "@/components/funnel/PackageBuilderField";
+import type { LeadKind } from "@/lib/forms/registry";
+import { isChoiceField, validateField, type FormField, type FormStep, type FormValues } from "@/lib/forms/schema";
 import { compressPhoto } from "@/lib/image-compress";
 import { saveLastLead } from "@/lib/last-lead";
 import { trackLeadSubmitted } from "@/lib/tracking";
@@ -27,8 +28,19 @@ export interface LeadSubmission {
 }
 
 interface Props {
-  /** Which form to render — its steps and fields come from lib/forms/registry.ts. */
+  /** Which form this is — /api/lead validates it against LEAD_FORMS[kind] in lib/forms/registry.ts. */
   kind: LeadKind;
+  /**
+   * The form's steps — LEAD_FORMS[kind].steps, passed in by the (server) page. Keeping the
+   * registry out of this client component keeps unconfirmed content out of the browser bundle.
+   */
+  steps: FormStep[];
+  /** Open on this step, e.g. straight to the builder when a package is pre-loaded. */
+  initialStep?: number;
+  /** Focus the step heading on first render (when the form is opened programmatically). */
+  autoFocus?: boolean;
+  /** Custom parameters for the lead event, e.g. { package_name }. */
+  eventParams?: (values: FormValues) => Record<string, unknown>;
   submitLabel: string;
   successHref: string;
   endpoint?: string;
@@ -48,6 +60,10 @@ function newEventId(): string {
 
 export default function MultiStepForm({
   kind,
+  steps,
+  initialStep = 0,
+  autoFocus = false,
+  eventParams,
   submitLabel,
   successHref,
   endpoint = "/api/lead",
@@ -57,8 +73,7 @@ export default function MultiStepForm({
 }: Props) {
   const router = useRouter();
   const formId = useId();
-  const { steps } = LEAD_FORMS[kind];
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initialStep);
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hp, setHp] = useState("");
@@ -68,6 +83,8 @@ export default function MultiStepForm({
   const startedAt = useRef(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isFirstRender = useRef(true);
+  /** Element to focus after the next step change instead of the heading (e.g. the part being edited). */
+  const pendingFocus = useRef<string | null>(null);
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -77,10 +94,12 @@ export default function MultiStepForm({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      return;
+      if (!autoFocus) return;
     }
-    headingRef.current?.focus();
-  }, [step]);
+    const target = pendingFocus.current && document.getElementById(pendingFocus.current);
+    pendingFocus.current = null;
+    (target || headingRef.current)?.focus();
+  }, [step, autoFocus]);
 
   const current = steps[step];
   const isLast = step === steps.length - 1;
@@ -89,6 +108,21 @@ export default function MultiStepForm({
   function setValue(name: string, value: string | string[]) {
     setValues((v) => ({ ...v, [name]: value }));
     if (errors[name]) setErrors((e) => ({ ...e, [name]: "" }));
+  }
+
+  /** Choosing an option with presets also fills the fields it names (e.g. a starting package fills the builder). */
+  function choose(field: FormField, option: string) {
+    setValue(field.name, option);
+    const preset = isChoiceField(field) ? field.presets?.[option] : undefined;
+    if (preset) setValues((v) => ({ ...v, ...preset }));
+  }
+
+  /** Jump back to the step holding `name`, focusing `focusId` there (review → edit). */
+  function editField(name: string, focusId?: string) {
+    const target = steps.findIndex((s) => s.fields.some((f) => f.name === name));
+    if (target < 0) return;
+    pendingFocus.current = focusId ?? null;
+    setStep(target);
   }
 
   function toggleMulti(name: string, option: string) {
@@ -142,7 +176,7 @@ export default function MultiStepForm({
       if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
       const route = typeof data.route === "string" ? data.route : null;
       saveLastLead(kind, values, route);
-      trackLeadSubmitted(kind, submission.eventId, values, route);
+      trackLeadSubmitted(kind, submission.eventId, values, route, eventParams?.(values));
       onSubmitted?.(submission);
       // Leave `submitting` on so the button can't double-submit while the next page loads.
       router.push(successHref);
@@ -199,7 +233,7 @@ export default function MultiStepForm({
                     name={field.name}
                     value={o.value}
                     checked={checked}
-                    onChange={() => (multi ? toggleMulti(field.name, o.value) : setValue(field.name, o.value))}
+                    onChange={() => (multi ? toggleMulti(field.name, o.value) : choose(field, o.value))}
                   />
                   <span>{o.label}</span>
                 </label>
@@ -208,6 +242,36 @@ export default function MultiStepForm({
           </div>
           {errorText}
         </div>
+      );
+    }
+
+    if (field.type === "package") {
+      return (
+        <div key={field.name}>
+          {hint}
+          <PackageBuilderField
+            id={id}
+            components={field.components}
+            value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
+            onChange={(v) => setValue(field.name, v)}
+            describedBy={describedBy}
+          />
+          {errorText}
+        </div>
+      );
+    }
+
+    if (field.type === "review") {
+      const source = steps.flatMap((s) => s.fields).find((f) => f.name === field.of);
+      if (!source || source.type !== "package") return null;
+      const sourceId = fieldId(source.name);
+      return (
+        <PackageReview
+          key={field.name}
+          components={source.components}
+          value={typeof values[source.name] === "string" ? (values[source.name] as string) : ""}
+          onEdit={(componentId) => editField(source.name, componentId ? `${sourceId}-${componentId}` : sourceId)}
+        />
       );
     }
 

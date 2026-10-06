@@ -1,3 +1,4 @@
+import Link from "next/link";
 import FunnelButton from "@/components/funnel/FunnelButton";
 import { FUNNEL_ENTRY } from "@/lib/site-config";
 
@@ -20,6 +21,12 @@ export default function ProductFunnelCTA({ productName, quoteType }: { productNa
             Open a Trade Account
           </FunnelButton>
         </div>
+        <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "rgba(250,250,247,0.8)", marginTop: 24 }}>
+          Combine this with other products →{" "}
+          <Link href="/projects#design" style={{ color: "var(--white)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 3 }}>
+            Design your package
+          </Link>
+        </p>
       </div>
     </section>
   );

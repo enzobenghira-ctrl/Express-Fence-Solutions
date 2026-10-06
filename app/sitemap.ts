@@ -14,7 +14,6 @@ const PAGES: { path: string; priority: number }[] = [
   { path: "/projects", priority: 0.7 },
   { path: "/about", priority: 0.6 },
   { path: "/fence-installation-miami", priority: 0.7 },
-  { path: "/outdoor-living-packages", priority: 0.6 },
   { path: "/trade/container-schedule", priority: 0.6 },
   { path: "/trade/spec-kit", priority: 0.5 },
   { path: "/trade/samples", priority: 0.5 },
