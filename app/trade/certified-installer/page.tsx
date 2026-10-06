@@ -6,11 +6,14 @@ import FAQ from "@/components/funnel/FAQ";
 import FunnelButton from "@/components/funnel/FunnelButton";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
 import { INSTALLER_FAQS } from "@/lib/trade-content";
+import { robotsFor } from "@/lib/content-readiness";
 
 export const metadata: Metadata = {
   title: "Certified Installer Network — Get Homeowner WPC Jobs | Express Fence Solutions",
   description: `Join our Certified Installer Network: we refer homeowner WPC fence, deck and pergola jobs to installers across ${SITE.serviceAreaShort}.`,
   alternates: { canonical: `${SITE.url}/trade/certified-installer` },
+  // Unlisted + noindex until the program terms are confirmed (lib/content-readiness.ts).
+  robots: robotsFor("/trade/certified-installer"),
 };
 
 const APPLY_HREF = `${FUNNEL_ENTRY.tradeApply}?installer=1`;

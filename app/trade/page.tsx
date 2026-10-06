@@ -11,7 +11,10 @@ import FunnelButton from "@/components/funnel/FunnelButton";
 import FactText from "@/components/funnel/FactText";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
 import { isPageReady } from "@/lib/content-readiness";
-import { isVisible, visibleFacts } from "@/lib/facts";
+import { SHOW_TODOS, isVisible, visibleFacts } from "@/lib/facts";
+import { TodoNote } from "@/components/funnel/FactText";
+
+const INSTALLER_READY = isPageReady("/trade/certified-installer");
 import { TRADE_FAQS, TRADE_PRODUCT_LINES, TRADE_REASONS, TRADE_STEPS, TRADE_TIERS } from "@/lib/trade-content";
 
 export const metadata: Metadata = {
@@ -148,21 +151,27 @@ export default function TradePage() {
         {/* 7. Contractor testimonials — renders nothing until real ones exist */}
         <TestimonialBlock audience="trade" eyebrow="From our partners" title="What contractors say" />
 
-        {/* 8. Certified Installer Network */}
-        <section className="efs-section" style={{ background: "var(--dark)" }}>
-          <div className="efs-container" style={{ maxWidth: 760, textAlign: "center" }}>
-            <span className="efs-eyebrow efs-eyebrow--on-dark">Certified Installer Network</span>
-            <h2 className="efs-h2" style={{ color: "var(--white)", marginBottom: 16 }}>
-              We send you homeowner jobs
-            </h2>
-            <p style={{ ...bodyText, color: "rgba(250,250,247,0.8)", marginBottom: 24 }}>
-              Homeowner projects we don&apos;t install ourselves go to certified installers in our network. You do the install; we supply the WPC.
-            </p>
-            <Link href="/trade/certified-installer" className="topbar-link" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, fontWeight: 600 }}>
-              How the network works →
-            </Link>
-          </div>
-        </section>
+        {/* 8. Certified Installer Network — hidden in production until the program terms are confirmed. */}
+        {(INSTALLER_READY || SHOW_TODOS) && (
+          <section className="efs-section" style={{ background: "var(--dark)" }}>
+            <div className="efs-container" style={{ maxWidth: 760, textAlign: "center" }}>
+              <span className="efs-eyebrow efs-eyebrow--on-dark">Certified Installer Network</span>
+              <h2 className="efs-h2" style={{ color: "var(--white)", marginBottom: 16 }}>
+                We send you homeowner jobs
+              </h2>
+              <p style={{ ...bodyText, color: "rgba(250,250,247,0.8)", marginBottom: 24 }}>
+                Homeowner projects we don&apos;t install ourselves go to certified installers in our network. You do the install; we supply the WPC.
+              </p>
+              {INSTALLER_READY ? (
+                <Link href="/trade/certified-installer" className="topbar-link" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, fontWeight: 600 }}>
+                  How the network works →
+                </Link>
+              ) : (
+                <TodoNote>Certified Installer program terms — section hidden in production until confirmed</TodoNote>
+              )}
+            </div>
+          </section>
+        )}
 
         {/* 9. FAQ */}
         <FAQ eyebrow="Trade FAQ" items={TRADE_FAQS} />

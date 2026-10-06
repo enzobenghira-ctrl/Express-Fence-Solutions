@@ -8,6 +8,10 @@ import { isTodo } from "@/lib/facts";
 import { SPEC_KIT_FILES } from "@/lib/downloads";
 import { CONTAINER_POOL_FEATURES, PACKAGE_DEFINITIONS } from "@/lib/home-content";
 import { ALUMINUM_SPECS } from "@/lib/products-data";
+import { INSTALLER_FAQS } from "@/lib/trade-content";
+
+/** The Certified Installer program is ready once its terms (the installer FAQ answers) are all confirmed. */
+const INSTALLER_TERMS_READY = INSTALLER_FAQS.every((f) => !(Array.isArray(f.answer) ? f.answer : [f.answer]).some(isTodo));
 
 /** The schedule card needs at least the next arrival month to say anything real. */
 export const SCHEDULE_READY = (schedule as { nextArrival: string | null }).nextArrival !== null;
@@ -18,6 +22,7 @@ const READY: Record<string, boolean> = {
   "/outdoor-living-packages": !isTodo(PACKAGE_DEFINITIONS),
   "/container-pools": !isTodo(CONTAINER_POOL_FEATURES),
   "/products/aluminum": ALUMINUM_SPECS.some((r) => !isTodo(r.value)),
+  "/trade/certified-installer": INSTALLER_TERMS_READY,
 };
 
 /** False for gated pages. Accepts hrefs with a query or hash. */
