@@ -41,7 +41,7 @@ export default function Home() {
         <Hero
           title="Premium WPC, built for Florida."
           subtitle="Fencing, decking, cladding and pergola systems, supplied to contractors and installed for homeowners across South Florida."
-          image={{ src: "/images/fence-waterway-turf.jpg", alt: "Charcoal WPC privacy fence along a South Florida waterway" }}
+          image={{ src: "/images/fence-light-grey-decorative-patio.webp", alt: "Light grey WPC fence with a decorative laser-cut top panel around a patio lounge" }}
           primary={{ label: "Open a Trade Account", href: FUNNEL_ENTRY.tradeHub, funnel: "trade" }}
           secondary={{ label: "Get a Home Quote", href: FUNNEL_ENTRY.homeQuote, funnel: "home" }}
         />

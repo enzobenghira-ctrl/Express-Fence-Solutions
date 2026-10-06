@@ -183,6 +183,14 @@ select option {
   pointer-events: none;
 }
 
+/* Hero badges sit bottom-right, clear of the fixed header. */
+.efs-hero .efs-concept-badge {
+  top: auto;
+  left: auto;
+  bottom: 16px;
+  right: 16px;
+}
+
 /* Header — the whole fixed header slides up by the top bar's height once scrolled. */
 .site-header-link {
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;

@@ -10,6 +10,7 @@ export const CONCEPT_IMAGES = new Set<string>([
   "/images/aluminum-pergola-pool-sunset.webp",
   "/images/aluminum-pergola-waterfront-sunset.webp",
   "/images/gate-double-swing-render.webp",
+  "/images/fence-light-grey-decorative-patio.webp",
 ]);
 
 // Confirmed photos of real EFS installs (matched to the owner's phone photos). The only

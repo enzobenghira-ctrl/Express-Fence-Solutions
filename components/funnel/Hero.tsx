@@ -129,6 +129,7 @@ export default function Hero({
 
   return (
     <section
+      className="efs-hero"
       style={{
         position: "relative",
         overflow: "hidden",
