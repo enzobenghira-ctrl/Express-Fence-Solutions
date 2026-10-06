@@ -5,11 +5,14 @@ import ContainerScheduleCard from "@/components/funnel/ContainerScheduleCard";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
 import Confirmation from "@/components/funnel/Confirmation";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
+import { robotsFor } from "@/lib/content-readiness";
 
 export const metadata: Metadata = {
   title: "Container Schedule — Reserve WPC Pallets | Express Fence Solutions Trade",
   description: "See when the next WPC container arrives and how much is already allocated. Trade partners reserve pallets ahead of arrival.",
   alternates: { canonical: `${SITE.url}/trade/container-schedule` },
+  // Unlisted + noindex until the next arrival month is set (lib/content-readiness.ts).
+  robots: robotsFor("/trade/container-schedule"),
 };
 
 interface Props {

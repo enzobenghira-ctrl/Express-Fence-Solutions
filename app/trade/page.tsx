@@ -10,6 +10,8 @@ import FAQ from "@/components/funnel/FAQ";
 import FunnelButton from "@/components/funnel/FunnelButton";
 import FactText from "@/components/funnel/FactText";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
+import { isPageReady } from "@/lib/content-readiness";
+import { isVisible, visibleFacts } from "@/lib/facts";
 import { TRADE_FAQS, TRADE_PRODUCT_LINES, TRADE_REASONS, TRADE_STEPS, TRADE_TIERS } from "@/lib/trade-content";
 
 export const metadata: Metadata = {
@@ -90,11 +92,13 @@ export default function TradePage() {
                 >
                   <span className={t.featured ? "efs-eyebrow efs-eyebrow--on-dark" : "efs-eyebrow"}>{t.volume}</span>
                   <h3 style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontWeight: 400, fontSize: 34, marginBottom: 8 }}>{t.name}</h3>
-                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, fontWeight: 600, marginBottom: 20 }}>
-                    Discount: <FactText value={t.discount} />
-                  </p>
-                  <ul style={{ listStyle: "none", display: "grid", gap: 10 }}>
-                    {t.benefits.map((b, i) => (
+                  {isVisible(t.discount) && (
+                    <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, fontWeight: 600, marginBottom: 12 }}>
+                      Discount: <FactText value={t.discount} />
+                    </p>
+                  )}
+                  <ul style={{ listStyle: "none", display: "grid", gap: 10, marginTop: 12 }}>
+                    {visibleFacts(t.benefits).map((b, i) => (
                       <li key={i} style={{ display: "flex", gap: 10, fontFamily: "var(--font-dm-sans)", fontSize: 14, lineHeight: 1.5 }}>
                         <Check size={16} aria-hidden style={{ color: "var(--accent)", flexShrink: 0, marginTop: 2 }} />
                         <span style={{ color: t.featured ? "rgba(250,250,247,0.85)" : "var(--text-secondary)" }}>
@@ -123,13 +127,17 @@ export default function TradePage() {
                 {TRADE_PRODUCT_LINES.map((p) => (
                   <div key={p.name} style={{ ...cardStyle, background: "var(--white)", display: "flex", flexDirection: "column", gap: 10 }}>
                     <h3 style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)" }}>{p.name}</h3>
-                    <p style={bodyText}>{p.text}</p>
-                    <p style={{ ...bodyText, fontSize: 14, flex: 1 }}>
-                      <strong style={{ color: "var(--dark)" }}>Spec highlights:</strong> <FactText value={p.highlights} />
-                    </p>
-                    <Link href={p.href} className="efs-link" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 600, color: "var(--accent-text)" }}>
-                      View product →
-                    </Link>
+                    <p style={{ ...bodyText, flex: 1 }}>{p.text}</p>
+                    {isVisible(p.highlights) && (
+                      <p style={{ ...bodyText, fontSize: 14 }}>
+                        <strong style={{ color: "var(--dark)" }}>Spec highlights:</strong> <FactText value={p.highlights} />
+                      </p>
+                    )}
+                    {isPageReady(p.href) && (
+                      <Link href={p.href} className="efs-link" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 600, color: "var(--accent-text)" }}>
+                        View product →
+                      </Link>
+                    )}
                   </div>
                 ))}
               </div>
@@ -169,12 +177,16 @@ export default function TradePage() {
             <FunnelButton href={APPLY.href}>{APPLY.label}</FunnelButton>
             <p style={{ ...bodyText, fontSize: 14, marginTop: 24 }}>
               Not ready yet?{" "}
-              <Link href="/trade/spec-kit" className="efs-link" style={{ color: "var(--accent-text)", fontWeight: 600 }}>
-                Download the spec kit
-              </Link>{" "}
-              or{" "}
+              {isPageReady("/trade/spec-kit") && (
+                <>
+                  <Link href="/trade/spec-kit" className="efs-link" style={{ color: "var(--accent-text)", fontWeight: 600 }}>
+                    Download the spec kit
+                  </Link>{" "}
+                  or{" "}
+                </>
+              )}
               <Link href="/trade/samples" className="efs-link" style={{ color: "var(--accent-text)", fontWeight: 600 }}>
-                request samples
+                {isPageReady("/trade/spec-kit") ? "request samples" : "Request samples"}
               </Link>
               .
             </p>

@@ -6,15 +6,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
-import { FUNNEL_ENTRY, MAIN_NAV, PRODUCT_NAV, SITE, TRADE_NAV_CTA } from "@/lib/site-config";
+import { FUNNEL_ENTRY, MAIN_NAV, SITE, TRADE_NAV_CTA, type NavLink } from "@/lib/site-config";
 import FunnelButton from "@/components/funnel/FunnelButton";
 
 interface Props {
   /** Homepage only: the nav sits transparent over the full-bleed hero until scrolled. */
   transparent?: boolean;
+  /**
+   * Products menu, already filtered by SiteShell (server) to pages that are ready —
+   * passed in so content data never ends up in this client bundle.
+   */
+  productNav: NavLink[];
 }
 
-export default function SiteHeader({ transparent = false }: Props) {
+export default function SiteHeader({ transparent = false, productNav: PRODUCT_NAV }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);

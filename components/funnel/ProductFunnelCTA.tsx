@@ -7,7 +7,7 @@ export default function ProductFunnelCTA({ productName, quoteType }: { productNa
     <section className="efs-section" style={{ background: "var(--dark)", textAlign: "center" }}>
       <div className="efs-container" style={{ maxWidth: 720 }}>
         <h2 className="efs-h2" style={{ color: "var(--white)", marginBottom: 14 }}>
-          Ready for {productName.toLowerCase()}?
+          Ready for {productName}?
         </h2>
         <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 16, color: "rgba(250,250,247,0.8)", marginBottom: 28 }}>
           Homeowners: get a free quote. Contractors: trade pricing available — open an account.

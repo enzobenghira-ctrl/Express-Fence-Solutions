@@ -4,19 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
-import { DIRECTIONS_URL, PRODUCT_NAV, SITE } from "@/lib/site-config";
+import { DIRECTIONS_URL, SITE, type NavLink } from "@/lib/site-config";
 
 // Spec sheets live on the site (the old Google Drive catalog included pricing and is no longer linked).
 const SPEC_KIT = "/trade/spec-kit";
 
 // Absolute hrefs so every link works from any page, not just the homepage.
-const products = [...PRODUCT_NAV, { label: "WPC Benches", href: "/products/benches" }];
-const moreProducts = [
-  { label: "Get a Home Quote", href: "/get-a-quote" },
-  { label: "Outdoor Living Packages", href: "/outdoor-living-packages" },
-  { label: "Container Pools", href: "/container-pools" },
-  { label: "Homeowners", href: "/homeowners" },
-];
 const company = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
@@ -26,9 +19,14 @@ const company = [
   { label: "Contact", href: "/#contact" },
 ];
 
-/** On trade pages the homeowner quote link is dropped — trade pages never show a homeowner CTA. */
-export default function Footer({ funnel = "home" }: { funnel?: "home" | "trade" }) {
-  const homeownerLinks = funnel === "trade" ? moreProducts.filter((p) => p.href !== "/get-a-quote") : moreProducts;
+interface Props {
+  /** Link lists are built by SiteShell (server): gated pages removed, and no homeowner CTA on trade pages. */
+  products: NavLink[];
+  homeownerLinks: NavLink[];
+  showSpecKit: boolean;
+}
+
+export default function Footer({ products, homeownerLinks, showSpecKit }: Props) {
   return (
     <footer
       style={{
@@ -75,6 +73,7 @@ export default function Footer({ funnel = "home" }: { funnel?: "home" | "trade" 
             >
               Make your dream home a reality.
             </p>
+            {showSpecKit && (
             <Link
               href={SPEC_KIT}
               style={{
@@ -96,6 +95,7 @@ export default function Footer({ funnel = "home" }: { funnel?: "home" | "trade" 
             >
               📄 Spec sheets
             </Link>
+            )}
           </div>
 
           {/* Col 2 — Products */}

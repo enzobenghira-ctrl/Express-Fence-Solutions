@@ -1,11 +1,22 @@
 import { Download } from "lucide-react";
+import { TodoNote } from "@/components/funnel/FactText";
+import { SHOW_TODOS } from "@/lib/facts";
 import { SPEC_KIT_FILES } from "@/lib/downloads";
 
-/** Spec kit PDFs. Files without an href yet render as {{TODO}} placeholders. */
+/** True when at least one spec kit PDF has been uploaded. */
+export const HAS_DOWNLOADS = SPEC_KIT_FILES.some((f) => f.href);
+
+/**
+ * Spec kit PDFs. Files without an href show as {{TODO}} on previews and are left out in
+ * production; renders nothing if no file is available.
+ */
 export default function DownloadList() {
+  const files = SPEC_KIT_FILES.filter((f) => f.href || SHOW_TODOS);
+  if (files.length === 0) return null;
+
   return (
     <ul style={{ listStyle: "none", display: "grid", gap: 10 }}>
-      {SPEC_KIT_FILES.map((f) => (
+      {files.map((f) => (
         <li key={f.label}>
           {f.href ? (
             <a
@@ -30,7 +41,7 @@ export default function DownloadList() {
             </a>
           ) : (
             <div style={{ padding: "10px 0", fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)" }}>
-              {f.label} — <span className="efs-todo">{`{{TODO: upload PDF to public/downloads}}`}</span>
+              {f.label} — <TodoNote>upload PDF to public/downloads</TodoNote>
             </div>
           )}
         </li>

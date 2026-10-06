@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import FactText from "@/components/funnel/FactText";
-import { isTodo, type Fact } from "@/lib/facts";
+import { isPageReady } from "@/lib/content-readiness";
+import { isTodo, isVisible, type Fact } from "@/lib/facts";
 
 export interface FAQItem {
   question: string;
@@ -21,10 +22,15 @@ const parts = (answer: FAQItem["answer"]): Fact[] => (Array.isArray(answer) ? an
 
 /**
  * Accordion built on <details> (works without JS) plus FAQPage JSON-LD.
- * Answers with any unconfirmed {{TODO}} part are shown on the page but left out of the schema.
+ * Unconfirmed {{TODO}} answers show on previews only; in production a question with
+ * no confirmed answer is dropped, and the section disappears if none are left.
+ * Schema only ever includes fully confirmed answers.
  */
 export default function FAQ({ id, eyebrow, title = "Frequently asked questions", items }: Props) {
-  const answered = items.filter((i) => !parts(i.answer).some(isTodo));
+  const shown = items.filter((i) => parts(i.answer).some(isVisible));
+  if (shown.length === 0) return null;
+
+  const answered = shown.filter((i) => !parts(i.answer).some(isTodo));
   const schema =
     answered.length > 0
       ? {
@@ -47,7 +53,7 @@ export default function FAQ({ id, eyebrow, title = "Frequently asked questions",
         </div>
 
         <div style={{ borderTop: "1px solid var(--border)" }}>
-          {items.map((item) => (
+          {shown.map((item) => (
             <details key={item.question} className="efs-faq-item" style={{ borderBottom: "1px solid var(--border)" }}>
               <summary
                 style={{
@@ -74,13 +80,13 @@ export default function FAQ({ id, eyebrow, title = "Frequently asked questions",
                   color: "var(--text-secondary)",
                 }}
               >
-                {parts(item.answer).map((p, i) => (
+                {parts(item.answer).filter(isVisible).map((p, i) => (
                   <span key={i}>
                     {i > 0 && " "}
                     <FactText value={p} />
                   </span>
                 ))}
-                {item.link && (
+                {item.link && (item.link.external || isPageReady(item.link.href)) && (
                   <>
                     {" "}
                     <a

@@ -5,6 +5,8 @@ import ProcessSteps from "@/components/funnel/ProcessSteps";
 import ProjectGallery from "@/components/funnel/ProjectGallery";
 import FactText from "@/components/funnel/FactText";
 import FunnelButton from "@/components/funnel/FunnelButton";
+import { robotsFor } from "@/lib/content-readiness";
+import { isVisible } from "@/lib/facts";
 import { CONTAINER_POOL_FEATURES, HOME_STEPS, PACKAGE_PRICE_FROM } from "@/lib/home-content";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
 
@@ -12,6 +14,8 @@ export const metadata: Metadata = {
   title: "Container Pools — Design & Installation | Express Fence Solutions",
   description: `Container pools designed and installed with matching WPC decking and pergolas. Book a design consultation — serving ${SITE.serviceAreaShort}.`,
   alternates: { canonical: `${SITE.url}/container-pools` },
+  // Unlisted + noindex until pool options are confirmed (lib/content-readiness.ts).
+  robots: robotsFor("/container-pools"),
 };
 
 const CONSULT = { label: "Book a design consultation", href: `${FUNNEL_ENTRY.homeQuote}?type=container-pool`, funnel: "home" as const };
@@ -41,17 +45,19 @@ export default function ContainerPoolsPage() {
           </p>
         )}
 
-        <section className="efs-section" style={{ background: "var(--background)" }}>
-          <div className="efs-container" style={{ maxWidth: 760, textAlign: "center" }}>
-            <span className="efs-eyebrow">Options</span>
-            <h2 className="efs-h2" style={{ marginBottom: 20 }}>
-              Sizes, finishes and upgrades
-            </h2>
-            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)" }}>
-              <FactText value={CONTAINER_POOL_FEATURES} />
-            </p>
-          </div>
-        </section>
+        {isVisible(CONTAINER_POOL_FEATURES) && (
+          <section className="efs-section" style={{ background: "var(--background)" }}>
+            <div className="efs-container" style={{ maxWidth: 760, textAlign: "center" }}>
+              <span className="efs-eyebrow">Options</span>
+              <h2 className="efs-h2" style={{ marginBottom: 20 }}>
+                Sizes, finishes and upgrades
+              </h2>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)" }}>
+                <FactText value={CONTAINER_POOL_FEATURES} />
+              </p>
+            </div>
+          </section>
+        )}
 
         <ProjectGallery
           eyebrow="Design ideas"

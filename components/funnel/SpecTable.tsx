@@ -1,9 +1,14 @@
 import FactText from "@/components/funnel/FactText";
-import type { Fact } from "@/lib/facts";
+import { isVisible, type Fact } from "@/lib/facts";
 
 export interface SpecRow {
   label: string;
   value: Fact;
+}
+
+/** The rows that render anything in this build (production drops unconfirmed ones). */
+export function visibleRows(rows: SpecRow[]): SpecRow[] {
+  return rows.filter((r) => isVisible(r.value));
 }
 
 interface Props {
@@ -13,7 +18,11 @@ interface Props {
   rows: SpecRow[];
 }
 
+/** Renders nothing when no row has a confirmed value (production) — callers drop the section too. */
 export default function SpecTable({ title, caption, rows }: Props) {
+  const shown = visibleRows(rows);
+  if (shown.length === 0) return null;
+
   return (
     <div>
       {title && (
@@ -35,7 +44,7 @@ export default function SpecTable({ title, caption, rows }: Props) {
       >
         <caption className="sr-only">{caption}</caption>
         <tbody>
-          {rows.map((r, i) => (
+          {shown.map((r, i) => (
             <tr key={r.label} style={{ background: i % 2 ? "var(--background)" : "var(--white)" }}>
               <th
                 scope="row"

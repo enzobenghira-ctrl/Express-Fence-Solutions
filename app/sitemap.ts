@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
+import { isPageReady } from "@/lib/content-readiness";
 import { productsData } from "@/lib/products-data";
 import { SITE } from "@/lib/site-config";
 
-// Indexable pages only — thank-you pages and APIs are excluded (see robots.ts).
+// Indexable pages only — thank-you pages and APIs are excluded (see robots.ts), and pages
+// still waiting on content (lib/content-readiness.ts) are left out until they're ready.
 const PAGES: { path: string; priority: number }[] = [
   { path: "/", priority: 1 },
   { path: "/trade", priority: 0.9 },
@@ -24,7 +26,7 @@ const PAGES: { path: string; priority: number }[] = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   return [
-    ...PAGES.map(({ path, priority }) => ({ url: `${SITE.url}${path}`, lastModified, priority })),
+    ...PAGES.filter((p) => isPageReady(p.path)).map(({ path, priority }) => ({ url: `${SITE.url}${path}`, lastModified, priority })),
     ...productsData.map((p) => ({ url: `${SITE.url}/products/${p.slug}`, lastModified, priority: 0.7 })),
   ];
 }

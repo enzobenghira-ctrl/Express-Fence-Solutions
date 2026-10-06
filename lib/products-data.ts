@@ -180,3 +180,12 @@ export const productsData: ProductData[] = [
 export function getProductBySlug(slug: string): ProductData | undefined {
   return productsData.find((p) => p.slug === slug);
 }
+
+/** /products/aluminum spec table — the page stays unlisted until at least one is confirmed. */
+export const ALUMINUM_SPECS: SpecRow[] = [
+  { label: "Fence styles & heights", value: todo("aluminum fence styles and heights") },
+  { label: "Pergola sizes", value: todo("louvered pergola sizes") },
+  { label: "Louver operation", value: todo("manual or motorized louvers") },
+  { label: "Finishes & colors", value: todo("powder-coat colors") },
+  { label: "Warranty", value: todo("warranty length and terms") },
+];

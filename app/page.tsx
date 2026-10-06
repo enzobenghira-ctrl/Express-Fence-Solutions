@@ -6,9 +6,11 @@ import Hero from "@/components/funnel/Hero";
 import TrustBar from "@/components/funnel/TrustBar";
 import FunnelSplit from "@/components/funnel/FunnelSplit";
 import FeatureGrid from "@/components/funnel/FeatureGrid";
-import SpecTable from "@/components/funnel/SpecTable";
+import SpecTable, { visibleRows } from "@/components/funnel/SpecTable";
 import ProjectGallery from "@/components/funnel/ProjectGallery";
-import ContainerScheduleCard from "@/components/funnel/ContainerScheduleCard";
+import ContainerScheduleCard, { SCHEDULE_CARD_VISIBLE } from "@/components/funnel/ContainerScheduleCard";
+import { isPageReady } from "@/lib/content-readiness";
+import { productsData } from "@/lib/products-data";
 import FunnelButton from "@/components/funnel/FunnelButton";
 import HomeContact from "@/components/funnel/HomeContact";
 import Products from "@/components/sections/Products";
@@ -69,19 +71,34 @@ export default function Home() {
               audience: "Architects & designers",
               title: "Specify WPC",
               text: "Spec sheets and install guides for your drawings and specs.",
-              cta: { label: "Get the spec kit", href: "/trade/spec-kit", funnel: "trade" },
+              // Until spec sheets are uploaded, architects apply with their trade type pre-selected.
+              cta: isPageReady("/trade/spec-kit")
+                ? { label: "Get the spec kit", href: "/trade/spec-kit", funnel: "trade" }
+                : { label: "Get spec support", href: `${FUNNEL_ENTRY.tradeApply}?trade=architect-designer`, funnel: "trade" },
             },
           ]}
         />
 
-        <Products />
+        <Products
+          products={productsData
+            .filter((p) => p.inMainNav)
+            .map(({ slug, num, name, tagline, image, alt, bg, desc }) => ({ slug, num, name, tagline, image, alt, bg, desc }))}
+          moreLinks={[
+            { label: "Aluminum fences & pergolas", href: "/products/aluminum" },
+            { label: "Container pools", href: "/container-pools" },
+            { label: "Outdoor living packages", href: "/outdoor-living-packages" },
+          ].filter((l) => isPageReady(l.href))}
+          showAluminumLink={isPageReady("/products/aluminum")}
+        />
 
         <FeatureGrid eyebrow="Why our WPC" title="Made for Florida's heat, humidity and salt air" items={WHY_WPC_FLORIDA} />
-        <section className="efs-section" style={{ background: "var(--surface)", paddingTop: 0 }}>
-          <div style={{ maxWidth: 820, margin: "0 auto" }}>
-            <SpecTable title="Quality you can check" caption="Express Fence Solutions WPC quality details" rows={QUALITY_PROOF} />
-          </div>
-        </section>
+        {visibleRows(QUALITY_PROOF).length > 0 && (
+          <section className="efs-section" style={{ background: "var(--surface)", paddingTop: 0 }}>
+            <div style={{ maxWidth: 820, margin: "0 auto" }}>
+              <SpecTable title="Quality you can check" caption="Express Fence Solutions WPC quality details" rows={QUALITY_PROOF} />
+            </div>
+          </section>
+        )}
 
         <section className="efs-section" style={{ background: "var(--dark)" }}>
           <div className="efs-container" style={{ display: "grid", gap: 32, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center" }}>
@@ -116,11 +133,13 @@ export default function Home() {
 
         <Testimonials audience="all" />
 
-        <section className="efs-section" style={{ background: "var(--background)" }}>
-          <div style={{ maxWidth: 820, margin: "0 auto" }}>
-            <ContainerScheduleCard secondary={{ label: "See the container schedule", href: "/trade/container-schedule" }} />
-          </div>
-        </section>
+        {SCHEDULE_CARD_VISIBLE && (
+          <section className="efs-section" style={{ background: "var(--background)" }}>
+            <div style={{ maxWidth: 820, margin: "0 auto" }}>
+              <ContainerScheduleCard secondary={{ label: "See the container schedule", href: "/trade/container-schedule" }} />
+            </div>
+          </section>
+        )}
 
         <HomeContact />
       </main>

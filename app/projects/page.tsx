@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
 import FunnelImage from "@/components/funnel/FunnelImage";
-import FactText from "@/components/funnel/FactText";
+import FactText, { TodoNote } from "@/components/funnel/FactText";
+import { SHOW_TODOS, isTodo, isVisible } from "@/lib/facts";
 import FunnelLink from "@/components/funnel/FunnelLink";
 import { PROJECTS } from "@/lib/projects-data";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
@@ -29,15 +30,23 @@ export default function ProjectsPage() {
                   <FunnelImage src={p.photo.src} alt={p.photo.alt} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: "cover" }} />
                 </div>
                 <div style={{ padding: "22px 22px 24px", display: "grid", gap: 8 }}>
-                  <span className="efs-eyebrow" style={{ marginBottom: 0 }}>
-                    {p.tag ?? <span className="efs-todo">{"{{TODO: Residential or Trade}}"}</span>} · {p.product}
-                  </span>
+                  {(p.tag || SHOW_TODOS) && (
+                    <span className="efs-eyebrow" style={{ marginBottom: 0 }}>
+                      {p.tag ?? <TodoNote>Residential or Trade</TodoNote>}
+                    </span>
+                  )}
+                  {/* Until the owner names a project, its product is the heading. */}
                   <h2 style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)" }}>
-                    <FactText value={p.title} />
+                    {isTodo(p.title) && !SHOW_TODOS ? p.product : <FactText value={p.title} />}
                   </h2>
-                  <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)" }}>
-                    <FactText value={p.location} />
-                  </p>
+                  {(SHOW_TODOS || !isTodo(p.title)) && (
+                    <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)" }}>{p.product}</p>
+                  )}
+                  {isVisible(p.location) && (
+                    <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)" }}>
+                      <FactText value={p.location} />
+                    </p>
+                  )}
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 18px", marginTop: 6 }}>
                     {p.tag !== "Trade" && (
                       <FunnelLink href={FUNNEL_ENTRY.homeQuote} funnel="home" style={linkStyle}>

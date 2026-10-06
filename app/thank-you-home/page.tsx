@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import HomeNextStep from "@/components/funnel/HomeNextStep";
+import { TodoNote } from "@/components/funnel/FactText";
+import { SHOW_TODOS } from "@/lib/facts";
 import { OWNER_VIDEO_URL } from "@/lib/home-content";
 
 export const metadata: Metadata = {
@@ -24,7 +26,8 @@ export default function ThankYouHomePage() {
             </p>
           </div>
 
-          {/* Owner video: "what happens next" in 30 seconds */}
+          {/* Owner video: "what happens next" in 30 seconds. The box only renders in production once the video exists. */}
+          {(OWNER_VIDEO_URL || SHOW_TODOS) && (
           <div
             style={{
               aspectRatio: "16 / 9",
@@ -41,9 +44,10 @@ export default function ThankYouHomePage() {
             {OWNER_VIDEO_URL ? (
               <video src={OWNER_VIDEO_URL} controls playsInline preload="metadata" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             ) : (
-              <span className="efs-todo">{"{{TODO: 30-second owner video — what happens next}}"}</span>
+              <TodoNote>30-second owner video — what happens next</TodoNote>
             )}
           </div>
+          )}
 
           <HomeNextStep calendarUrl={process.env.CALENDAR_HOME_URL} />
         </div>

@@ -1,8 +1,19 @@
-import { isTodo, type Fact } from "@/lib/facts";
+import { SHOW_TODOS, isTodo, type Fact } from "@/lib/facts";
 
-/** Renders a confirmed fact as plain text, or an unconfirmed one as a loud {{TODO}} badge. */
+/**
+ * Renders a confirmed fact as plain text. An unconfirmed one shows as a loud {{TODO}}
+ * badge on previews and renders nothing in production.
+ */
 export default function FactText({ value }: { value: Fact | null | undefined }) {
-  if (value === null || value === undefined) return <span className="efs-todo">{"{{TODO}}"}</span>;
-  if (isTodo(value)) return <span className="efs-todo">{`{{TODO: ${value.todo}}}`}</span>;
+  if (value === null || value === undefined || isTodo(value)) {
+    if (!SHOW_TODOS) return null;
+    return <span className="efs-todo">{`{{TODO${isTodo(value) ? `: ${value.todo}` : ""}}}`}</span>;
+  }
   return <>{value}</>;
+}
+
+/** A free-standing {{TODO}} note (not tied to a fact). Previews only. */
+export function TodoNote({ children }: { children: string }) {
+  if (!SHOW_TODOS) return null;
+  return <span className="efs-todo">{`{{TODO: ${children}}}`}</span>;
 }

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import CalendarEmbed from "@/components/funnel/CalendarEmbed";
 import TradeCallBooking from "@/components/funnel/TradeCallBooking";
-import DownloadList from "@/components/funnel/DownloadList";
+import DownloadList, { HAS_DOWNLOADS } from "@/components/funnel/DownloadList";
+import { SHOW_TODOS } from "@/lib/facts";
 
 export const metadata: Metadata = {
   title: "Application received — book your call | Express Fence Solutions",
@@ -30,15 +31,17 @@ export default function ThankYouTradePage() {
 
           <CalendarEmbed url={process.env.CALENDAR_TRADE_URL} title="Book your qualification call" scheduledEvent="Schedule_Trade" fallback={<TradeCallBooking />} />
 
-          <section aria-labelledby="spec-kit-heading" style={{ marginTop: 56 }}>
-            <h2 id="spec-kit-heading" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)", marginBottom: 6 }}>
-              Your spec kit
-            </h2>
-            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)", marginBottom: 16 }}>
-              Spec sheets and install guides to review before the call.
-            </p>
-            <DownloadList />
-          </section>
+          {(HAS_DOWNLOADS || SHOW_TODOS) && (
+            <section aria-labelledby="spec-kit-heading" style={{ marginTop: 56 }}>
+              <h2 id="spec-kit-heading" style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)", marginBottom: 6 }}>
+                Your spec kit
+              </h2>
+              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)", marginBottom: 16 }}>
+                Spec sheets and install guides to review before the call.
+              </p>
+              <DownloadList />
+            </section>
+          )}
         </div>
       </main>
     </FunnelShell>

@@ -4,7 +4,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { productsData } from "@/lib/products-data";
+
+// This is a client component, so it receives ready-made card data and links from the
+// (server) homepage instead of importing lib/products-data or lib/content-readiness —
+// that keeps unconfirmed {{TODO}} content out of the browser bundle.
+
+export interface ProductCard {
+  slug: string;
+  num: string;
+  name: string;
+  tagline: string;
+  image: string;
+  alt: string;
+  bg: string;
+  desc: string;
+}
+
+interface Props {
+  products: ProductCard[];
+  /** Secondary-line pages that are ready (lib/content-readiness.ts). */
+  moreLinks: { label: string; href: string }[];
+  showAluminumLink: boolean;
+}
+
+const START_LINKS = [
+  { label: "Get a Home Quote", href: "/get-a-quote" },
+  { label: "Open a Trade Account", href: "/trade" },
+];
 
 
 const containerVariants = {
@@ -17,7 +43,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function Products() {
+export default function Products({ products, moreLinks, showAluminumLink }: Props) {
   return (
     <section
       id="products"
@@ -76,6 +102,7 @@ export default function Products() {
           >
             Five WPC product lines — Wood Plastic Composite looks like real wood, without the warping, rot or repainting.
           </p>
+          {showAluminumLink && (
           <Link
             href="/products/aluminum"
             style={{
@@ -97,6 +124,7 @@ export default function Products() {
             Aluminum fences & pergolas
             <ArrowUpRight size={14} strokeWidth={2.5} />
           </Link>
+          )}
         </motion.div>
 
         {/* Product grid */}
@@ -116,7 +144,7 @@ export default function Products() {
             overflow: "hidden",
           }}
         >
-          {productsData.filter((p) => p.inMainNav).map((p) => (
+          {products.map((p) => (
             <motion.div
               key={p.num}
               variants={cardVariants}
@@ -267,13 +295,9 @@ export default function Products() {
             style={{ background: "var(--surface)", padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 14 }}
           >
             <span style={{ fontFamily: "var(--font-dm-sans)", fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent-text)" }}>
-              More products
+              {moreLinks.length > 0 ? "More products" : "Not sure where to start?"}
             </span>
-            {[
-              { label: "Aluminum fences & pergolas", href: "/products/aluminum" },
-              { label: "Container pools", href: "/container-pools" },
-              { label: "Outdoor living packages", href: "/outdoor-living-packages" },
-            ].map((l) => (
+            {(moreLinks.length > 0 ? moreLinks : START_LINKS).map((l) => (
               <Link key={l.href} href={l.href} className="efs-link" style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: 26, display: "inline-flex", alignItems: "center", gap: 8 }}>
                 {l.label} <ArrowUpRight size={16} strokeWidth={2.5} />
               </Link>

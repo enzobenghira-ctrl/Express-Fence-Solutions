@@ -20,8 +20,17 @@ const REDIRECTS = [
   ["/book-consultation", "/get-a-quote"],
 ];
 
+// {{TODO}} placeholders are visible on preview deployments and local builds, and removed
+// entirely from production builds (Vercel sets VERCEL_ENV at build time).
+// A branch named "*-prodview" builds a preview that looks exactly like production.
+// Override with SHOW_TODOS=0|1, e.g. to check the production view locally.
+const PRODUCTION_VIEW =
+  process.env.VERCEL_ENV === "production" || (process.env.VERCEL_GIT_COMMIT_REF ?? "").endsWith("-prodview");
+const SHOW_TODOS = process.env.SHOW_TODOS ?? (PRODUCTION_VIEW ? "0" : "1");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: { NEXT_PUBLIC_SHOW_TODOS: SHOW_TODOS },
   images: {
     remotePatterns: [],
   },

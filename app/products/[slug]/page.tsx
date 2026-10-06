@@ -6,7 +6,9 @@ import SiteShell from "@/components/funnel/SiteShell";
 import Hero from "@/components/funnel/Hero";
 import FeatureGrid from "@/components/funnel/FeatureGrid";
 import ProjectGallery from "@/components/funnel/ProjectGallery";
-import SpecTable from "@/components/funnel/SpecTable";
+import SpecTable, { visibleRows } from "@/components/funnel/SpecTable";
+import { TodoNote } from "@/components/funnel/FactText";
+import { SHOW_TODOS } from "@/lib/facts";
 import ProductFunnelCTA from "@/components/funnel/ProductFunnelCTA";
 import ProductViewTracker from "@/components/funnel/ProductViewTracker";
 
@@ -62,24 +64,29 @@ export default function ProductPage({ params }: Props) {
           subtitle={product.overview.join(" ")}
           image={{ src: product.heroImage, alt: product.alt }}
         />
-        <FeatureGrid eyebrow="Why homeowners choose it" title={`The benefits of ${product.name.toLowerCase()}`} items={product.benefits} background="background" />
+        <FeatureGrid eyebrow="Why homeowners choose it" title={`The benefits of ${product.name}`} items={product.benefits} background="background" />
         <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />
 
-        <section className="efs-section" style={{ background: "var(--surface)" }}>
-          <div style={{ maxWidth: 820, margin: "0 auto" }}>
-            <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product.name)} />
-            <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
-              Installation guide:{" "}
-              {product.installGuide ? (
-                <a href={product.installGuide} download className="efs-link" style={{ fontWeight: 600, color: "var(--accent-text)" }}>
-                  Download PDF
-                </a>
-              ) : (
-                <span className="efs-todo">{"{{TODO: install guide PDF}}"}</span>
+        {/* Specs: confirmed rows only in production; the whole section drops out if there are none. */}
+        {(visibleRows(specRows(product.name)).length > 0 || product.installGuide || SHOW_TODOS) && (
+          <section className="efs-section" style={{ background: "var(--surface)" }}>
+            <div style={{ maxWidth: 820, margin: "0 auto" }}>
+              <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product.name)} />
+              {(product.installGuide || SHOW_TODOS) && (
+                <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
+                  Installation guide:{" "}
+                  {product.installGuide ? (
+                    <a href={product.installGuide} download className="efs-link" style={{ fontWeight: 600, color: "var(--accent-text)" }}>
+                      Download PDF
+                    </a>
+                  ) : (
+                    <TodoNote>install guide PDF</TodoNote>
+                  )}
+                </p>
               )}
-            </p>
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
         <ProductFunnelCTA productName={product.name} quoteType={QUOTE_TYPE[product.slug]} />
       </main>
