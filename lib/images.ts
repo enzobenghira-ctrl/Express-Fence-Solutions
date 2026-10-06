@@ -18,6 +18,7 @@ export const CONCEPT_IMAGES = new Set<string>([
   "/images/aluminum-pergola-black-patio.webp",
   "/images/aluminum-pergola-white-poolside.webp",
   "/images/container-pool-glass-wall-night.webp",
+  "/images/container-pool-white-wpc-deck-sunset.webp",
   // Unknown origin; labelled until the owner confirms it's a real install.
   "/images/aluminium-fence-1.png",
 ]);
