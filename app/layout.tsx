@@ -3,7 +3,7 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleTag from "@/components/GoogleTag";
 import AttributionCapture from "@/components/funnel/AttributionCapture";
-import { SITE } from "@/lib/site-config";
+import { DIRECTIONS_URL, SITE } from "@/lib/site-config";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -46,8 +46,12 @@ export const metadata: Metadata = {
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "HomeAndConstructionBusiness",
+  "@id": `${SITE.url}/#business`,
   name: SITE.legalName,
+  logo: `${SITE.url}/images/logo.png`,
+  image: `${SITE.url}/images/fence-waterway-turf.jpg`,
+  hasMap: DIRECTIONS_URL,
   address: {
     "@type": "PostalAddress",
     streetAddress: SITE.address.street,

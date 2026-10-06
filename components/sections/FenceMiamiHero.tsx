@@ -115,7 +115,7 @@ export default function FenceMiamiHero() {
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
           >
             <motion.a
-              href="/book-consultation"
+              href="#book-form"
               whileHover={{ y: -2, boxShadow: "0 8px 28px rgba(184,150,90,0.28)" }}
               whileTap={{ scale: 0.97 }}
               style={{

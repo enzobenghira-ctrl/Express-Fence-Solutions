@@ -26,7 +26,9 @@ const company = [
   { label: "Contact", href: "/#contact" },
 ];
 
-export default function Footer() {
+/** On trade pages the homeowner quote link is dropped — trade pages never show a homeowner CTA. */
+export default function Footer({ funnel = "home" }: { funnel?: "home" | "trade" }) {
+  const homeownerLinks = funnel === "trade" ? moreProducts.filter((p) => p.href !== "/get-a-quote") : moreProducts;
   return (
     <footer
       style={{
@@ -121,7 +123,7 @@ export default function Footer() {
               For Homeowners
             </p>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-              {moreProducts.map(p => (
+              {homeownerLinks.map(p => (
                 <li key={p.label}>
                   <Link
                     href={p.href}

@@ -21,7 +21,7 @@ export default function SiteShell({ children, transparentHeader = false, mobileB
     <>
       <SiteHeader transparent={transparentHeader} />
       {children}
-      <Footer />
+      <Footer funnel={mobileBar === "trade" ? "trade" : "home"} />
       <WhatsAppButton />
       {mobileBar !== "none" && <MobileCTABar funnel={mobileBar} />}
       <div className="mobile-bar-spacer" aria-hidden />

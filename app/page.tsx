@@ -20,7 +20,7 @@ import { TRADE_REASONS } from "@/lib/trade-content";
 
 export const metadata: Metadata = {
   title: "Premium WPC Fencing, Decking & Cladding Supplier | Miami & South Florida",
-  description: `South Florida's premium WPC supplier — fencing, decking, cladding, pergolas and gates, supplied to contractors and installed for homeowners across ${SITE.serviceAreaShort}.`,
+  description: "South Florida's premium WPC supplier: fencing, decking, cladding, pergolas and gates — trade supply for contractors, installed for homeowners.",
   alternates: { canonical: SITE.url },
 };
 

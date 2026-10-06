@@ -14,7 +14,7 @@ import { TRADE_FAQS, TRADE_PRODUCT_LINES, TRADE_REASONS, TRADE_STEPS, TRADE_TIER
 
 export const metadata: Metadata = {
   title: "WPC Supplier Miami & South Florida — Trade Program | Express Fence Solutions",
-  description: `Trade pricing on WPC fencing, decking, cladding, pergolas and gates for contractors. Composite fence wholesale supply serving ${SITE.serviceAreaShort}. Apply for a trade account.`,
+  description: "Composite fence wholesale for Florida contractors: trade pricing on WPC fencing, decking, cladding, pergolas and gates. Apply for a trade account.",
   keywords: "WPC supplier Miami, composite fence wholesale Florida, WPC trade pricing, composite decking supplier South Florida, contractor fence supplier",
   alternates: { canonical: `${SITE.url}/trade` },
 };
