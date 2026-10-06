@@ -64,4 +64,3 @@ export const PACKAGE_INCLUDES = [
 ];
 
 export const PACKAGE_DEFINITIONS: Fact = todo("package tiers and what each includes");
-export const CONTAINER_POOL_FEATURES: Fact = todo("container pool sizes, finishes and options from the supplier spec");

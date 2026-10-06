@@ -20,7 +20,6 @@ interface Props {
 const HOMEOWNER_LINKS: NavLink[] = [
   { label: "Get a Home Quote", href: "/get-a-quote" },
   { label: "Outdoor Living Packages", href: "/outdoor-living-packages" },
-  { label: "Container Pools", href: "/container-pools" },
   { label: "Homeowners", href: "/homeowners" },
 ];
 
@@ -28,7 +27,8 @@ const HOMEOWNER_LINKS: NavLink[] = [
 // (lib/content-readiness.ts) are never linked, and the client header/footer only ever
 // receive finished link lists — so no {{TODO}} content reaches the browser bundle.
 const productNav = PRODUCT_NAV.filter((l) => isPageReady(l.href));
-const footerProducts = [...productNav, { label: "WPC Benches", href: "/products/benches" }];
+// Benches sit with the other WPC lines in the footer, ahead of aluminum and pools.
+const footerProducts = productNav.flatMap((l) => (l.href === "/products/gates" ? [l, { label: "WPC Benches", href: "/products/benches" }] : [l]));
 const homeownerLinks = HOMEOWNER_LINKS.filter((l) => isPageReady(l.href));
 
 /** Chrome for shared pages: top bar + nav, footer, WhatsApp, sticky mobile bar. Pages render their own <main>. */

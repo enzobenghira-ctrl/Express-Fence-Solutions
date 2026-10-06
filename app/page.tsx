@@ -81,14 +81,16 @@ export default function Home() {
 
         <Products
           products={productsData
-            .filter((p) => p.inMainNav)
+            .filter((p) => p.inHomeGrid)
             .map(({ slug, num, name, tagline, image, alt, bg, desc }) => ({ slug, num, name, tagline, image, alt, bg, desc }))}
           moreLinks={[
-            { label: "Aluminum fences & pergolas", href: "/products/aluminum" },
-            { label: "Container pools", href: "/container-pools" },
+            { label: "Aluminum fences", href: "/products/aluminum-fences" },
+            { label: "Aluminum gates", href: "/products/aluminum-gates" },
+            { label: "Aluminum pergolas", href: "/products/aluminum-pergolas" },
+            { label: "Container pools", href: "/products/container-pools" },
             { label: "Outdoor living packages", href: "/outdoor-living-packages" },
           ].filter((l) => isPageReady(l.href))}
-          showAluminumLink={isPageReady("/products/aluminum")}
+          showAluminumLink
         />
 
         <FeatureGrid eyebrow="Why our WPC" title="Made for Florida's heat, humidity and salt air" items={WHY_WPC_FLORIDA} />

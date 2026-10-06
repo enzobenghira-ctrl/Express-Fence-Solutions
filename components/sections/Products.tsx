@@ -104,7 +104,7 @@ export default function Products({ products, moreLinks, showAluminumLink }: Prop
           </p>
           {showAluminumLink && (
           <Link
-            href="/products/aluminum"
+            href="/products/aluminum-fences"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -121,7 +121,7 @@ export default function Products({ products, moreLinks, showAluminumLink }: Prop
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--accent-border)")}
           >
-            Aluminum fences & pergolas
+            Aluminum fences, gates & pergolas
             <ArrowUpRight size={14} strokeWidth={2.5} />
           </Link>
           )}

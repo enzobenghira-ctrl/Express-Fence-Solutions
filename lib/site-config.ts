@@ -50,7 +50,10 @@ export const PRODUCT_NAV: NavLink[] = [
   { label: "WPC Cladding", href: "/products/wpc-cladding" },
   { label: "WPC Pergolas", href: "/products/wpc-pergolas" },
   { label: "WPC Gates", href: "/products/gates" },
-  { label: "Aluminum", href: "/products/aluminum" },
+  { label: "Aluminum Fences", href: "/products/aluminum-fences" },
+  { label: "Aluminum Gates", href: "/products/aluminum-gates" },
+  { label: "Aluminum Pergolas", href: "/products/aluminum-pergolas" },
+  { label: "Container Pools", href: "/products/container-pools" },
 ];
 
 export const MAIN_NAV: NavLink[] = [

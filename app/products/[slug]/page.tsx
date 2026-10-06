@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getProductBySlug, productsData, specRows } from "@/lib/products-data";
+import { getProductBySlug, productsData, specRows, type ProductLine } from "@/lib/products-data";
 import { getComposition } from "@/lib/composition-data";
 import { SITE } from "@/lib/site-config";
 import SiteShell from "@/components/funnel/SiteShell";
@@ -25,6 +25,16 @@ const QUOTE_TYPE: Record<string, string> = {
   "wpc-cladding": "cladding",
   "wpc-decking": "decking",
   gates: "gate",
+  "aluminum-fences": "fence",
+  "aluminum-gates": "gate",
+  "aluminum-pergolas": "pergola",
+  "container-pools": "container-pool",
+};
+
+const SCHEMA_CATEGORY: Record<ProductLine, string> = {
+  wpc: "Wood plastic composite (WPC) outdoor products",
+  aluminum: "Aluminum outdoor products",
+  pool: "Container pools",
 };
 
 export function generateStaticParams() {
@@ -45,7 +55,9 @@ export function generateMetadata({ params }: Props): Metadata {
 export default function ProductPage({ params }: Props) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
-  const composition = getComposition(product.slug);
+  // The composition chart is WPC-only; other lines skip it entirely, even on previews.
+  const isWpc = product.line === "wpc";
+  const composition = isWpc ? getComposition(product.slug) : null;
 
   const schema = {
     "@context": "https://schema.org",
@@ -53,7 +65,7 @@ export default function ProductPage({ params }: Props) {
     name: product.name,
     description: product.desc,
     image: `${SITE.url}${product.heroImage}`,
-    category: "Wood plastic composite (WPC) outdoor products",
+    category: SCHEMA_CATEGORY[product.line],
     brand: { "@type": "Brand", name: SITE.name },
   };
 
@@ -68,13 +80,13 @@ export default function ProductPage({ params }: Props) {
           image={{ src: product.heroImage, alt: product.alt }}
         />
         <FeatureGrid eyebrow="Why homeowners choose it" title={`The benefits of ${product.name}`} items={product.benefits} background="background" />
-        <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />
+        {product.gallery.length > 0 && <ProjectGallery eyebrow="Gallery" title={product.name} photos={product.gallery} />}
 
         {/* Composition + specs: confirmed content only in production; the whole section drops out if there's none. */}
         {(composition || visibleRows(specRows(product)).length > 0 || product.installGuide || SHOW_TODOS) && (
           <section className="efs-section" style={{ background: "var(--surface)" }}>
             <div style={{ maxWidth: 820, margin: "0 auto" }}>
-              <MaterialComposition productName={product.name} composition={composition} />
+              {isWpc && <MaterialComposition productName={product.name} composition={composition} />}
               <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product)} />
               {(product.installGuide || SHOW_TODOS) && (
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>

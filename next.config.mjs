@@ -15,9 +15,12 @@ const REDIRECTS = [
   ["/products/cladding", "/products/wpc-cladding"],
   ["/products/pergolas", "/products/wpc-pergolas"],
   // Pages replaced by the funnels (/book-consultation is the Business Profile appointment link)
-  ["/other-products", "/products/aluminum"],
+  ["/other-products", "/products/aluminum-fences"],
   ["/partner", "/trade"],
   ["/book-consultation", "/get-a-quote"],
+  // The combined aluminum page and /container-pools became separate product pages
+  ["/products/aluminum", "/products/aluminum-fences"],
+  ["/container-pools", "/products/container-pools"],
 ];
 
 // {{TODO}} placeholders are visible on preview deployments and local builds, and removed

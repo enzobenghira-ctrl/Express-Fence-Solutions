@@ -71,12 +71,9 @@ export const TRADE_PRODUCT_LINES: TradeProductLine[] = [
   { name: "WPC wall cladding", text: "Exterior and interior wall finishes.", href: "/products/wpc-cladding", highlights: todo("cladding spec highlights") },
   { name: "WPC pergolas", text: "Shade structures for outdoor living.", href: "/products/wpc-pergolas", highlights: todo("pergola spec highlights") },
   { name: "Gates", text: "Pedestrian and driveway gates to match.", href: "/products/gates", highlights: todo("gate spec highlights") },
-  {
-    name: "Aluminum & container pools",
-    text: "Aluminum fences, louvered aluminum pergolas and container pools.",
-    href: "/products/aluminum",
-    highlights: todo("aluminum & pool spec highlights"),
-  },
+  { name: "Aluminum fences & gates", text: "Modern fencing with matching gates.", href: "/products/aluminum-fences", highlights: todo("aluminum fence and gate spec highlights") },
+  { name: "Aluminum pergolas", text: "Louvered pergolas for adjustable shade.", href: "/products/aluminum-pergolas", highlights: todo("aluminum pergola spec highlights") },
+  { name: "Container pools", text: "Complete pools, finished in WPC.", href: "/products/container-pools", highlights: todo("container pool spec highlights") },
 ];
 
 export const TRADE_FAQS: FAQItem[] = [
