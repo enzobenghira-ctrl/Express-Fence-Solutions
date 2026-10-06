@@ -49,7 +49,7 @@ export const PRODUCT_NAV: NavLink[] = [
   { label: "WPC Decking", href: "/products/wpc-decking" },
   { label: "WPC Cladding", href: "/products/wpc-cladding" },
   { label: "WPC Pergolas", href: "/products/wpc-pergolas" },
-  { label: "Gates", href: "/products/gates" },
+  { label: "WPC Gates", href: "/products/gates" },
   { label: "Aluminum", href: "/products/aluminum" },
 ];
 
