@@ -213,8 +213,8 @@ export const PACKAGES: OutdoorPackage[] = [
     ],
   },
   {
-    slug: "poolside",
-    name: "Poolside",
+    slug: "poolside-pavilion",
+    name: "Poolside Pavilion",
     description: "Turn your pool deck into an outdoor living space: louvered shade over an outdoor kitchen bar, enclosed by full-privacy WPC fencing.",
     idealFor: "Homes with an existing pool",
     image: {
