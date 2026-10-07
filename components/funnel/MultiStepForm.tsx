@@ -261,6 +261,8 @@ export default function MultiStepForm({
       );
     }
 
+    if (field.type === "slots") return null; // only the /get-a-quote booking form uses slots
+
     if (field.type === "review") {
       const source = steps.flatMap((s) => s.fields).find((f) => f.name === field.of);
       if (!source || source.type !== "package") return null;

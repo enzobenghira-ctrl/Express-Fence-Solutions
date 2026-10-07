@@ -3,6 +3,9 @@ import { put } from "@vercel/blob";
 import { Resend } from "resend";
 import { UTM_KEYS } from "@/lib/attribution";
 import { describePackageLead } from "@/lib/forms/package";
+import { parseSlot, slotLabel } from "@/lib/forms/slots";
+import { BOOKING_SLOTS, BOOKING_SOURCE, BOOKING_STEPS, bookingRoute } from "@/lib/get-a-quote/booking";
+import { isBookableZip } from "@/lib/get-a-quote/service-area-zips";
 import { LEAD_FORMS, isLeadKind, type LeadFormDefinition, type LeadKind } from "@/lib/forms/registry";
 import { PHOTO_DATA_PREFIX, displayValue, validateValues, type FormValues } from "@/lib/forms/schema";
 import { computeRoute } from "@/lib/lead-routing";
@@ -29,7 +32,19 @@ interface Lead {
   photoNote?: string;
   /** Package leads: the full selection as structured data (values.package holds the raw JSON). */
   package?: ReturnType<typeof describePackageLead>;
+  /** "get-a-quote-booking" for /get-a-quote's appointment requests; absent for every other form. */
+  source?: string;
+  /** Booking requests: the preferred times as structured data (values.slots holds the raw slots). */
+  booking?: { slots: { date: string; window: string; label: string }[] };
 }
+
+/**
+ * /get-a-quote's appointment requests post as kind "home_quote" (so CRM filters and the
+ * Lead_Home event keep working) with source "get-a-quote-booking", and are checked against
+ * the booking form's own fields. Every other submission is handled exactly as before.
+ */
+const BOOKING_FORM: LeadFormDefinition = { funnel: "home", label: "Home quote request", steps: BOOKING_STEPS, hiddenKeys: [] };
+const BOOKING_ATTRIBUTION_KEYS = [...UTM_KEYS, "utm_term", "fbclid", "landing_page", "referrer"];
 
 function cleanString(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -109,6 +124,7 @@ async function emailLead(lead: Lead, form: LeadFormDefinition, photo: Buffer | n
   const rows = [
     ...fields.filter((f) => lead.values[f.name] !== undefined).map((f) => row(f.label, displayValue(f, lead.values[f.name]))),
     ...Object.entries(lead.hidden).map(([k, v]) => row(k, v)),
+    lead.source ? row("Source", lead.source) : "",
     lead.route ? row("Route", lead.route) : "",
     lead.photoNote ? row("Photo", lead.photoNote) : "",
     ...Object.entries(lead.attribution).map(([k, v]) => row(k, v)),
@@ -156,7 +172,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown form." }, { status: 400 });
   }
   const kind = body.kind;
-  const form = LEAD_FORMS[kind];
+  const isBooking = kind === "home_quote" && body.source === BOOKING_SOURCE;
+  const form = isBooking ? BOOKING_FORM : LEAD_FORMS[kind];
 
   // Bots: answer "ok" so they don't retry, but drop the submission.
   const elapsedMs = typeof body.elapsedMs === "number" ? body.elapsedMs : 0;
@@ -171,19 +188,37 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: firstError, fields: errors }, { status: 400 });
   }
 
+  // Booking requests are only taken inside the install area (the form already blocks the rest).
+  if (isBooking && !isBookableZip(String(values.zip))) {
+    return NextResponse.json(
+      {
+        error: `You're outside our usual install area. Give us a call at ${SITE.phone.display} and we'll let you know if we can help.`,
+        fields: { zip: "outside the install area" },
+      },
+      { status: 400 }
+    );
+  }
+  // Backward compatibility: anything reading the old single projectType still gets one.
+  if (isBooking && Array.isArray(values.projectTypes)) values.projectType = values.projectTypes[0];
+
   const lead: Lead = {
     // The browser's event id (shared with the Meta pixel for dedup); also used in the photo's file path, so keep it path-safe.
     id: cleanString(body.eventId, 100).replace(/[^A-Za-z0-9-]/g, "") || crypto.randomUUID(),
     kind,
     funnel: form.funnel,
-    route: computeRoute(kind, values),
+    route: isBooking ? bookingRoute(values) : computeRoute(kind, values),
     values,
     hidden: pickStrings(body.hidden, form.hiddenKeys, 100),
-    attribution: pickStrings(body.attribution, [...UTM_KEYS, "landing_page", "referrer"], 500),
+    attribution: pickStrings(body.attribution, isBooking ? BOOKING_ATTRIBUTION_KEYS : [...UTM_KEYS, "landing_page", "referrer"], 500),
     pageUrl: cleanString(body.pageUrl, 500),
     submittedAt: new Date().toISOString(),
   };
   if (kind === "package") lead.package = describePackageLead(values);
+  if (isBooking) {
+    lead.source = BOOKING_SOURCE;
+    const slots = Array.isArray(values.slots) ? values.slots : [];
+    lead.booking = { slots: slots.map((s) => ({ ...parseSlot(s)!, label: slotLabel(s, BOOKING_SLOTS) })) };
+  }
 
   const unstoredPhoto = await storePhoto(lead);
 

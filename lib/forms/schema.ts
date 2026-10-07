@@ -3,6 +3,7 @@
 
 import { EMAIL_RE, ZIP_RE, isValidPhone } from "@/lib/form-validation";
 import { parseSelection, selectionError, selectionToText, type BuilderComponent } from "@/lib/forms/package-selection";
+import { slotError, slotLabel, type SlotConfig } from "@/lib/forms/slots";
 
 export interface FormOption {
   value: string;
@@ -31,7 +32,10 @@ export type PackageField = FieldBase & { type: "package"; components: BuilderCom
 /** Read-only summary of another field (the package), with a link back to edit each part. Never submitted. */
 export type ReviewField = FieldBase & { type: "review"; of: string };
 
-export type FormField = ChoiceField | InputField | TextareaField | PhotoField | PackageField | ReviewField;
+/** Preferred appointment times: a list of "YYYY-MM-DD|window" slots (lib/forms/slots.ts). */
+export type SlotsField = FieldBase & { type: "slots"; config: SlotConfig };
+
+export type FormField = ChoiceField | InputField | TextareaField | PhotoField | PackageField | ReviewField | SlotsField;
 
 export const PHOTO_DATA_PREFIX = "data:image/jpeg;base64,";
 /** ~2 MB of JPEG once base64-encoded — comfortably under Vercel's 4.5 MB request limit. */
@@ -67,8 +71,10 @@ export function validateField(field: FormField, value: string | string[] | undef
     if (!field.required) return null;
     if (field.type === "choice") return "Please choose an option.";
     if (field.type === "multichoice") return "Please choose at least one.";
+    if (field.type === "slots") return "Please pick at least one time.";
     return "This field is required.";
   }
+  if (field.type === "slots") return Array.isArray(value) ? slotError(value, field.config) : "Please choose from the times shown.";
   if (isChoiceField(field)) {
     const picked = Array.isArray(value) ? value : [value as string];
     if (field.type === "choice" && picked.length !== 1) return "Please choose one option.";
@@ -119,6 +125,7 @@ export function displayValue(field: FormField, value: string | string[]): string
     const selection = parseSelection(value);
     return selection ? selectionToText(selection, field.components) : "";
   }
+  if (field.type === "slots") return (Array.isArray(value) ? value : [value]).map((s) => slotLabel(s, field.config)).join("\n");
   if (!isChoiceField(field)) return Array.isArray(value) ? value.join(", ") : value;
   const label = (v: string) => field.options.find((o) => o.value === v)?.label ?? v;
   return Array.isArray(value) ? value.map(label).join(", ") : label(value);
