@@ -269,6 +269,18 @@ select option {
   border-radius: 3px;
   flex-shrink: 0;
 }
+/* "Why it matters" guide under the composition chart (shares the .efs-comp card and colors). */
+.efs-guide-lead { font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 15px; line-height: 1.65; color: var(--text-secondary); max-width: 640px; }
+.efs-guide-list { list-style: none; margin-top: 20px; }
+.efs-guide-list li { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.efs-guide-list li:last-child { border-bottom: 0; }
+.efs-guide-name { font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.efs-guide-text { font-family: var(--font-dm-sans), "DM Sans", sans-serif; font-size: 14px; line-height: 1.65; color: var(--text-secondary); }
+.efs-guide-subhead { font-family: var(--font-cormorant), serif; font-style: italic; font-weight: 400; font-size: clamp(24px, 3vw, 30px); color: var(--dark); margin: 32px 0 16px; }
+.efs-guide-points { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 640px) { .efs-guide-points { grid-template-columns: 1fr; } }
+.efs-guide-points li { background: var(--surface); border-radius: 10px; padding: 18px 18px 20px; }
+
 .efs-comp-pct {
   margin-left: auto;
   font-weight: 700;

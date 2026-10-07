@@ -9,6 +9,7 @@ import FeatureGrid from "@/components/funnel/FeatureGrid";
 import ProjectGallery from "@/components/funnel/ProjectGallery";
 import SpecTable, { visibleRows } from "@/components/funnel/SpecTable";
 import MaterialComposition from "@/components/funnel/MaterialComposition";
+import WpcMaterialGuide from "@/components/funnel/WpcMaterialGuide";
 import { TodoNote } from "@/components/funnel/FactText";
 import { SHOW_TODOS } from "@/lib/facts";
 import ProductFunnelCTA from "@/components/funnel/ProductFunnelCTA";
@@ -87,6 +88,7 @@ export default function ProductPage({ params }: Props) {
           <section className="efs-section" style={{ background: "var(--surface)" }}>
             <div style={{ maxWidth: 820, margin: "0 auto" }}>
               {isWpc && <MaterialComposition productName={product.name} composition={composition} />}
+              {composition && <WpcMaterialGuide productName={product.name} composition={composition} />}
               <SpecTable title="Specifications" caption={`${product.name} specifications`} rows={specRows(product)} />
               {(product.installGuide || SHOW_TODOS) && (
                 <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginTop: 20 }}>
