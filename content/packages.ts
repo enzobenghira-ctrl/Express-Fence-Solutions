@@ -179,7 +179,10 @@ export const PACKAGES: OutdoorPackage[] = [
     name: "Shade Retreat",
     description: "A shaded spot to sit outside: a pergola over a deck platform, lit for the evenings.",
     idealFor: "A first backyard upgrade",
-    image: { src: "/images/pergola-key-west.jpeg", alt: "WPC pergola over a patio beside a canal" },
+    image: {
+      src: "/images/package-shade-retreat-louvered-pergola.webp",
+      alt: "Dark louvered pergola with lighting over an outdoor kitchen and bar, beside a container pool on a WPC deck",
+    },
     includes: [
       { component: "pergola", label: "WPC pergola", preset: { material: "wpc" } },
       { component: "wpc-decking", label: "WPC deck platform" },
