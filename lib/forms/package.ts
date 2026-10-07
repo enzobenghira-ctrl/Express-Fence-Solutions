@@ -33,7 +33,7 @@ export const BUILDER_COMPONENTS: BuilderComponent[] = PACKAGE_COMPONENTS.filter(
 }));
 
 export function packageIsAvailable(p: OutdoorPackage): boolean {
-  return p.includes.every((i) => AVAILABLE.has(i.component));
+  return p.includes.every((i) => !i.component || AVAILABLE.has(i.component));
 }
 
 /** Packages for this build: any that include an unavailable part only show on previews. */
@@ -43,7 +43,7 @@ export const VISIBLE_PACKAGES = PACKAGES.filter((p) => packageIsAvailable(p) || 
 export function packagePreset(p: OutdoorPackage): string {
   const selection: PackageSelection = {};
   for (const i of p.includes) {
-    if (BUILDER_COMPONENTS.some((c) => c.id === i.component)) selection[i.component] = { ...i.preset };
+    if (i.component && BUILDER_COMPONENTS.some((c) => c.id === i.component)) selection[i.component] = { ...i.preset };
   }
   return serializeSelection(selection, BUILDER_COMPONENTS);
 }

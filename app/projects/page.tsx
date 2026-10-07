@@ -32,7 +32,7 @@ const TABS = [
 const PACKAGE_NAMES = Object.fromEntries(VISIBLE_PACKAGES.map((p) => [p.slug, p.name]));
 const unavailableParts = (slug: string) =>
   PACKAGES.find((p) => p.slug === slug)!
-    .includes.filter((i) => !PACKAGE_COMPONENTS.find((c) => c.id === i.component)?.available)
+    .includes.filter((i) => i.component && !PACKAGE_COMPONENTS.find((c) => c.id === i.component)?.available)
     .map((i) => i.label);
 
 // Shared page: proof, with each project ending in the matching funnel.

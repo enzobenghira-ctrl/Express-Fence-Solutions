@@ -33,8 +33,12 @@ export interface OutdoorPackage {
   description: string;
   idealFor: string;
   image: { src: string; alt: string };
-  /** What the card lists, each tied to a builder part (and optional pre-picked options). */
-  includes: { component: string; label: string; preset?: Record<string, string> }[];
+  /**
+   * What the card lists, each tied to a builder part (and optional pre-picked options).
+   * Leave out `component` for card-only text: it isn't pre-loaded into the builder and
+   * doesn't hide the package.
+   */
+  includes: { component?: string; label: string; preset?: Record<string, string> }[];
 }
 
 export const WPC_COLORS: ComponentChoice[] | TodoFact = todo("WPC color range for the package builder");
@@ -211,13 +215,17 @@ export const PACKAGES: OutdoorPackage[] = [
   {
     slug: "poolside",
     name: "Poolside",
-    description: "Finish the space around your pool with a deck surround, a pool fence and shade.",
+    description: "Turn your pool deck into an outdoor living space: louvered shade over an outdoor kitchen bar, enclosed by full-privacy WPC fencing.",
     idealFor: "Homes with an existing pool",
-    image: { src: "/images/aluminum-pergola-pool-sunset.webp", alt: "Pergola beside a backyard pool" },
+    image: {
+      src: "/images/package-poolside-louvered-pergola-kitchen.webp",
+      alt: "White louvered aluminum pergola over an outdoor kitchen bar and dining table beside a pool, with a WPC privacy fence",
+    },
     includes: [
-      { component: "wpc-decking", label: "WPC pool deck surround" },
-      { component: "aluminum-fence", label: "Pool fence" },
-      { component: "pergola", label: "Cabana-style pergola" },
+      { component: "pergola", label: "Aluminum Louvered Pergola", preset: { material: "louvered-aluminum" } },
+      { component: "wpc-fence", label: "WPC Full Privacy Fence" },
+      // Card text only until outdoor kitchens are confirmed (the builder part is still off).
+      { label: "Outdoor Kitchen Bar" },
     ],
   },
   {
