@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import HomeLink from "@/components/funnel/HomeLink";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { trackEvent } from "@/lib/metaEvents";
@@ -117,7 +118,7 @@ export default function SiteHeader({ transparent = false, productNav: PRODUCT_NA
             }}
           >
             {/* Logo */}
-            <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", minWidth: 0 }}>
+            <HomeLink onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", minWidth: 0 }}>
               <div className="nav-logo-img" style={{ position: "relative", height: 68, width: 68, flexShrink: 0 }}>
                 <Image src="/images/logo-transparent.png" alt="" fill sizes="68px" style={{ objectFit: "contain" }} priority />
               </div>
@@ -134,7 +135,7 @@ export default function SiteHeader({ transparent = false, productNav: PRODUCT_NA
               >
                 {SITE.name}
               </span>
-            </Link>
+            </HomeLink>
 
             {/* Desktop links */}
             <ul style={{ listStyle: "none", gap: 28, alignItems: "center" }} className="hidden xl:flex">
