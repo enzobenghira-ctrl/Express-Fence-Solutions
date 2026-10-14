@@ -129,7 +129,7 @@ export default function Home() {
         <ProjectGallery eyebrow="Real projects" title="Recent installs" />
         <div style={{ textAlign: "center", marginTop: -60, paddingBottom: 60 }}>
           <Link href="/projects" className="efs-link" style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 600, color: "var(--accent-text)" }}>
-            See all projects →
+            See more projects →
           </Link>
         </div>
 
