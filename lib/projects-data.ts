@@ -13,6 +13,8 @@ export interface Project {
 }
 
 const PRODUCT_BY_PHOTO: Record<string, string> = {
+  "/images/fence-black-pool-patio.jpg": "WPC fencing",
+  "/images/fence-light-grey-white-frame-turf.jpg": "WPC fencing",
   "/images/fence-waterway-turf.jpg": "WPC fencing",
   "/images/fence-black-modern-home.jpg": "WPC fencing",
   "/images/fence-charcoal-white-frame.jpg": "WPC fencing",

@@ -36,6 +36,8 @@ export const UNLABELLED_RENDERS = new Set<string>([
 // Confirmed photos of real EFS installs (matched to the owner's phone photos). The only
 // images allowed on landing pages and in project galleries until more are confirmed.
 export const REAL_INSTALL_PHOTOS = [
+  { src: "/images/fence-black-pool-patio.jpg", alt: "Black WPC privacy fence around a travertine pool patio" },
+  { src: "/images/fence-light-grey-white-frame-turf.jpg", alt: "Light grey WPC privacy fence with white aluminum posts in a tropical yard" },
   { src: "/images/fence-waterway-turf.jpg", alt: "Charcoal WPC privacy fence along a South Florida waterway" },
   { src: "/images/fence-black-modern-home.jpg", alt: "Black horizontal WPC fence at a modern home" },
   { src: "/images/fence-charcoal-white-frame.jpg", alt: "Charcoal WPC fence panels in a white aluminum frame" },
