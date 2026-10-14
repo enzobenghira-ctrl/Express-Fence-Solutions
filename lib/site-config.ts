@@ -13,7 +13,7 @@ export const SITE = {
     e164: "+13059679202",
   },
   whatsapp: "https://wa.me/13059679202",
-  email: "Info@expressfencesolutions.com",
+  email: "info@expressfencesolutions.com",
   // Showroom & warehouse.
   address: {
     street: "8031 US-441",

@@ -164,9 +164,9 @@ export default function Footer({ products, homeownerLinks, showSpecKit }: Props)
               <a href="tel:+13059679202" onClick={() => trackEvent("Contact", { method: "phone" })} style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 14, fontWeight: 600, color: "var(--white)", textDecoration: "none" }}>
                 <Phone size={13} strokeWidth={2.5} style={{ color: "var(--accent)" }} /> (305) 967-9202
               </a>
-              <a href="mailto:Info@expressfencesolutions.com" style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none" }}>
+              <a href={`mailto:${SITE.email}`} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", textDecoration: "none" }}>
                 <Mail size={13} style={{ marginTop: 2, flexShrink: 0, color: "var(--accent)" }} />
-                Info@expressfencesolutions.com
+                {SITE.email}
               </a>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontFamily: "var(--font-dm-sans)", fontSize: 13, color: "var(--white)", lineHeight: 1.5 }}>
                 <MapPin size={13} style={{ marginTop: 3, flexShrink: 0, color: "var(--accent)" }} />

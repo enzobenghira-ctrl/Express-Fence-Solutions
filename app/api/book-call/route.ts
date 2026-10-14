@@ -2,12 +2,18 @@ import { NextResponse } from "next/server";
 import { CALENDAR_ID, describeGoogleError, getCalendarClient } from "@/lib/google-calendar";
 import { SLOT_DURATION_MINUTES, TIMEZONE, generateSlotsForDate, isDateBookable } from "@/lib/booking-config";
 import { EMAIL_RE, isValidPhone } from "@/lib/form-validation";
-import { SITE } from "@/lib/site-config";
+import { emailTradeCall, type TradeCallLead } from "@/lib/lead-delivery";
+import { deliveryAttempt, recordDelivery, saveLead, type DeliveryAttempt } from "@/lib/lead-store";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
-// Books a trade qualification call on the shared Google Calendar. This is the in-house
-// fallback used on /thank-you-trade until CALENDAR_TRADE_URL points at an external
-// scheduler. Separate from /api/book-consultation, which handles in-home visits.
+// Books a trade qualification call. This is the in-house fallback used on /thank-you-trade
+// until CALENDAR_TRADE_URL points at an external scheduler. Separate from
+// /api/book-consultation, which handles in-home visits — and, like it, never loses a request:
+// it's saved to the private Blob store first, then put on the Google Calendar and emailed to
+// the company inbox. If the email fails the full request is in the server log and the retry
+// job re-sends it. `onCalendar: false` makes the form say "Request received" instead of "booked".
+
+export const maxDuration = 60; // Blob save + Calendar + SMTP, each with its own timeout
 
 interface CallPayload {
   slotIso: string;
@@ -17,13 +23,18 @@ interface CallPayload {
   company?: string;
 }
 
-const UNAVAILABLE = `Booking is temporarily unavailable. Please call us at ${SITE.phone.display}.`;
-
 /** YYYY-MM-DD of an instant in the business time zone. */
 function localDate(iso: string): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(
     new Date(iso)
   );
+}
+
+function formatSlotDisplay(iso: string): string {
+  const d = new Date(iso);
+  const dateStr = d.toLocaleDateString("en-US", { timeZone: TIMEZONE, weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  const timeStr = d.toLocaleTimeString("en-US", { timeZone: TIMEZONE, hour: "numeric", minute: "2-digit" });
+  return `${dateStr} at ${timeStr}`;
 }
 
 function validate(body: Partial<CallPayload>): string | null {
@@ -38,6 +49,46 @@ function validate(body: Partial<CallPayload>): string | null {
     return "That time is no longer available. Please choose another.";
   }
   return null;
+}
+
+/** Puts the call on the calendar. "slot_taken" means someone booked that time first. */
+async function addToCalendar(lead: TradeCallLead): Promise<"slot_taken" | DeliveryAttempt> {
+  let calendar;
+  try {
+    calendar = getCalendarClient();
+  } catch (err) {
+    console.error("[book-call] Calendar auth failed:", describeGoogleError(err));
+    return deliveryAttempt("calendar", `auth: ${describeGoogleError(err)}`);
+  }
+
+  try {
+    const freebusy = await calendar.freebusy.query({
+      requestBody: { timeMin: lead.start, timeMax: lead.end, timeZone: TIMEZONE, items: [{ id: CALENDAR_ID }] },
+    });
+    if ((freebusy.data.calendars?.[CALENDAR_ID]?.busy || []).length > 0) return "slot_taken";
+
+    await calendar.events.insert({
+      calendarId: CALENDAR_ID,
+      requestBody: {
+        summary: `Trade qualification call — ${lead.company || lead.name}`,
+        description: [
+          `Contact: ${lead.name}`,
+          lead.company ? `Company: ${lead.company}` : null,
+          `Phone: ${lead.phone}`,
+          `Email: ${lead.email}`,
+          "Booked from /thank-you-trade after a trade application.",
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        start: { dateTime: lead.start, timeZone: TIMEZONE },
+        end: { dateTime: lead.end, timeZone: TIMEZONE },
+      },
+    });
+    return deliveryAttempt("calendar");
+  } catch (err) {
+    console.error(`[book-call] Calendar API failed for calendarId="${CALENDAR_ID}":`, describeGoogleError(err));
+    return deliveryAttempt("calendar", describeGoogleError(err));
+  }
 }
 
 export async function POST(req: Request) {
@@ -56,46 +107,38 @@ export async function POST(req: Request) {
   if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
 
   const { slotIso, name, email, phone, company } = body as CallPayload;
-  const startIso = new Date(slotIso).toISOString();
-  const endIso = new Date(new Date(slotIso).getTime() + SLOT_DURATION_MINUTES * 60000).toISOString();
+  const start = new Date(slotIso).toISOString();
+  const lead: TradeCallLead = {
+    id: crypto.randomUUID(),
+    kind: "trade_call",
+    start,
+    end: new Date(new Date(slotIso).getTime() + SLOT_DURATION_MINUTES * 60000).toISOString(),
+    when: formatSlotDisplay(start),
+    name: name.trim(),
+    company: typeof company === "string" && company.trim() ? company.trim().slice(0, 200) : undefined,
+    email: email.trim(),
+    phone: phone.trim(),
+    submittedAt: new Date().toISOString(),
+  };
+  // Saved before the calendar or the email is touched, so neither outage can lose the request.
+  const saved = await saveLead(`trade_call-${lead.id}`, lead);
 
-  let calendar;
-  try {
-    calendar = getCalendarClient();
-  } catch (err) {
-    console.error("[book-call] Calendar auth failed:", describeGoogleError(err));
-    return NextResponse.json({ error: UNAVAILABLE }, { status: 500 });
+  const calendar = await addToCalendar(lead);
+  if (calendar === "slot_taken") {
+    await recordDelivery(saved, "slot_taken", []);
+    return NextResponse.json({ error: "That time was just booked. Please choose another." }, { status: 409 });
   }
 
-  try {
-    const freebusy = await calendar.freebusy.query({
-      requestBody: { timeMin: startIso, timeMax: endIso, timeZone: TIMEZONE, items: [{ id: CALENDAR_ID }] },
-    });
-    if ((freebusy.data.calendars?.[CALENDAR_ID]?.busy || []).length > 0) {
-      return NextResponse.json({ error: "That time was just booked. Please choose another." }, { status: 409 });
-    }
+  const emailAttempt = await emailTradeCall(lead, calendar.ok);
+  const delivered = emailAttempt.ok;
+  await recordDelivery(saved, delivered ? "delivered" : "failed", [calendar, emailAttempt]);
 
-    await calendar.events.insert({
-      calendarId: CALENDAR_ID,
-      requestBody: {
-        summary: `Trade qualification call — ${company?.trim() || name.trim()}`,
-        description: [
-          `Contact: ${name.trim()}`,
-          company ? `Company: ${company.trim()}` : null,
-          `Phone: ${phone.trim()}`,
-          `Email: ${email.trim()}`,
-          "Booked from /thank-you-trade after a trade application.",
-        ]
-          .filter(Boolean)
-          .join("\n"),
-        start: { dateTime: startIso, timeZone: TIMEZONE },
-        end: { dateTime: endIso, timeZone: TIMEZONE },
-      },
-    });
-
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error(`[book-call] Calendar API failed for calendarId="${CALENDAR_ID}":`, describeGoogleError(err));
-    return NextResponse.json({ error: UNAVAILABLE }, { status: 500 });
+  if (!delivered) {
+    console.error(
+      `[book-call] UNDELIVERED LEAD ${lead.id} — ${saved.url ? `saved at ${saved.path}; the retry job will re-send it` : "NOT SAVED to Blob either; recover it from this log line"}:`,
+      JSON.stringify(lead)
+    );
   }
+
+  return NextResponse.json({ ok: true, delivered, onCalendar: calendar.ok });
 }

@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import SlotPicker from "@/components/get-a-quote/SlotPicker";
 import { CallButton, PhoneNumber, WhatsAppButton } from "@/components/get-a-quote/ContactButtons";
+import { DeliveryFallbackLine } from "@/components/funnel/DeliveryFallbackNotice";
 import { getAttribution } from "@/lib/attribution";
 import { formatPhone } from "@/lib/form-validation";
 import { HOME_PROJECT_TYPES } from "@/lib/forms/home";
@@ -68,6 +69,7 @@ export default function VisitRequestForm({ presetType, callbackWindow }: Props) 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [done, setDone] = useState<Values | null>(null);
+  const [delivered, setDelivered] = useState(true);
   const startedAt = useRef(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const doneRef = useRef<HTMLDivElement>(null);
@@ -140,6 +142,8 @@ export default function VisitRequestForm({ presetType, callbackWindow }: Props) 
       Object.entries(values).filter(([, v]) => (Array.isArray(v) ? v.length : String(v).trim()))
     ) as FormValues;
 
+    let data: Record<string, unknown> = {};
+    let ok = false;
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
@@ -156,24 +160,30 @@ export default function VisitRequestForm({ presetType, callbackWindow }: Props) 
           elapsedMs: Date.now() - startedAt.current,
         }),
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
-      const route = typeof data.route === "string" ? data.route : null;
-
-      // Same events as the old quote form (Lead_Home + Lead, one shared id), then Schedule.
-      trackLeadSubmitted("home_quote", eventId, payload, route, { source: BOOKING_SOURCE });
-      trackEvent(
-        "Schedule",
-        { source: BOOKING_SOURCE, project_types: values.projectTypes, slot_count: values.slots.length },
-        userDataFrom(payload),
-        eventId
-      );
-      setDone(values);
-    } catch (err) {
-      const message = err instanceof Error && err.message ? err.message : "Something went wrong sending your request.";
+      data = await res.json().catch(() => ({}));
+      ok = res.ok;
+    } catch {
+      // Network failure — the request never arrived, so the customer needs to retry.
+    }
+    if (!ok) {
+      // Only the API's own (customer-friendly) messages are shown, never a raw error.
+      const message = typeof data.error === "string" && data.error ? data.error : "We couldn't send your request.";
       setSubmitError(`${message} Please try again or call us at ${SITE.phone.display}.`);
       setSubmitting(false);
+      return;
     }
+
+    const route = typeof data.route === "string" ? data.route : null;
+    // Same events as the old quote form (Lead_Home + Lead, one shared id), then Schedule.
+    trackLeadSubmitted("home_quote", eventId, payload, route, { source: BOOKING_SOURCE });
+    trackEvent(
+      "Schedule",
+      { source: BOOKING_SOURCE, project_types: values.projectTypes, slot_count: values.slots.length },
+      userDataFrom(payload),
+      eventId
+    );
+    setDelivered(data.delivered !== false);
+    setDone(values);
   }
 
   if (done) {
@@ -181,6 +191,7 @@ export default function VisitRequestForm({ presetType, callbackWindow }: Props) 
       <div ref={doneRef} tabIndex={-1} className="efs-visit-form efs-visit-done" role="status">
         <h3>Request received.</h3>
         <p>We&apos;ll call you {callbackWindow} to confirm your appointment.</p>
+        {!delivered && <DeliveryFallbackLine />}
         <dl>
           <dt>Project{done.projectTypes.length > 1 ? "s" : ""}</dt>
           <dd>{done.projectTypes.map(projectLabel).join(", ")}</dd>

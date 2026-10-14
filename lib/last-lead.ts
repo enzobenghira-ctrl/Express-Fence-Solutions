@@ -12,17 +12,19 @@ export interface LastLead {
   kind: LeadKind;
   /** Routing tier returned by /api/lead, e.g. "priority" or "partner_referral". */
   route: string | null;
+  /** False when /api/lead saved the lead but couldn't deliver it — the next page adds a "call us" line. */
+  delivered?: boolean;
   contact: Partial<Record<(typeof CONTACT_FIELDS)[number], string>>;
 }
 
-export function saveLastLead(kind: LeadKind, values: FormValues, route: string | null = null): void {
+export function saveLastLead(kind: LeadKind, values: FormValues, route: string | null = null, delivered = true): void {
   const contact: LastLead["contact"] = {};
   for (const key of CONTACT_FIELDS) {
     const v = values[key];
     if (typeof v === "string" && v) contact[key] = v;
   }
   try {
-    window.sessionStorage.setItem(KEY, JSON.stringify({ kind, route, contact } satisfies LastLead));
+    window.sessionStorage.setItem(KEY, JSON.stringify({ kind, route, delivered, contact } satisfies LastLead));
   } catch {
     // Storage blocked — the next page simply asks for the details again.
   }

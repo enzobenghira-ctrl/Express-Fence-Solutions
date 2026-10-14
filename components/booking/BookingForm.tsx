@@ -6,6 +6,8 @@ import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { OUT_OF_AREA_MESSAGE, PROJECT_TYPES, PROPERTY_TYPES, TIMEZONE, isInServiceArea } from "@/lib/booking-config";
 import { trackEvent } from "@/lib/metaEvents";
 import { trackFunnelEvent } from "@/lib/tracking";
+import { DeliveryFallbackLine } from "@/components/funnel/DeliveryFallbackNotice";
+import { SITE } from "@/lib/site-config";
 
 const STEP_LABELS = ["Project", "Address", "Date & Time", "Your Info"];
 
@@ -61,6 +63,9 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [delivered, setDelivered] = useState(true);
+  /** False when the calendar step failed: the time isn't reserved yet, so don't say "booked". */
+  const [onCalendar, setOnCalendar] = useState(true);
 
   const [utm, setUtm] = useState<{ source?: string; medium?: string; campaign?: string }>({});
 
@@ -132,6 +137,8 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
     if (!validateStep(3)) return;
     setSubmitting(true);
     setSubmitError("");
+    let data: Record<string, unknown> = {};
+    let ok = false;
     try {
       const res = await fetch("/api/book-consultation", {
         method: "POST",
@@ -149,25 +156,36 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
           utm,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong booking your consultation.");
-      setSuccess(true);
-
-      const [firstName, ...rest] = name.trim().split(/\s+/);
-      trackEvent(
-        "Schedule",
-        { content_name: "In-Home Consultation", content_category: "Fencing" },
-        { email, phone, firstName, lastName: rest.join(" ") || undefined, zip }
-      );
-      trackFunnelEvent("Schedule_Home", {
-        userData: { email, phone, firstName, lastName: rest.join(" ") || undefined, zip },
-        params: { content_category: "home" },
-      });
-    } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please call us at (305) 967-9202.");
-    } finally {
-      setSubmitting(false);
+      data = await res.json().catch(() => ({}));
+      ok = res.ok;
+    } catch {
+      // Network failure — the request never arrived, so the customer needs to retry.
     }
+    setSubmitting(false);
+    if (!ok) {
+      // Only the API's own (customer-friendly) messages are shown, never a raw error.
+      setSubmitError(
+        typeof data.error === "string" && data.error
+          ? data.error
+          : `We couldn't send your booking. Please try again or call us at ${SITE.phone.display}.`
+      );
+      return;
+    }
+
+    setDelivered(data.delivered !== false);
+    setOnCalendar(data.onCalendar !== false);
+    setSuccess(true);
+
+    const [firstName, ...rest] = name.trim().split(/\s+/);
+    trackEvent(
+      "Schedule",
+      { content_name: "In-Home Consultation", content_category: "Fencing" },
+      { email, phone, firstName, lastName: rest.join(" ") || undefined, zip }
+    );
+    trackFunnelEvent("Schedule_Home", {
+      userData: { email, phone, firstName, lastName: rest.join(" ") || undefined, zip },
+      params: { content_category: "home" },
+    });
   }
 
   if (success) {
@@ -197,11 +215,13 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
           <Check size={24} style={{ color: "var(--accent)" }} />
         </div>
         <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: 28, color: "var(--dark)", marginBottom: 8 }}>
-          Your consultation is booked!
+          {onCalendar ? "Your consultation is booked!" : "Request received — we'll call you today to confirm your time."}
         </p>
-        <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginBottom: 16 }}>
-          We&apos;ll confirm within 24 hours.
-        </p>
+        {onCalendar && (
+          <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 15, color: "var(--text-secondary)", marginBottom: 16 }}>
+            We&apos;ll confirm within 24 hours.
+          </p>
+        )}
         <p
           style={{
             fontFamily: "var(--font-dm-sans)",
@@ -217,6 +237,7 @@ export default function BookingForm({ initial = {} }: { initial?: BookingFormIni
         >
           {formatSlotDisplay(selectedSlot)}
         </p>
+        {!delivered && <DeliveryFallbackLine style={{ marginTop: 16 }} />}
       </div>
     );
   }

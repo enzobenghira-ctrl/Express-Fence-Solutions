@@ -3,6 +3,7 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { MAX_BOOKING_DAYS_AHEAD, TIMEZONE } from "@/lib/booking-config";
+import { DeliveryFallbackLine } from "@/components/funnel/DeliveryFallbackNotice";
 import { EMAIL_RE, formatPhone, isValidPhone } from "@/lib/form-validation";
 import { readLastLead } from "@/lib/last-lead";
 import { SITE } from "@/lib/site-config";
@@ -34,6 +35,9 @@ export default function TradeCallBooking() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [booked, setBooked] = useState("");
+  const [delivered, setDelivered] = useState(true);
+  /** False when the calendar step failed: the time isn't reserved yet, so don't say "booked". */
+  const [onCalendar, setOnCalendar] = useState(true);
 
   useEffect(() => {
     const last = readLastLead();
@@ -82,6 +86,8 @@ export default function TradeCallBooking() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
+      setDelivered(data.delivered !== false);
+      setOnCalendar(data.onCalendar !== false);
       trackFunnelEvent("Schedule_Trade", { userData: userDataFrom({ contactName: contact.name, email: contact.email, phone: contact.phone }) });
       setBooked(slot);
     } catch (err) {
@@ -98,12 +104,17 @@ export default function TradeCallBooking() {
       <div style={{ ...card, textAlign: "center" }} role="status">
         <CheckCircle2 size={36} style={{ color: "var(--green)", margin: "0 auto 12px" }} aria-hidden />
         <h2 className="efs-h2" style={{ fontSize: 32, marginBottom: 10 }}>
-          Your call is booked
+          {onCalendar ? "Your call is booked" : "Request received"}
         </h2>
         <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 16, color: "var(--dark)", fontWeight: 600 }}>{formatSlot(booked)}</p>
         <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 14, color: "var(--text-secondary)", marginTop: 8 }}>
-          We&apos;ll call {contact.phone}. Need to change it? Call {SITE.phone.display}.
+          {onCalendar ? (
+            <>We&apos;ll call {contact.phone}. Need to change it? Call {SITE.phone.display}.</>
+          ) : (
+            <>We&apos;ll call {contact.phone} today to confirm your time.</>
+          )}
         </p>
+        {!delivered && <DeliveryFallbackLine style={{ marginTop: 12, fontSize: 14 }} />}
       </div>
     );
   }

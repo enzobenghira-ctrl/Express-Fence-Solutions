@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import HomeNextStep from "@/components/funnel/HomeNextStep";
+import LastLeadDeliveryNotice from "@/components/funnel/DeliveryFallbackNotice";
 import { TodoNote } from "@/components/funnel/FactText";
 import { SHOW_TODOS } from "@/lib/facts";
 import { OWNER_VIDEO_URL } from "@/lib/home-content";
@@ -24,6 +25,7 @@ export default function ThankYouHomePage() {
             <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: 17, lineHeight: 1.65, color: "var(--text-secondary)" }}>
               Here&apos;s what happens next.
             </p>
+            <LastLeadDeliveryNotice style={{ marginTop: 12 }} />
           </div>
 
           {/* Owner video: "what happens next" in 30 seconds. The box only renders in production once the video exists. */}

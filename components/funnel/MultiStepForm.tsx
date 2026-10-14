@@ -166,25 +166,33 @@ export default function MultiStepForm({
       elapsedMs: Date.now() - startedAt.current,
     };
 
+    let data: Record<string, unknown> = {};
+    let ok = false;
     try {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submission),
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "");
-      const route = typeof data.route === "string" ? data.route : null;
-      saveLastLead(kind, values, route);
-      trackLeadSubmitted(kind, submission.eventId, values, route, eventParams?.(values));
-      onSubmitted?.(submission);
-      // Leave `submitting` on so the button can't double-submit while the next page loads.
-      router.push(successHref);
-    } catch (err) {
-      const message = err instanceof Error && err.message ? err.message : "Something went wrong sending your details.";
+      data = await res.json().catch(() => ({}));
+      ok = res.ok;
+    } catch {
+      // Network failure — the request never arrived, so the customer needs to retry.
+    }
+    if (!ok) {
+      // Only the API's own (customer-friendly) messages are shown, never a raw error.
+      const message = typeof data.error === "string" && data.error ? data.error : "We couldn't send your details.";
       setSubmitError(`${message} Please try again or call us at ${SITE.phone.display}.`);
       setSubmitting(false);
+      return;
     }
+
+    const route = typeof data.route === "string" ? data.route : null;
+    saveLastLead(kind, values, route, data.delivered !== false);
+    trackLeadSubmitted(kind, submission.eventId, values, route, eventParams?.(values));
+    onSubmitted?.(submission);
+    // Leave `submitting` on so the button can't double-submit while the next page loads.
+    router.push(successHref);
   }
 
   function renderField(field: FormField) {

@@ -1,4 +1,3 @@
-import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { CALENDAR_ID, describeGoogleError, getCalendarClient } from "@/lib/google-calendar";
 import {
@@ -10,6 +9,19 @@ import {
   TIMEZONE,
   MIN_LEAD_HOURS,
 } from "@/lib/booking-config";
+import { consultationUtm, emailConsultation, type ConsultationLead } from "@/lib/lead-delivery";
+import { deliveryAttempt, recordDelivery, saveLead, type DeliveryAttempt } from "@/lib/lead-store";
+import { escapeHtml, sendMail } from "@/lib/mailer";
+import { SITE } from "@/lib/site-config";
+
+// In-home consultation bookings. Like /api/lead, never lose one: the request is saved to the
+// private Blob store first, then put on the Google Calendar and emailed to the company inbox.
+// If the email fails, the full request is in the server log, the retry job re-sends the
+// email later, and the customer still sees their confirmation (with a "call us if you don't
+// hear from us today" line). `onCalendar: false` makes the form say "Request received"
+// instead of "booked", since the time isn't reserved yet.
+
+export const maxDuration = 60; // Blob save + Calendar + two SMTP sends, each with its own timeout
 
 function formatSlotDisplay(iso: string): string {
   const d = new Date(iso);
@@ -18,24 +30,23 @@ function formatSlotDisplay(iso: string): string {
   return `${dateStr} at ${timeStr}`;
 }
 
-async function sendCustomerConfirmation(opts: { email: string; name: string; address: string; zip: string; startIso: string }) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const { error } = await resend.emails.send({
-    from: "Express Fence Solutions <onboarding@resend.dev>",
-    to: opts.email,
-    replyTo: "Info@expressfencesolutions.com",
+async function sendCustomerConfirmation(lead: ConsultationLead): Promise<DeliveryAttempt> {
+  const result = await sendMail({
+    to: lead.email,
+    replyTo: SITE.email,
     subject: "Your Free In-Home Consultation is Booked — Express Fence Solutions",
     html: `
       <h2 style="font-family:sans-serif;color:#1a1a1a;">Your consultation is booked!</h2>
-      <p style="font-family:sans-serif;font-size:15px;color:#1a1a1a;">Hi ${opts.name}, we'll see you at the time below. We'll bring real WPC samples and measure your property for an accurate, no-obligation quote.</p>
+      <p style="font-family:sans-serif;font-size:15px;color:#1a1a1a;">Hi ${escapeHtml(lead.name)}, we'll see you at the time below. We'll bring real WPC samples and measure your property for an accurate, no-obligation quote.</p>
       <table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%;max-width:520px;margin-top:16px;">
-        <tr><td style="padding:8px 0;color:#666;width:100px;">When</td><td style="padding:8px 0;font-weight:600;color:#1a1a1a;">${formatSlotDisplay(opts.startIso)}</td></tr>
-        <tr><td style="padding:8px 0;color:#666;">Where</td><td style="padding:8px 0;color:#1a1a1a;">${opts.address}, ${opts.zip}</td></tr>
+        <tr><td style="padding:8px 0;color:#666;width:100px;">When</td><td style="padding:8px 0;font-weight:600;color:#1a1a1a;">${lead.when}</td></tr>
+        <tr><td style="padding:8px 0;color:#666;">Where</td><td style="padding:8px 0;color:#1a1a1a;">${escapeHtml(`${lead.address}, ${lead.zip}`)}</td></tr>
       </table>
-      <p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:24px;">Need to reschedule? Call us at (305) 967-9202.</p>
+      <p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:24px;">Need to reschedule? Call us at ${SITE.phone.display}.</p>
     `,
+    context: `consultation ${lead.id} (customer confirmation)`,
   });
-  if (error) throw new Error(error.message);
+  return deliveryAttempt("customer_confirmation", result.ok ? null : result.error);
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -89,6 +100,60 @@ function validate(body: Partial<BookingPayload>): string | null {
   return null;
 }
 
+/** Puts the visit on the calendar. "slot_taken" means someone booked that time first. */
+async function addToCalendar(lead: ConsultationLead): Promise<"slot_taken" | DeliveryAttempt> {
+  let calendar;
+  try {
+    calendar = getCalendarClient();
+  } catch (err) {
+    console.error("[book-consultation] Calendar auth failed before any API call:", describeGoogleError(err));
+    return deliveryAttempt("calendar", `auth: ${describeGoogleError(err)}`);
+  }
+
+  try {
+    const freebusy = await calendar.freebusy.query({
+      requestBody: {
+        timeMin: lead.start,
+        timeMax: lead.end,
+        timeZone: TIMEZONE,
+        items: [{ id: CALENDAR_ID }],
+      },
+    });
+    const busy = freebusy.data.calendars?.[CALENDAR_ID]?.busy || [];
+    if (busy.length > 0) return "slot_taken";
+
+    const utm = consultationUtm(lead.utm);
+    const description = [
+      `Project types: ${lead.projectTypes.join(", ")}`,
+      `Property type: ${lead.propertyType}`,
+      `Phone: ${lead.phone}`,
+      `Email: ${lead.email}`,
+      `Notes: ${lead.notes || "—"}`,
+      utm ? `UTM: ${utm}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    // Note: attendees are intentionally omitted — a plain service account (no Google
+    // Workspace Domain-Wide Delegation) cannot invite attendees on events it creates.
+    // The customer's contact info is captured in the description instead.
+    await calendar.events.insert({
+      calendarId: CALENDAR_ID,
+      requestBody: {
+        summary: `In-Home Consultation — ${lead.name}`,
+        description,
+        location: `${lead.address}, ${lead.zip}`,
+        start: { dateTime: lead.start, timeZone: TIMEZONE },
+        end: { dateTime: lead.end, timeZone: TIMEZONE },
+      },
+    });
+    return deliveryAttempt("calendar");
+  } catch (err) {
+    console.error(`[book-consultation] Calendar API call failed for calendarId="${CALENDAR_ID}":`, describeGoogleError(err), err);
+    return deliveryAttempt("calendar", describeGoogleError(err));
+  }
+}
+
 export async function POST(req: Request) {
   let body: Partial<BookingPayload>;
   try {
@@ -103,83 +168,49 @@ export async function POST(req: Request) {
   }
 
   const { projectTypes, propertyType, address, zip, slotIso, name, email, phone, notes, utm } = body as BookingPayload;
-  const startIso = new Date(slotIso).toISOString();
-  const endIso = new Date(new Date(slotIso).getTime() + SLOT_DURATION_MINUTES * 60000).toISOString();
-  const propertyLabel = PROPERTY_TYPES.find((p) => p.value === propertyType)?.label || propertyType;
+  const start = new Date(slotIso).toISOString();
+  const lead: ConsultationLead = {
+    id: crypto.randomUUID(),
+    kind: "consultation",
+    projectTypes,
+    propertyType: PROPERTY_TYPES.find((p) => p.value === propertyType)?.label || propertyType,
+    address: address.trim(),
+    zip: zip.trim(),
+    start,
+    end: new Date(new Date(slotIso).getTime() + SLOT_DURATION_MINUTES * 60000).toISOString(),
+    when: formatSlotDisplay(start),
+    name: name.trim(),
+    email: email.trim(),
+    phone: phone.trim(),
+    notes: typeof notes === "string" && notes.trim() ? notes.trim() : undefined,
+    utm,
+    submittedAt: new Date().toISOString(),
+  };
+  // Saved before the calendar or any email is touched, so neither outage can lose the request.
+  const saved = await saveLead(`consultation-${lead.id}`, lead);
 
-  let calendar;
-  try {
-    calendar = getCalendarClient();
-  } catch (err) {
-    console.error("[book-consultation] Calendar auth failed before any API call:", describeGoogleError(err));
-    return NextResponse.json(
-      { error: "Booking is temporarily unavailable. Please call us at (305) 967-9202." },
-      { status: 500 }
-    );
+  const calendar = await addToCalendar(lead);
+  if (calendar === "slot_taken") {
+    await recordDelivery(saved, "slot_taken", []);
+    return NextResponse.json({ error: "That time slot was just booked. Please choose another." }, { status: 409 });
   }
 
-  try {
-    const freebusy = await calendar.freebusy.query({
-      requestBody: {
-        timeMin: startIso,
-        timeMax: endIso,
-        timeZone: TIMEZONE,
-        items: [{ id: CALENDAR_ID }],
-      },
-    });
-    const busy = freebusy.data.calendars?.[CALENDAR_ID]?.busy || [];
-    if (busy.length > 0) {
-      return NextResponse.json(
-        { error: "That time slot was just booked. Please choose another." },
-        { status: 409 }
-      );
-    }
+  const emailAttempt = await emailConsultation(lead, calendar.ok);
+  const attempts: DeliveryAttempt[] = [calendar, emailAttempt];
+  // Delivered = it reached the inbox; a calendar-only booking is still retried by email.
+  const delivered = emailAttempt.ok;
+  // Only confirm the time to the customer by email once it's actually on the calendar.
+  if (calendar.ok) attempts.push(await sendCustomerConfirmation(lead));
+  await recordDelivery(saved, delivered ? "delivered" : "failed", attempts);
 
-    const description = [
-      `Project types: ${projectTypes.join(", ")}`,
-      `Property type: ${propertyLabel}`,
-      `Phone: ${phone}`,
-      `Email: ${email}`,
-      `Notes: ${notes || "—"}`,
-      utm && (utm.source || utm.medium || utm.campaign)
-        ? `UTM: source=${utm.source || "—"} medium=${utm.medium || "—"} campaign=${utm.campaign || "—"}`
-        : null,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    // Note: attendees are intentionally omitted — a plain service account (no Google
-    // Workspace Domain-Wide Delegation) cannot invite attendees on events it creates.
-    // The customer's contact info is captured in the description instead.
-    await calendar.events.insert({
-      calendarId: CALENDAR_ID,
-      requestBody: {
-        summary: `In-Home Consultation — ${name}`,
-        description,
-        location: `${address}, ${zip}`,
-        start: { dateTime: startIso, timeZone: TIMEZONE },
-        end: { dateTime: endIso, timeZone: TIMEZONE },
-      },
-    });
-
-    try {
-      await sendCustomerConfirmation({ email, name, address, zip, startIso });
-    } catch (emailErr) {
-      // Don't fail the booking over a non-critical confirmation email — the
-      // calendar event (the source of truth) was already created successfully.
-      console.error("[book-consultation] Confirmation email failed:", emailErr);
-    }
-
-    return NextResponse.json({ ok: true });
-  } catch (err) {
+  if (!delivered) {
     console.error(
-      `[book-consultation] Calendar API call failed for calendarId="${CALENDAR_ID}":`,
-      describeGoogleError(err),
-      err
-    );
-    return NextResponse.json(
-      { error: "Something went wrong booking your consultation. Please call us at (305) 967-9202." },
-      { status: 500 }
+      `[book-consultation] UNDELIVERED LEAD ${lead.id} — ${saved.url ? `saved at ${saved.path}; the retry job will re-send it` : "NOT SAVED to Blob either; recover it from this log line"}:`,
+      JSON.stringify(lead)
     );
   }
+
+  // The request is safe either way, so the customer always gets their confirmation;
+  // `delivered: false` makes the form add "If you don't hear from us today, call…".
+  return NextResponse.json({ ok: true, delivered, onCalendar: calendar.ok });
 }

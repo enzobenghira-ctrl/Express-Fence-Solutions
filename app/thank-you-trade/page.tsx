@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import FunnelShell from "@/components/funnel/FunnelShell";
 import CalendarEmbed from "@/components/funnel/CalendarEmbed";
 import TradeCallBooking from "@/components/funnel/TradeCallBooking";
+import LastLeadDeliveryNotice from "@/components/funnel/DeliveryFallbackNotice";
 import DownloadList, { HAS_DOWNLOADS } from "@/components/funnel/DownloadList";
 import { SHOW_TODOS } from "@/lib/facts";
 
@@ -27,6 +28,7 @@ export default function ThankYouTradePage() {
               <br />
               <strong style={{ color: "var(--dark)" }}>Want samples? We&apos;ll bring them to the call.</strong>
             </p>
+            <LastLeadDeliveryNotice style={{ marginTop: 12 }} />
           </div>
 
           <CalendarEmbed url={process.env.CALENDAR_TRADE_URL} title="Book your qualification call" scheduledEvent="Schedule_Trade" fallback={<TradeCallBooking />} />

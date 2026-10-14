@@ -5,6 +5,7 @@ import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
 import { LEAD_FORMS } from "@/lib/forms/registry";
 import DownloadList, { HAS_DOWNLOADS } from "@/components/funnel/DownloadList";
+import LastLeadDeliveryNotice from "@/components/funnel/DeliveryFallbackNotice";
 import { robotsFor } from "@/lib/content-readiness";
 import { SHOW_TODOS } from "@/lib/facts";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
@@ -37,6 +38,7 @@ export default function SpecKitPage({ searchParams }: Props) {
                 <h2 style={{ fontFamily: "var(--font-dm-sans)", fontSize: 18, fontWeight: 700, color: "var(--dark)", marginBottom: 16 }}>
                   Your downloads
                 </h2>
+                <LastLeadDeliveryNotice style={{ marginBottom: 16 }} />
                 {HAS_DOWNLOADS || SHOW_TODOS ? (
                   <DownloadList />
                 ) : (

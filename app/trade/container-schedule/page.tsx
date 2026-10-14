@@ -5,6 +5,7 @@ import ContainerScheduleCard from "@/components/funnel/ContainerScheduleCard";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
 import { LEAD_FORMS } from "@/lib/forms/registry";
 import Confirmation from "@/components/funnel/Confirmation";
+import LastLeadDeliveryNotice from "@/components/funnel/DeliveryFallbackNotice";
 import { FUNNEL_ENTRY, SITE } from "@/lib/site-config";
 import { robotsFor } from "@/lib/content-readiness";
 
@@ -51,6 +52,7 @@ export default function ContainerSchedulePage({ searchParams }: Props) {
                   {SITE.phone.display}
                 </a>
                 .
+                <LastLeadDeliveryNotice style={{ marginTop: 12 }} />
               </Confirmation>
             ) : (
               <MultiStepForm kind="pallet_reservation" steps={LEAD_FORMS.pallet_reservation.steps} submitLabel="Send reservation" successHref="/trade/container-schedule?sent=1#reserve" />

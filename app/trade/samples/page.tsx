@@ -4,6 +4,7 @@ import Hero from "@/components/funnel/Hero";
 import MultiStepForm from "@/components/funnel/MultiStepForm";
 import { LEAD_FORMS } from "@/lib/forms/registry";
 import Confirmation from "@/components/funnel/Confirmation";
+import LastLeadDeliveryNotice from "@/components/funnel/DeliveryFallbackNotice";
 import { SITE } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default function SamplesPage({ searchParams }: Props) {
                   {SITE.phone.display}
                 </a>
                 .
+                <LastLeadDeliveryNotice style={{ marginTop: 12 }} />
               </Confirmation>
             ) : (
               <MultiStepForm kind="sample_request" steps={LEAD_FORMS.sample_request.steps} submitLabel="Request samples" successHref="/trade/samples?sent=1" />
