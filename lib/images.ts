@@ -46,6 +46,7 @@ export const REAL_INSTALL_PHOTOS = [
   { src: "/images/pergola-wood-look-waterfront.jpg", alt: "Wood-look WPC pergola over a waterfront paver patio" },
   { src: "/images/pergola-brown-covered-patio.jpg", alt: "Brown WPC covered pergola over a patio dining area" },
   { src: "/images/gate-black-slat-double-turf.jpg", alt: "Black horizontal-slat WPC double gate and privacy fence beside a modern home" },
+  { src: "/images/decking-grey-closeup.webp", alt: "Light grey WPC decking with a raised step and planters" },
   { src: "/images/fence-waterway-turf.jpg", alt: "Charcoal WPC privacy fence along a South Florida waterway" },
   { src: "/images/fence-black-modern-home.jpg", alt: "Black horizontal WPC fence at a modern home" },
   { src: "/images/fence-charcoal-white-frame.jpg", alt: "Charcoal WPC fence panels in a white aluminum frame" },
