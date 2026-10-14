@@ -23,6 +23,8 @@ const PRODUCT_BY_PHOTO: Record<string, string> = {
   "/images/pergola-brown-covered-patio.jpg": "WPC pergola",
   "/images/gate-black-slat-double-turf.jpg": "WPC gate",
   "/images/decking-grey-closeup.webp": "WPC decking",
+  "/images/deck-grey-waterfront-dock.jpg": "WPC decking & pergola",
+  "/images/pergola-wood-look-garden-dining.jpg": "WPC pergola",
   "/images/fence-waterway-turf.jpg": "WPC fencing",
   "/images/fence-black-modern-home.jpg": "WPC fencing",
   "/images/fence-charcoal-white-frame.jpg": "WPC fencing",
