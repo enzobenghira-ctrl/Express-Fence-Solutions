@@ -23,8 +23,9 @@ export const CONCEPT_IMAGES = new Set<string>([
 // Renders (or, for aluminium-fence-1, unknown origin) that the owner chose on 2026-10-06 to
 // show without the "Concept" badge. They are still not photos of real installs, so they
 // never go in REAL_INSTALL_PHOTOS, the homepage "Recent installs" gallery or /projects.
+// (fence-light-grey-decorative-patio.webp was listed here until the owner confirmed on
+// 2026-10-14 that it is a photo of a real job; it is now in REAL_INSTALL_PHOTOS.)
 export const UNLABELLED_RENDERS = new Set<string>([
-  "/images/fence-light-grey-decorative-patio.webp",
   "/images/aluminum-fence-black-pool.webp",
   "/images/aluminum-fence-black-pool-2.webp",
   "/images/aluminum-fence-black-front-yard.webp",
@@ -38,6 +39,7 @@ export const UNLABELLED_RENDERS = new Set<string>([
 export const REAL_INSTALL_PHOTOS = [
   { src: "/images/fence-black-pool-patio.jpg", alt: "Black WPC privacy fence around a travertine pool patio" },
   { src: "/images/fence-light-grey-white-frame-turf.jpg", alt: "Light grey WPC privacy fence with white aluminum posts in a tropical yard" },
+  { src: "/images/fence-light-grey-decorative-patio.webp", alt: "Light grey WPC fence with decorative laser-cut top panels around a WPC deck lounge" },
   { src: "/images/fence-waterway-turf.jpg", alt: "Charcoal WPC privacy fence along a South Florida waterway" },
   { src: "/images/fence-black-modern-home.jpg", alt: "Black horizontal WPC fence at a modern home" },
   { src: "/images/fence-charcoal-white-frame.jpg", alt: "Charcoal WPC fence panels in a white aluminum frame" },
